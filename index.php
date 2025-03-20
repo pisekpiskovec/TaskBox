@@ -9,5 +9,4 @@ $fw->set('DB', new \DB\SQL(
     $fw->get('db.password'),
     [PDO::ATTR_STRINGIFY_FETCHES => false]
 ));
-echo $fw->get('db.dsn');
 $fw->run();
