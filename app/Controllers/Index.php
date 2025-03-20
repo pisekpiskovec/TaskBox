@@ -2,8 +2,15 @@
 
 namespace Controllers;
 
-class Index {
-	public function robots_txt(\Base $base, array $args = []): void {
+class Index
+{
+	public function index(\Base $base)
+	{
+		$base->set("content", "home.html");
+		echo \Template::instance()->render('index.html');
+	}
+	public function robots_txt(\Base $base, array $args = []): void
+	{
 		echo "DO YOU LOVE THE CITY YOU LIVE IN?";
 	}
 }
