@@ -7,6 +7,7 @@ class Index
 	public function index(\Base $base)
 	{
 		$base->set("content", "home.html");
+		$base->set('pgTitle', 'TaskBox');
 		echo \Template::instance()->render('index.html');
 	}
 	public function robots_txt(\Base $base, array $args = []): void
