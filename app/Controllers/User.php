@@ -4,7 +4,9 @@ namespace Controllers;
 
 class User{
     public function login(\Base $base){
-        include 'app/Views/User/login.html';
+        $base->set('pgTitle', 'Log In');
+        $base->set('content', '/User/login.html');
+		echo \Template::instance()->render('index.html');
     }
 
     public function addUser(\Base $base, array $args = []){
