@@ -1,0 +1,19 @@
+<h1>Registration</h1>
+<form action="" method="post">
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username">
+    <br>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password">
+    <br>
+        <label for="repeat-password">Password Verification</label>
+        <input type="password" name="repeat-password" id="repeat-password">
+        <br>
+    <input type="submit" value="Register" class="button">
+</form>
+
+<check if="isset($_GET['e']) && $_GET['e'] == 1">
+    <true>
+        <div>Password don't match.</div>
+    </true>
+</check>

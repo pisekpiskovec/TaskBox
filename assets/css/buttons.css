@@ -1,0 +1,22 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+a.button {
+  background-color: light-dark(#deddda, #3d3846);
+  padding: 11px;
+  border-radius: 12px;
+  color: light-dark(#3d3846, #deddda);
+  text-decoration: none;
+}
+
+a.button:hover {
+  background-color: light-dark(#c0bfbc, #5e5c64);
+}
+
+a.button:active {
+  background-color: #9141ac;
+  color: #deddda;
+}

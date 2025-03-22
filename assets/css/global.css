@@ -1,0 +1,4 @@
+* {
+    background-color: light-dark(#f6f5f4, #241f31);
+    color: light-dark(#241f31, #f6f5f4);
+}
