@@ -34,6 +34,10 @@ class User extends \DB\Cortex
         ],
         'login' => [
             'has-many' => ['Models\Login', 'user']
+        ],
+        'account_created' => [
+            'type' => 'DATETIME',
+            'default' => \DB\SQL\Schema::DF_CURRENT_TIMESTAMP
         ]
     ];
 
