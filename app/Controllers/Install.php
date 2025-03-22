@@ -6,6 +6,7 @@ use Models\Login;
 use Models\User;
 use Models\Task;
 use Models\Subtask;
+use Models\Lists;
 
 class Install
 {
@@ -15,11 +16,13 @@ class Install
         Login::setdown();
         Task::setdown();
         Subtask::setdown();
-
+        Lists::setdown();
+        
         User::setup();
         Login::setup();
         Task::setup();
         Subtask::setup();
+        Lists::setup();
 
         \Base::instance()->reroute('/');
     }
