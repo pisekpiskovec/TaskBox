@@ -2,8 +2,10 @@
 
 namespace Controllers;
 
-use models\Login;
-use models\User;
+use Models\Login;
+use Models\User;
+use Models\Task;
+use Models\Subtask;
 
 class Install
 {
@@ -11,9 +13,13 @@ class Install
     {
         User::setdown();
         Login::setdown();
+        Task::setdown();
+        Subtask::setdown();
 
         User::setup();
         Login::setup();
+        Task::setup();
+        Subtask::setup();
 
         \Base::instance()->reroute('/');
     }
