@@ -1,0 +1,278 @@
+/* Blues */
+@property --blueA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #99c1f1;
+}
+
+@property --blueB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #62a0ea;
+}
+
+@property --blueC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #3584e4;
+}
+
+@property --blueD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #1c71d8;
+}
+
+@property --blueE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #1a5fb4;
+}
+
+/* Greens */
+@property --greenA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #8ff0a4;
+}
+
+@property --greenB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #57e389;
+}
+
+@property --greenC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #33d17a;
+}
+
+@property --greenD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #2ec27e;
+}
+
+@property --greenE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #26a269;
+}
+
+/* Yellows */
+@property --yellowA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f9f06b;
+}
+
+@property --yellowB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f8e45c;
+}
+
+@property --yellowC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f6d32d;
+}
+
+@property --yellowD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f5c211;
+}
+
+@property --yellowE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #e5a50a;
+}
+
+/* Oranges */
+@property --orangeA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ffbe6f;
+}
+
+@property --orangeB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ffa348;
+}
+
+@property --orangeC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ff7800;
+}
+
+@property --orangeD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #e66100;
+}
+
+@property --orangeE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c64600;
+}
+
+/* Reds */
+@property --redA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f66151;
+}
+
+@property --redB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ed333b;
+}
+
+@property --redC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #e01b24;
+}
+
+@property --redD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c01c28;
+}
+
+@property --redE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #a51d2d;
+}
+
+/* Purples */
+@property --purpleA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #dc8add;
+}
+
+@property --purpleB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c061cb;
+}
+
+@property --purpleC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #9141ac;
+}
+
+@property --purpleD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #813d9c;
+}
+
+@property --purpleE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #613583;
+}
+
+/* Browns */
+@property --brownA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #cdab8f;
+}
+
+@property --brownB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #b5835a;
+}
+
+@property --brownC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #986a44;
+}
+
+@property --brownD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #865e3c;
+}
+
+@property --brownE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #63452c;
+}
+
+/* Lights */
+@property --lightA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #fff;
+}
+
+@property --lightB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f6f5f4;
+}
+
+@property --lightC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #deddda;
+}
+
+@property --lightD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c0bfbc;
+}
+
+@property --lightE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #9a9996;
+}
+
+/* Darks */
+@property --darkA {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #77767b;
+}
+
+@property --darkB {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #5e5c64;
+}
+
+@property --darkC {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #3d3846;
+}
+
+@property --darkD {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #241f31;
+}
+
+@property --darkE {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #000;
+}
