@@ -18,7 +18,7 @@ class Install
         Task::setdown();
         Subtask::setdown();
         Lists::setdown();
-        Abnos::setdown();
+        //Abnos::setdown();
         
         User::setup();
         Login::setup();
