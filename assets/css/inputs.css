@@ -1,0 +1,17 @@
+@import url("pallete.css");
+
+input[type="text"],
+input[type="password"] {
+  background-color: light-dark(var(--lightC), var(--darkC));
+  padding: 11px;
+  border-radius: 12px;
+  color: light-dark(var(--darkE), var(--lightA));
+  text-decoration: none;
+  margin: 2ch;
+  border: none;
+  width: 35vh;
+}
+
+label {
+    background-color: transparent;
+}

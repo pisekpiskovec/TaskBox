@@ -1,0 +1,51 @@
+@import url("pallete.css");
+
+body {
+  background: linear-gradient(
+    -45deg,
+    var(--purpleC),
+    var(--blueC),
+    var(--greenC),
+    var(--yellowC),
+    var(--orangeC),
+    var(--redC)
+    )
+  ;
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%;
+
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.loginbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+form#login {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  background-color: var(--darkD);
+  border-radius: 12px;
+  max-width: 30%;
+  padding: 30px;
+}

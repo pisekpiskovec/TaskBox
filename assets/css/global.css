@@ -1,10 +1,8 @@
-@property --brandingColor {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: #9141ac;
+@import url("pallete.css");
+body {
+  background-color: light-dark(var(--lightC), var(--darkC));
 }
 
 * {
-    background-color: light-dark(#f6f5f4, #241f31);
-    color: light-dark(#241f31, #f6f5f4);
+  color: light-dark(--darkE, --lightA);
 }

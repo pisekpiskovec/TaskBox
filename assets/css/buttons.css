@@ -1,3 +1,5 @@
+@import url("pallete.css");
+
 :root {
   color-scheme: light dark;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -5,18 +7,27 @@
 }
 
 a.button {
-  background-color: light-dark(#deddda, #3d3846);
+  background-color: light-dark(var(--lightD), var(--darkD));
   padding: 11px;
   border-radius: 12px;
-  color: light-dark(#3d3846, #deddda);
+  color: light-dark(var(--darkE), var(--lightA));
   text-decoration: none;
 }
 
 a.button:hover {
-  background-color: light-dark(#c0bfbc, #5e5c64);
+  background-color: light-dark(var(--lightB), var(--darkB));
 }
 
 a.button:active {
-  background-color: #9141ac;
-  color: #deddda;
+  background-color: var(--brand);
+  color: var(--lightA);
+}
+
+input[type="submit"]{
+  padding: 11px;
+  border-radius: 12px;
+  background-color: var(--brand);
+  color: var(--lightA);
+  text-decoration: none;
+  border: none;
 }

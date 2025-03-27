@@ -1,3 +1,9 @@
+@property --brand {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #9141ac;
+}
+
 /* Blues */
 @property --blueA {
   syntax: "<color>";
