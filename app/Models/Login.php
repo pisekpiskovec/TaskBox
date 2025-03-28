@@ -8,7 +8,7 @@ class Login extends \DB\Cortex
 
     protected $fieldConf = [
         'user' => [
-            'belongs-to-one' => 'models\Uzivatel',
+            'belongs-to-one' => 'Models\User',
         ],
         'last_login' => [
             'type' => 'TIMESTAMP',
