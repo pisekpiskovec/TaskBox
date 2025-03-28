@@ -3,9 +3,9 @@
 body {
   background: linear-gradient(
     -45deg,
-    var(--purpleE),
-    var(--purpleD),
     var(--purpleC),
+    var(--purpleD),
+    var(--purpleE),
     var(--darkC),
     var(--darkC),
     var(--darkC),
@@ -16,7 +16,7 @@ body {
   ;
   animation: gradient 28s ease infinite;
   background-size: 400% 400%;
-
+  overflow: hidden;
 }
 
 @keyframes gradient {
