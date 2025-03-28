@@ -18,14 +18,12 @@ class Install
         Task::setdown();
         Subtask::setdown();
         Lists::setdown();
-        //Abnos::setdown();
         
         User::setup();
         Login::setup();
         Task::setup();
         Subtask::setup();
         Lists::setup();
-        Abnos::setup();
 
         \Base::instance()->reroute('/');
     }

@@ -1,86 +1,121 @@
-Name;Origin;Shape;Code;Risk
-Standard Training-Dummy Rabbit;;;;
-Scorched Girl;;;;
-One Sin and Hundreds of Good Deeds;;;;
-The Queen of Hatred;;;;
-Happy Teddy Bear;;;;
-Red Shoes;;;;
-Theresia;;;;
-Old Lady;;;;
-Nameless Fetus;;;;
-The Lady Facing the Wall;;;;
-Nothing There;;;;
-1.76 MHz;;;;
-Singing Machine;;;;
-The Silent Orchestra;;;;
-Warm-Hearted Woodsman;;;;
-The Snow Queen;;;;
-Big Bird;;;;
-All-Around Helper;;;;
-Snow White's Apple;;;;
-Spider Bud;;;;
-Beauty and the Beast;;;;
-Plague Doctor;;;;
-WhiteNight;;;;
-Don't Touch Me;;;;
-Rudolta of the Sleigh;;;;
-Queen Bee;;;;
-Bloodbath;;;;
-Opened Can of WellCheers;;;;
-Alriune;;;;
-Forsaken Murderer;;;;
-Child of the Galaxy;;;;
-Punishing Bird;;;;
-Little Red Riding Hooded Mercenary;;;;
-Big and Will be Bad Wolf;;;;
-Fragment of the Universe;;;;
-Crumbling Armor;;;;
-Judgement Bird;;;;
-Apocalypse Bird;;;;
-The King of Greed;;;;
-The Little Prince;;;;
-Laetitia;;;;
-Funeral of the Dead Butterflies;;;;
-Der Freischütz;;;;
-Dream of a Black Swan;;;;
-The Dreaming Current;;;;
-The Burrowing Heaven;;;;
-The Knight of Despair;;;;
-The Naked Nest;;;;
-The Mountain of Smiling Bodies;;;;
-Schadenfreude;;;;
-The Heart of Aspiration;;;;
-Notes from a Crazed Researcher;;;;
-Flesh Idol;;;;
-Giant Tree Sap;;;;
-Mirror of Adjustment;;;;
-Shelter from the 27th of March;;;;
-Fairy Festival;;;;
-Meat Lantern;;;;
-We Can Change Anything;;;;
-Express Train to Hell;;;;
-Scarecrow Searching for Wisdom;;;;
-Dimensional Refraction Variant;;;;
-CENSORED;;;;
-Skin Prophecy;;;;
-Portrait of Another World;;;;
-Today's Shy Look;;;;
-Blue Star;;;;
-You Must Be Happy;;;;
-Luminous Bracelet;;;;
-Behavior Adjustment;;;;
-Old Faith and Promise;;;;
-Porccubus;;;;
-Void Dream;;;;
-Grave of Cherry Blossoms;;;;
-The Firebird;;;;
-Yin;;;;
-Yang;;;;
-Backward Clock;;;;
-Il Pianto della Luna;;;;
-Army In Black;;;;
-Ppodae;;;;
-Parasite Tree;;;;
-Melting Love;;;;
-Clouded Monk;;;;
-You're Bald...;;;;
+name,origin,shape,code,risk
+Standard Training-Dummy Rabbit,0,0,0,T
+Scorched Girl,F,1,2,T
+One Sin and Hundreds of Good Deeds,O,3,3,Z
+The Queen of Hatred,O,1,4,W
+Happy Teddy Bear,T,4,6,H
+Red Shoes,O,4,8,H
+Theresia,T,9,9,T
+Old Lady,O,1,12,T
+Nameless Fetus,O,1,15,H
+The Lady Facing the Wall,F,1,18,T
+Nothing There,O,6,20,A
+1.76 MHz,T,6,27,T
+Singing Machine,O,5,30,H
+The Silent Orchestra,T,1,31,A
+Warm-Hearted Woodsman,F,5,32,H
+The Snow Queen,F,1,37,H
+Big Bird,O,2,40,W
+All-Around Helper,T,5,41,H
+Snow White's Apple,F,4,42,W
+Spider Bud,T,2,43,T
+Beauty and the Beast,F,2,44,T
+Plague Doctor,O,1,45,Z
+WhiteNight,T,3,46,A
+Don't Touch Me,O,5,47,Z
+Rudolta of the Sleigh,F,2,49,H
+Queen Bee,T,4,50,W
+Bloodbath,T,5,51,T
+Opened Can of WellCheers,F,5,52,Z
+Alriune,T,4,53,W
+Forsaken Murderer,T,1,54,T
+Child of the Galaxy,O,1,55,H
+Punishing Bird,O,2,56,T
+Little Red Riding Hooded Mercenary,F,1,57,W
+Big and Will be Bad Wolf,F,2,58,W
+Fragment of the Universe,O,3,60,T
+Crumbling Armor,O,5,61,T
+Judgement Bird,O,2,62,W
+Apocalypse Bird,O,2,63,A
+The King of Greed,O,1,64,W
+The Little Prince,O,4,66,W
+Laetitia,O,1,67,H
+Funeral of the Dead Butterflies,T,1,68,H
+Der Freischütz,F,1,69,H
+Dream of a Black Swan,F,2,70,W
+The Dreaming Current,T,2,71,W
+The Burrowing Heaven,O,4,72,W
+The Knight of Despair,O,1,73,W
+The Naked Nest,O,2,74,W
+The Mountain of Smiling Bodies,T,1,75,A
+Schadenfreude,O,5,76,H
+The Heart of Aspiration,T,9,77,T
+Notes from a Crazed Researcher,T,9,78,H
+Flesh Idol,T,9,79,W
+Giant Tree Sap,T,9,80,H
+Mirror of Adjustment,O,9,81,Z
+Shelter from the 27th of March,T,9,82,H
+Fairy Festival,F,4,83,Z
+Meat Lantern,O,4,84,T
+We Can Change Anything,T,9,85,Z
+Express Train to Hell,T,9,86,W
+Scarecrow Searching for Wisdom,F,1,87,H
+Dimensional Refraction Variant,O,3,88,W
+CENSORED,O,3,89,A
+Skin Prophecy,T,9,90,T
+Portrait of Another World,O,9,91,H
+Today's Shy Look,O,1,92,T
+Blue Star,O,3,93,A
+You Must Be Happy,T,9,94,Z
+Luminous Bracelet,O,9,95,T
+Behavior Adjustment,O,9,96,T
+Old Faith and Promise,T,9,97,Z
+Porccubus,O,2,98,H
+Void Dream,T,2,99,T
+Grave of Cherry Blossoms,O,4,100,T
+The Firebird,O,2,101,W
+Yin,O,5,102,W
+Yang,O,7,103,W
+Backward Clock,D,9,104,W
+Il Pianto della Luna,D,1,105,W
+Army In Black,D,1,406,Z
+Ppodae,D,2,107,T
+Parasite Tree,D,4,108,W
+Melting Love,D,3,109,A
+Clouded Monk,D,1,110,W
+You're Bald...,Bald,2,8,Z
+Ebony Queen's Apple,F,4,4,W
+My Form Empties,M,4,4,W
+Doomsday Calendar,M,4,5,H
+Golden Apple,O,2,6,H
+Have You Become Strong,T,4,6,H
+Alleyway Watchdog,O,2,11,H
+Pink Shoes,F,4,13,H
+Baba Yaga,F,5,18,T
+Drifting Fox,T,2,3,H
+Shock Centipede,T,2,4,H
+Brazen Bull,M,1,7,T
+Fairy Gentleman,F,1,12,T
+Fairy-Long-Legs,F,1,15,T
+So That No One Will Cry,T,4,20,T
+Headless Ichthys,O,2,26,H
+Hurting Teddy Bear,T,4,2,T
+Four-hundred Roses,F,4,4,W
+Rose Hunter,F,1,10,H
+Der Fluchschütze,F,1,13,H
+Sleeping Bag of a Bygone Day,T,3,15,T
+kqe-1j-23,O,6,2,H
+Spiral of Contempt,T,3,4,W
+Portrait of a Certain Day,O,2,5,T
+Ador Blossom Moth,O,1,7,W
+Dreaming Electric Sheep,F,1,8,H
+Drenched Gossypium,O,4,11,T
+The King in Binds,O,1,12,W
+Faelantern,F,4,3,T
+Dream-Devouring Siltcurrent,T,2,6,W
+Wayward Passenger,T,2,7,H
+Skin Prophet,T,3,9,T
+Ambling Pearl,O,2,11,W
+Steam Transport Machine,O,6,16,H
+Sign of Roses,O,4,22,W
+Blubbering Toad,T,1,4,Z

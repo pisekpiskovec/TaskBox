@@ -33,7 +33,7 @@ class Abnos extends \DB\Cortex
         'code' => [
             'type' => 'INT2',
             'required' => true,
-            'unique' => true,
+            'unique' => false,
             'nullable' => false,
             'index' => true,
             'default' => 00
