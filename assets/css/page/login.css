@@ -1,17 +1,20 @@
-@import url("pallete.css");
+@import url("/pallete.css");
 
 body {
   background: linear-gradient(
     -45deg,
+    var(--purpleE),
+    var(--purpleD),
     var(--purpleC),
-    var(--blueC),
-    var(--greenC),
-    var(--yellowC),
-    var(--orangeC),
-    var(--redC)
+    var(--darkC),
+    var(--darkC),
+    var(--darkC),
+    var(--purpleE),
+    var(--purpleD),
+    var(--purpleC)
     )
   ;
-  animation: gradient 15s ease infinite;
+  animation: gradient 28s ease infinite;
   background-size: 400% 400%;
 
 }
