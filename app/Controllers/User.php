@@ -6,12 +6,16 @@ class User
 {
 	public function register(\Base $base)
 	{
+		if ($base->get('SESSION.uid'))
+			$this->clearSession($base);
 		$base->set('pgTitle', 'Register');
 		$base->set('content', '/User/register.html');
 		echo \Template::instance()->render('index.html');
 	}
 	public function login(\Base $base)
 	{
+		if ($base->get('SESSION.uid'))
+			$this->clearSession($base);
 		$base->set('pgTitle', 'Log In');
 		$base->set('content', '/User/login.html');
 		echo \Template::instance()->render('index.html');
@@ -60,18 +64,24 @@ class User
 		}
 		$login->state = 1;
 		$login->save();
-		if($us->is_locked){
-				\Flash::instance()->addMessage("User is blocked.", "danger");
-            $base->reroute('/login');
-        }
-        $base->set('SESSION.uid', $us->id);
-        $base->set('SESSION.jmeno', $us->nick);
-        $base->set('SESSION.avatar', $us->avatar);
-        $base->reroute('/');
+		if ($us->is_locked) {
+			\Flash::instance()->addMessage("User is blocked.", "danger");
+			$base->reroute('/login');
+		}
+		$base->set('SESSION.uid', $us->id);
+		$base->set('SESSION.jmeno', $us->nick);
+		$base->set('SESSION.avatar', $us->avatar);
+		$base->reroute('/');
 	}
 
-	public function signOut(\Base $base){
+	public function signOut(\Base $base)
+	{
+		$this->clearSession($base);
+		$base->reroute('/');
+	}
+
+	public function clearSession(\Base $base)
+	{
 		$base->clear('SESSION');
-        $base->reroute('/');
 	}
 }
