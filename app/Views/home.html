@@ -1,5 +1,6 @@
 <check if="isset({{@SESSION.uid}})">
     <true>
+        <img src="{{@SESSION.avatar}}" alt="User's profile picture">
         <a href="/user/logout" class="button">Log out</a>
     </true>
     <false>
