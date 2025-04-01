@@ -1,2 +1,9 @@
-<a href="/register" class="button">Register</a>
-<a href="/login" class="button">Log in</a>
+<check if="isset({{@SESSION.uid}})">
+    <true>
+        <a href="/user/logout" class="button">Log out</a>
+    </true>
+    <false>
+        <a href="/register" class="button">Register</a>
+        <a href="/login" class="button">Log in</a>
+    </false>
+</check>
