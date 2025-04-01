@@ -40,7 +40,7 @@ body {
   min-height: 100vh;
 }
 
-form#login {
+form.login {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
