@@ -36,5 +36,11 @@ class Abnos
 
         $base->reroute('/');
     }
-    
+
+    public function addAbnormality(\Base $base)
+	{
+		$base->set('pgTitle', 'Register an Abnormality');
+		$base->set('content', '/Abnos/addAbno.html');
+		echo \Template::instance()->render('index.html');
+	}
 }
