@@ -37,10 +37,19 @@ class Abnos
         $base->reroute('/');
     }
 
-    public function addAbnormality(\Base $base)
-	{
-		$base->set('pgTitle', 'Register an Abnormality');
-		$base->set('content', '/Abnos/addAbno.html');
-		echo \Template::instance()->render('index.html');
-	}
+    public function addAbnormalityPage(\Base $base)
+    {
+        $base->set('pgTitle', 'Register an Abnormality');
+        $base->set('content', '/Abnos/addAbno.html');
+        echo \Template::instance()->render('index.html');
+    }
+
+    public function addAbnormalityLogic(\Base $base)
+    {
+        $model = new \Models\Abnos();
+        $model->copyfrom($base->get("POST"));
+        $model->save();
+        \Flash::instance()->addMessage("Abnormailty added.", 'success');
+        $base->reroute("/abnos/add");
+    }
 }

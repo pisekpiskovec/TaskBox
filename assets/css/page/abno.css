@@ -14,12 +14,6 @@ body {
   animation: gradient 28s ease infinite;
   background-size: 400% 400%;
   overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  align-content: center;
 }
 
 @keyframes gradient {
