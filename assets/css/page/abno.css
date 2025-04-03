@@ -10,11 +10,16 @@ body {
     var(--darkC),
     #ff4500,
     #8b0000
-    )
-  ;
+  );
   animation: gradient 28s ease infinite;
   background-size: 400% 400%;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
 }
 
 @keyframes gradient {
@@ -29,7 +34,8 @@ body {
   }
 }
 
-.loginbox {
+.loginbox,
+.infobox {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,7 +44,7 @@ body {
   min-height: 100vh;
 }
 
-form.login {
+.login {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -47,10 +53,24 @@ form.login {
   align-content: center;
   background-color: var(--darkD);
   border-radius: 12px;
-  max-width: 30%;
+  /* max-width: 80%; */
   padding: 30px;
 }
 
-input[type="submit"]{
+.info {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  background-color: var(--darkD);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: left;
+  margin: 10px;
+}
+
+input[type="submit"] {
   background: darkred !important;
 }
