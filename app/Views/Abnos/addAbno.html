@@ -6,51 +6,41 @@
         <input type="text" name="name" id="name">
         <br>
         <label for="origin">Abnormality's origin</label>
-        <input type="text" name="origin" id="origin">
+        <select name="origin" id="origin">
+            <option value="F">Fairytale</option>
+            <option value="T">Trauma</option>
+            <option value="O">Original</option>
+            <option value="M">Mythical</option>
+        </select>
         <br>
         <label for="shape">Abnormality's shape</label>
-        <input type="number" name="shape" id="shape" max="9" min="0">
+        <select name="shape" id="shape">
+            <option value="1">Humanoid</option>
+            <option value="2">Animalistic</option>
+            <option value="3">Otherworldly or religious</option>
+            <option value="4">Inanimate objects</option>
+            <option value="5">Machines and artifacts</option>
+            <option value="6">'Abstract'</option>
+            <option value="7">'Breaching Tool'</option>
+            <option value="8">'Sin'</option>
+            <option value="9">Tool-type</option>
+            <option value="0">Unknown</option>
+        </select>
         <br>
-        <label for="code">Abnormality's identification code</label>
+        <label for="code">Abnormality's unique identification code</label>
         <input type="number" name="code" id="code">
         <br>
         <label for="risk">Abnormality's Risk Level</label>
-        <input type="text" name="risk" id="risk" maxlength="1">
+        <select name="risk" id="risk">
+            <option value="Z">Zayin</option>
+            <option value="T">Teth</option>
+            <option value="H">He</option>
+            <option value="W">Waw</option>
+            <option value="A">Aleph</option>
+        </select>
         <br>
         <input type="submit" value="Add">
     </form>
     <a href="/" class="link">Go home</a>
-</div>
-
-<div class="infobox">
-    <h1>Classification Code Helper</h1>
-    <div class="info">
-        <b>Origin</b>
-        F - Fairytale: Fairy Tales, folklore, forgotten stories, and urban legends.<br>
-        T - Trauma: Traumatic experiences, phobias, or intense emotions.<br>
-        O - Original: Unknown cause of birth, naturally occurring phenomena, or were manufactured by humans.<br>
-        M - 'Mythical': All of these are associated with objects from or are representative of mythology.
-    </div>
-    <div class="info">
-        <b>Shape</b>
-        1 - Humanoid or possessing human-like characteristics<br>
-        2 - Animalistic<br>
-        3 - Otherworldly or religious<br>
-        4 - Inanimate objects<br>
-        5 - Machines and artifacts<br>
-        6 - 'Abstract'<br>
-        7 - 'Breaching Tool'<br>
-        8 - 'Sin'<br>
-        9 - Tool-type<br>
-        0 - Unknown
-    </div>
-    <div class="info">
-        <b>Code</b>
-        The third number acts as a unique code for the Abnormality.
-    </div>
-    <div class="info">
-        <b>Risk Level</b>
-        The categorization of power, danger level and/or threat to the facility, employees.<br>
-        [Z]ayin, [T]eth, [H]e, [W]aw, [A]leph
-    </div>
+    <a href="https://lobotomycorp.fandom.com/wiki/Abnormalities#Classification_Code" class="link">More info</a>
 </div>
