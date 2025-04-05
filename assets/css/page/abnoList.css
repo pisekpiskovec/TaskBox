@@ -1,5 +1,32 @@
 @import url("/pallete.css");
 
+body {
+  background: linear-gradient(
+    -45deg,
+    #8b0000,
+    #ff4500,
+    var(--darkC),
+    var(--darkC),
+    var(--darkC),
+    #ff4500,
+    #8b0000
+  );
+  animation: gradient 28s ease infinite;
+  background-size: 400% 400%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 th#Z {
   color: #1df900;
 }
@@ -20,7 +47,7 @@ th#A {
   color: #ff0000;
 }
 
-.infobox {
+.info {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -39,4 +66,10 @@ table {
   border-collapse: collapse;
   line-height: 30px;
   
+}
+
+.infobox {
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
 }
