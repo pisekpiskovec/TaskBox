@@ -11,7 +11,7 @@ class Abnos
         $base->set('pgTitle', 'Abnormalities');
         $model = new \Models\Abnos();
         $base->set('abnos', $model->find());
-        $base->set('content', '/Abnos/list.html');
+        $base->set('content', '/Abnos/listAbnos.html');
         echo \Template::instance()->render('index.html');
     }
 

@@ -19,3 +19,24 @@ th#W {
 th#A {
   color: #ff0000;
 }
+
+.infobox {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  background-color: var(--darkD);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: left;
+  margin: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  line-height: 30px;
+  
+}
