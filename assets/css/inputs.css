@@ -12,10 +12,10 @@ select {
   margin: 2ch;
   border: none;
   width: 35vh;
-  -ms-box-sizing:content-box;
--moz-box-sizing:content-box;
--webkit-box-sizing:content-box; 
-box-sizing:content-box;
+  -ms-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
 }
 
 label {
