@@ -31,3 +31,8 @@ input[type="submit"]{
   text-decoration: none;
   border: none;
 }
+
+a.link{
+  margin: 10px;
+  text-decoration: none;
+}
