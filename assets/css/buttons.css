@@ -12,6 +12,8 @@ a.button {
   border-radius: 12px;
   color: light-dark(var(--darkE), var(--lightA));
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 a.button:hover {
@@ -23,11 +25,15 @@ a.button:active {
   color: var(--lightA);
 }
 
-input[type="submit"]{
+input[type="submit"] {
   padding: 11px;
   border-radius: 12px;
   background-color: var(--brand);
   color: var(--lightA);
   text-decoration: none;
   border: none;
+}
+
+a.imgButton {
+  display: inline-flex;
 }

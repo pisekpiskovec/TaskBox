@@ -1,0 +1,17 @@
+<div class="header-bar">
+    <span class="header-title">TaskBox</span>
+    <div>
+        <check if="isset({{@SESSION.uid}})">
+            <true>
+                <a href="/user" class="imgButton">
+                    <img src="{{@SESSION.avatar}}" alt="User's profile picture" height="43" width="43" class="circle">
+                </a>
+                <a href="/user/logout" class="button">Log out</a>
+            </true>
+            <false>
+                <a href="/register" class="button">Register</a>
+                <a href="/login" class="button">Log in</a>
+            </false>
+        </check>
+    </div>
+</div>
