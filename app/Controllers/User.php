@@ -69,7 +69,7 @@ class User
 			$base->reroute('/login');
 		}
 		$base->set('SESSION.uid', $us->id);
-		$base->set('SESSION.jmeno', $us->nick);
+		$base->set('SESSION.nick', $us->nick);
 		$base->set('SESSION.avatar', $us->avatar);
 		$base->reroute('/');
 	}
@@ -83,5 +83,15 @@ class User
 	public function clearSession(\Base $base)
 	{
 		$base->clear('SESSION');
+	}
+
+	public function getEditUser(\Base $base)
+	{
+		if (!$base->exists('SESSION.uid'))
+			$base->reroute('/login');
+
+		$base->set('pgTitle', 	$base->get('SESSION.nick') . '\'s Account');
+		$base->set('content', '/User/edit.html');
+		echo \Template::instance()->render('index.html');
 	}
 }
