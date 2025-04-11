@@ -84,4 +84,27 @@ class User
 	{
 		$base->clear('SESSION');
 	}
+
+	public function requestPage(\Base $base)
+	{
+		$base->set('pgTitle', 'Recover password');
+		$base->set('content', '/User/reset_request.html');
+		echo \Template::instance()->render('index.html');
+	}
+
+	public function requestSend (\Base $base) {
+		$userModel = new \Models\User();
+		$user = $userModel->findone(['email=?', $base->get('POST.email')]);
+		if($user === false){
+			\Flash::instance()->addMessage('There is no user with this email.', 'danger');
+			$base->reroute('/password');
+		}
+
+		$token = bin2hex(random_bytes(16));
+		$tokenModel = new \Models\Token();
+		$tokenModel->user = $user;
+		$tokenModel->token = $token;
+		$tokenModel->expires_at = date('Y-m-d H:i:s', time() + 3600);
+		$tokenModel->save();
+	}
 }
