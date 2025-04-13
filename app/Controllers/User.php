@@ -92,10 +92,11 @@ class User
 		echo \Template::instance()->render('index.html');
 	}
 
-	public function requestSend (\Base $base) {
+	public function requestSend(\Base $base)
+	{
 		$userModel = new \Models\User();
 		$user = $userModel->findone(['email=?', $base->get('POST.email')]);
-		if($user === false){
+		if ($user === false) {
 			\Flash::instance()->addMessage('There is no user with this email.', 'danger');
 			$base->reroute('/password');
 		}
@@ -106,5 +107,14 @@ class User
 		$tokenModel->token = $token;
 		$tokenModel->expires_at = date('Y-m-d H:i:s', time() + 3600);
 		$tokenModel->save();
+
+		$mail = new \Mailer();
+		$mail->addTo($base->get('POST.email'));
+		$mail->setHTML('<a href="' . $base->get('HOST') . '/password/reset/' . $token . '">Reset password</a>');
+		$mail->send('TaskBox: Password request requested');
+		$mail->save($token . '.txt');
+
+		\Flash::instance()->addMessage('Reset email has been sent.', 'success');
+		$base->reroute('/login');
 	}
 }

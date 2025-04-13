@@ -1,4 +1,6 @@
 composer.lock
 vendor/
 tmp/
+logs/
 app/Config/db.ini
+app/Configs/emails.ini
