@@ -117,4 +117,39 @@ class User
 		\Flash::instance()->addMessage('Reset email has been sent.', 'success');
 		$base->reroute('/login');
 	}
+
+	public function resetPage(\Base $base)
+	{
+		$base->set('content', '/User/reset_password.html');
+		$base->set('pgTitle', 'Password Reset');
+		echo \Template::instance()->render('index.html');
+	}
+
+	public function resetPageError(\Base $base)
+	{
+		\Flash::instance()->addMessage('No tokek provided.', 'danger');
+		$base->reroute('/login');
+	}
+
+	public function requestReset(\Base $base)
+	{
+		$token = $base->get('PARAMS.token');
+		if ($base->get('POST.password') != $base->get('POST.repeat-password')) {
+			\Flash::instance()->addMessage("Passwords don't match", 'danger');
+			$base->reroute($base->get('PATH'));
+		}
+		$tokenModel = new \Models\Token();
+		$user = $tokenModel->findone(['token=?', $token]);
+		if ($user === false) {
+			\Flash::instance()->addMessage("User with this token not found.", 'danger');
+			$base->reroute('/password');
+		}
+
+		$userModel = new \Models\User();
+		$userModel->load(['id=?', $user->id]);
+		$userModel->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);
+		$userModel->save();
+		$base->clear('SESSION');
+		$base->reroute('/login');
+	}
 }
