@@ -110,7 +110,7 @@ class User
 
 		$mail = new \Mailer();
 		$mail->addTo($base->get('POST.email'));
-		$mail->setHTML('<a href="' . $base->get('HOST') . '/password/reset/' . $token . '">Reset password</a>');
+		$mail->setHTML('<a href="' . $base->get('HOST') . '/password/reset/' . $token . '">Reset password</a><br>Reset the password within an hour, before the link expires.');
 		$mail->send('TaskBox: Password request requested');
 		$mail->save($token . '.txt');
 
@@ -142,6 +142,11 @@ class User
 		$user = $tokenModel->findone(['token=?', $token]);
 		if ($user === false) {
 			\Flash::instance()->addMessage("User with this token not found.", 'danger');
+			$base->reroute('/password');
+		}
+
+		if((time() - strtotime($user->expires_at)) > 3600){
+			\Flash::instance()->addMessage("Token already expired.", 'danger');
 			$base->reroute('/password');
 		}
 
