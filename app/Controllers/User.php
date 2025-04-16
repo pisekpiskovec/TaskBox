@@ -145,7 +145,7 @@ class User
 			$base->reroute('/password');
 		}
 
-		if((time() - strtotime($user->expires_at)) > 3600){
+		if ((strtotime($user->expires_at) - time()) < 0) {
 			\Flash::instance()->addMessage("Token already expired.", 'danger');
 			$base->reroute('/password');
 		}
