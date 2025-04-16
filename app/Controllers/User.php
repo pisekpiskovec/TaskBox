@@ -103,7 +103,7 @@ class User
 
 		$token = bin2hex(random_bytes(16));
 		$tokenModel = new \Models\Token();
-		$tokenModel->user = $user;
+		$tokenModel->user_id = $user->id;
 		$tokenModel->token = $token;
 		$tokenModel->expires_at = date('Y-m-d H:i:s', time() + 3600);
 		$tokenModel->save();
@@ -151,7 +151,7 @@ class User
 		}
 
 		$userModel = new \Models\User();
-		$userModel->load(['id=?', $user->id]);
+		$userModel->load(['id=?', $user->user_id]);
 		$userModel->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);
 		$userModel->save();
 		$base->clear('SESSION');

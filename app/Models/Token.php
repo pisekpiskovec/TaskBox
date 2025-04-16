@@ -2,12 +2,17 @@
 
 namespace Models;
 
-class Token extends \DB\Cortex {
+class Token extends \DB\Cortex
+{
     protected $db = 'DB', $table = 'tokens';
 
     protected $fieldConf = [
-        'user' => [
-            'belongs-to-one' => 'Models\User'
+        'user_id' => [
+            'type' => 'INT4',
+            'required' => true,
+            'unique' => false,
+            'nullable' => false,
+            'index' => true
         ],
         'token' => [
             'type' => 'VARCHAR256',
