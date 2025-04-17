@@ -40,16 +40,4 @@ class User extends \DB\Cortex
             'default' => \DB\SQL\Schema::DF_CURRENT_TIMESTAMP
         ]
     ];
-
-    public function setPassword($value)
-    {
-        return password_hash($value, PASSWORD_DEFAULT);
-    }
-
-    public function getLastLogin()
-    {
-        $login = new Login();
-        $lastLogin = $login->findone(['user=?', $this->id], ['order' => 'id DESC']);
-        return $lastLogin ? $lastLogin->last_login : null;
-    }
 }

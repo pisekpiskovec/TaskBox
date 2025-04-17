@@ -8,6 +8,7 @@ use Models\Task;
 use Models\Subtask;
 use Models\Lists;
 use Models\Abnos;
+use Models\Token;
 
 class Install
 {
@@ -18,13 +19,15 @@ class Install
         Task::setdown();
         Subtask::setdown();
         Lists::setdown();
+        Token::setdown();
         
         User::setup();
         Login::setup();
         Task::setup();
         Subtask::setup();
         Lists::setup();
-
+        Token::setup();
+        
         \Base::instance()->reroute('/');
     }
 }
