@@ -2,6 +2,11 @@
 <div class="loginbox">
     <h1>{{@pgTitle}}</h1>
     <form action="" method="post" class="login">
+        <label for="avatar" class="avatar">
+            <span class="image-button"> Edit </span>
+            <img src="{{@SESSION.avatar}}" alt="User's profile picture" height="128" width="128" class="circle image-">
+        </label>
+        <input type="file" name="avatar" id="avatar" class="hidden">
         <label for="username">Username</label>
         <input type="text" name="username" id="username">
         <br>

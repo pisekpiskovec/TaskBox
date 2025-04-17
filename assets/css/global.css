@@ -33,4 +33,7 @@ img.circle {
   font-size: x-large;
   font-weight: bold;
 }
-	
+
+.hidden {
+  display: none;
+}
