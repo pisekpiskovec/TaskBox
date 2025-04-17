@@ -2,12 +2,6 @@
 
 namespace Controllers;
 
-use Models\Login;
-use Models\User;
-use Models\Task;
-use Models\Subtask;
-use Models\Lists;
-
 class Index
 {
 	public function index(\Base $base)
@@ -19,21 +13,4 @@ class Index
 	{
 		echo "DO YOU LOVE THE CITY YOU LIVE IN?";
 	}
-
-	public function install()
-    {
-        User::setdown();
-        Login::setdown();
-        Task::setdown();
-        Subtask::setdown();
-        Lists::setdown();
-        
-        User::setup();
-        Login::setup();
-        Task::setup();
-        Subtask::setup();
-        Lists::setup();
-
-        \Base::instance()->reroute('/');
-    }
 }
