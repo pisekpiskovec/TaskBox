@@ -1,4 +1,5 @@
 composer.lock
 vendor/
 tmp/
+uploads/
 app/Config/db.ini

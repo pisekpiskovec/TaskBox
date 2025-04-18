@@ -12,8 +12,7 @@ body {
     var(--purpleE),
     var(--purpleD),
     var(--purpleC)
-    )
-  ;
+  );
   animation: gradient 28s ease infinite;
   background-size: 400% 400%;
   overflow: hidden;
@@ -51,29 +50,30 @@ form.login {
   border-radius: 12px;
   max-width: 30%;
   padding: 30px;
+  margin: 30px;
 }
 
-label.avatar{
+.avatar-container {
   position: relative;
+  display: inline-block;
 }
 
-img.image-button {
-  object-fit: cover;
-}
-
-span.image-button {
-  color: red;
-  font-size: 32px;
-  font-weight: bold;
-  left: 50%;
-  opacity: 0;
+.hover-overlay {
   position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.6s;
-  background-color: rgba(0, 0, 0, 128);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 32px;
 }
 
-label.avatar:hover span.image-button:hover{
+.avatar-container:hover .hover-overlay {
   opacity: 1;
 }
