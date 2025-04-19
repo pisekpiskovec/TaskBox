@@ -115,5 +115,77 @@ class User
 
 		\Flash::instance()->addMessage('Avatar changed.', 'success');
 		$base->reroute('/user');
+
+	public function requestPage(\Base $base)
+	{
+		$base->set('pgTitle', 'Recover password');
+		$base->set('content', '/User/reset_request.html');
+		echo \Template::instance()->render('index.html');
+	}
+
+	public function requestSend(\Base $base)
+	{
+		$userModel = new \Models\User();
+		$user = $userModel->findone(['email=?', $base->get('POST.email')]);
+		if ($user === false) {
+			\Flash::instance()->addMessage('There is no user with this email.', 'danger');
+			$base->reroute('/password');
+		}
+
+		$token = bin2hex(random_bytes(16));
+		$tokenModel = new \Models\Token();
+		$tokenModel->user_id = $user->id;
+		$tokenModel->token = $token;
+		$tokenModel->expires_at = date('Y-m-d H:i:s', time() + 3600);
+		$tokenModel->save();
+
+		$mail = new \Mailer();
+		$mail->addTo($base->get('POST.email'));
+		$mail->setHTML('<a href="' . $base->get('HOST') . '/password/reset/' . $token . '">Reset password</a><br>Reset the password within an hour, before the link expires.');
+		$mail->send('TaskBox: Password request requested');
+		$mail->save($token . '.txt');
+
+		\Flash::instance()->addMessage('Reset email has been sent.', 'success');
+		$base->reroute('/login');
+	}
+
+	public function resetPage(\Base $base)
+	{
+		$base->set('content', '/User/reset_password.html');
+		$base->set('pgTitle', 'Password Reset');
+		echo \Template::instance()->render('index.html');
+	}
+
+	public function resetPageError(\Base $base)
+	{
+		\Flash::instance()->addMessage('No tokek provided.', 'danger');
+		$base->reroute('/login');
+	}
+
+	public function requestReset(\Base $base)
+	{
+		$token = $base->get('PARAMS.token');
+		if ($base->get('POST.password') != $base->get('POST.repeat-password')) {
+			\Flash::instance()->addMessage("Passwords don't match", 'danger');
+			$base->reroute($base->get('PATH'));
+		}
+		$tokenModel = new \Models\Token();
+		$user = $tokenModel->findone(['token=?', $token]);
+		if ($user === false) {
+			\Flash::instance()->addMessage("User with this token not found.", 'danger');
+			$base->reroute('/password');
+		}
+
+		if ((strtotime($user->expires_at) - time()) < 0) {
+			\Flash::instance()->addMessage("Token already expired.", 'danger');
+			$base->reroute('/password');
+		}
+
+		$userModel = new \Models\User();
+		$userModel->load(['id=?', $user->user_id]);
+		$userModel->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);
+		$userModel->save();
+		$base->clear('SESSION');
+		$base->reroute('/login');
 	}
 }

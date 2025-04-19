@@ -37,3 +37,8 @@ input[type="submit"] {
 .imgButton {
   display: inline-flex;
 }
+
+a.link{
+  margin: 10px;
+  text-decoration: none;
+}

@@ -37,3 +37,8 @@ body {
 .hidden {
   display: none;
 }
+
+.linkbar{
+  margin: 10px;
+  text-align: center;
+}

@@ -1,7 +1,10 @@
 @import url("pallete.css");
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="number"],
+input[type="email"],
+select {
   background-color: light-dark(var(--lightC), var(--darkC));
   padding: 11px;
   border-radius: 12px;
@@ -10,8 +13,12 @@ input[type="password"] {
   margin: 2ch;
   border: none;
   width: 35vh;
+  -ms-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
 }
 
 label {
-    background-color: transparent;
+  background-color: transparent;
 }

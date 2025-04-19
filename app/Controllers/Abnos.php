@@ -6,6 +6,15 @@ use Exception;
 
 class Abnos
 {
+    public function listAbnormalities(\Base $base)
+    {
+        $base->set('pgTitle', 'Abnormalities');
+        $model = new \Models\Abnos();
+        $base->set('abnos', $model->find());
+        $base->set('content', '/Abnos/listAbnos.html');
+        echo \Template::instance()->render('index.html');
+    }
+
     public function loadFile(\Base $base)
     {
         \Models\Abnos::setdown();
@@ -36,5 +45,33 @@ class Abnos
 
         $base->reroute('/');
     }
-    
+
+    public function addAbnormalityPage(\Base $base)
+    {
+        $base->set('pgTitle', 'Register an Abnormality');
+        $base->set('content', '/Abnos/addAbno.html');
+        echo \Template::instance()->render('index.html');
+    }
+
+    public function addAbnormalityLogic(\Base $base)
+    {
+        $model = new \Models\Abnos();
+        $model->copyfrom($base->get("POST"));
+        $model->save();
+        \Flash::instance()->addMessage("Abnormailty added.", 'success');
+        $base->reroute("/abnos/add");
+    }
+
+    public function getAbnormality(\Base $base)
+    {
+        $shape = $base->get('PARAMS.shape') ?? 0;
+        $code = $base->get('PARAMS.code') ?? 0;
+        $model = new \Models\Abnos();
+        $abno = $model->findone(['shape=:sh AND code=:cd', ':sh' => $shape, ':cd' => $code]);
+        if ($abno === false) {
+            echo $model->findone(['id=?', $shape . $code])->name;
+            return;
+        }
+        echo $abno->name;
+    }
 }
