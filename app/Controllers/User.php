@@ -115,6 +115,7 @@ class User
 
 		\Flash::instance()->addMessage('Avatar changed.', 'success');
 		$base->reroute('/user');
+	}
 
 	public function requestPage(\Base $base)
 	{
