@@ -69,7 +69,7 @@ class User
 			$base->reroute('/login');
 		}
 		$base->set('SESSION.uid', $us->id);
-		$base->set('SESSION.jmeno', $us->nick);
+		$base->set('SESSION.nick', $us->username);
 		$base->set('SESSION.avatar', $us->avatar);
 		$base->reroute('/');
 	}
@@ -84,6 +84,37 @@ class User
 	{
 		$base->clear('SESSION');
 	}
+
+	public function getEditUser(\Base $base)
+	{
+		if ($base->get('SESSION.uid') === true)
+			$base->reroute('/login');
+
+		$base->set('pgTitle', $base->get('SESSION.nick') . '\'s Account');
+		$base->set('content', '/User/edit.html');
+		echo \Template::instance()->render('index.html');
+	}
+
+	public function postChangeAvatar(\Base $base)
+	{
+		$web = \Web::instance();
+		$overwrite = true;
+		$slug = true;
+
+		$files = $web->receive(function ($file, $formFieldName) {
+			return true;
+		}, $overwrite, $slug);
+
+		foreach (array_keys($files) as $file) {
+			$model = new \Models\User();
+			$user = $model->findone(["id=?", $base->get('SESSION.uid')]);
+			$user->avatar = $file;
+			$user->save();
+			$base->set('SESSION.avatar', $file);
+		}
+
+		\Flash::instance()->addMessage('Avatar changed.', 'success');
+		$base->reroute('/user');
 
 	public function requestPage(\Base $base)
 	{
