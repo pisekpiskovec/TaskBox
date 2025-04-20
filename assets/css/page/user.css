@@ -37,6 +37,7 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
+  min-width: 100vw;
 }
 
 form.login {
@@ -76,4 +77,18 @@ form.login {
 
 .avatar-container:hover .hover-overlay {
   opacity: 1;
+}
+
+.editbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.editbox > .boxes {
+  display: flex;
+  flex-direction: initial;
 }
