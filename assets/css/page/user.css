@@ -93,4 +93,6 @@ form.login {
 .editbox > .boxes {
   display: flex;
   flex-direction: initial;
+  align-items: center;
+  flex-wrap: wrap;
 }
