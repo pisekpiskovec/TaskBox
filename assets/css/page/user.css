@@ -52,6 +52,8 @@ form.login {
   max-width: 30%;
   padding: 30px;
   margin: 30px;
+  min-width: fit-content;
+  height: fit-content;
 }
 
 .avatar-container {
