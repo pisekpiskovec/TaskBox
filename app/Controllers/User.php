@@ -87,7 +87,7 @@ class User
 
 	public function getEditUser(\Base $base)
 	{
-		if ($base->get('SESSION.uid') === true)
+		if (!$base->get('SESSION.uid'))
 			$base->reroute('/login');
 
 		$base->set('pgTitle', $base->get('SESSION.nick') . '\'s Account');
