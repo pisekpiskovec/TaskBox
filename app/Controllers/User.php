@@ -117,6 +117,22 @@ class User
 		$base->reroute('/user');
 	}
 
+	public function postChangeCredentials(\Base $base)
+	{
+		$model = new \Models\User();
+		$user = $model->findone(["id=?", $base->get('SEESION.uid')]);
+
+		$user->username = empty($base->get('POST.username'))
+						? $user->username
+						: $base->get('POST.username');
+		$user->email = empty($base->get('POST.email')) ? $user->email : $base->get('POST.email');
+
+		$user->save();
+
+		\Flash::instance()->addMessage('Credentials changed.', 'success');
+		$base->reroute('/user');
+	}
+
 	public function requestPage(\Base $base)
 	{
 		$base->set('pgTitle', 'Recover password');
