@@ -120,7 +120,7 @@ class User
 	public function postChangeCredentials(\Base $base)
 	{
 		$model = new \Models\User();
-		$user = $model->findone(["id=?", $base->get('SEESION.uid')]);
+		$user = $model->findone(["id=?", $base->get('SESSION.uid')]);
 
 		$user->username = empty($base->get('POST.username'))
 						? $user->username
