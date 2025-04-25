@@ -123,8 +123,8 @@ class User
 		$user = $model->findone(["id=?", $base->get('SESSION.uid')]);
 
 		$user->username = empty($base->get('POST.username'))
-						? $user->username
-						: $base->get('POST.username');
+			? $user->username
+			: $base->get('POST.username');
 		$user->email = empty($base->get('POST.email')) ? $user->email : $base->get('POST.email');
 
 		$user->save();
@@ -132,6 +132,33 @@ class User
 		$base->set('SESSION.nick', $user->username);
 
 		\Flash::instance()->addMessage('Credentials changed.', 'success');
+		$base->reroute('/user');
+	}
+
+	public function postChangePassword(\Base $base)
+	{
+		if (empty($base->get('POST.old-password'))) {
+			\Flash::instance()->addMessage("You must enter the old password", 'danger');
+			$base->reroute('/user');
+		} else if ($base->get('POST.new-password') != $base->get('POST.repeat-new-password')) {
+			\Flash::instance()->addMessage("New passwords don't match", 'danger');
+			$base->reroute('/user');
+		} else if (empty($base->get('POST.new-password')) || empty($base->get('POST.new-password'))) {
+			\Flash::instance()->addMessage("New password can't be empty", 'danger');
+			$base->reroute('/user');
+		}
+
+		$model = new \Models\User();
+		$user = $model->findone(['id=?', $base->get('SESSION.uid')]);
+		//if ($user->password != password_hash($base->get('POST.old-password'), PASSWORD_DEFAULT)) {
+		if (!password_verify($base->get('POST.old-password'), $user->password)) {
+			\Flash::instance()->addMessage("Old password doesn't match", 'danger');
+			$base->reroute('/user');
+		}
+		
+		$user->password = password_hash($base->get('POST.new-password'), PASSWORD_DEFAULT);
+		$user->save();
+		\Flash::instance()->addMessage("Password changed.", 'success');
 		$base->reroute('/user');
 	}
 
