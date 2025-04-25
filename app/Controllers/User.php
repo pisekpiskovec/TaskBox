@@ -129,6 +129,8 @@ class User
 
 		$user->save();
 
+		$base->set('SESSION.nick', $user->username);
+
 		\Flash::instance()->addMessage('Credentials changed.', 'success');
 		$base->reroute('/user');
 	}
