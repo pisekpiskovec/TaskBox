@@ -6,6 +6,8 @@ body {
 
 * {
   color: light-dark(--darkE, --lightA);
+  scrollbar-width: thin;
+  scrollbar-color: var(--lightA) transparent;
 }
 
 .circle {
