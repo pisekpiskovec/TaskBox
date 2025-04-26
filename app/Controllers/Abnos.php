@@ -74,4 +74,26 @@ class Abnos
         }
         echo $abno->name;
     }
+
+    public function getAbnormalityCode(\Base $base)
+    {
+        $shape = $base->get('PARAMS.shape') ?? 0;
+        $code = $base->get('PARAMS.code') ?? 0;
+        $model = new \Models\Abnos();
+        $abno = $model->findone(['shape=:sh AND code=:cd', ':sh' => $shape, ':cd' => $code]);
+        $fullCode = "";
+        if ($abno === false) {
+            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->origin . "-";
+            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->shape . "-";
+            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->code . "-";
+            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->risk;
+            echo $fullCode;
+            return;
+        }
+        $fullCode = $fullCode . $abno->origin . "-";
+        $fullCode = $fullCode . $abno->shape . "-";
+        $fullCode = $fullCode . $abno->code . "-";
+        $fullCode = $fullCode . $abno->risk;
+        echo $fullCode;
+    }
 }
