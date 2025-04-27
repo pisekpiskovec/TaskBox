@@ -154,6 +154,9 @@ class User
 		if (!password_verify($base->get('POST.old-password'), $user->password)) {
 			\Flash::instance()->addMessage("Old password doesn't match", 'danger');
 			$base->reroute('/user');
+		} else if (password_verify($base->get('POST.new-password'), $user->password)) {
+			\Flash::instance()->addMessage("Old password can't match the new password", 'danger');
+			$base->reroute('/user');
 		}
 		
 		$user->password = password_hash($base->get('POST.new-password'), PASSWORD_DEFAULT);
