@@ -68,8 +68,9 @@ class Abnos
         $code = $base->get('PARAMS.code') ?? 0;
         $model = new \Models\Abnos();
         $abno = $model->findone(['shape=:sh AND code=:cd', ':sh' => $shape, ':cd' => $code]);
+        $maxID = $model->count();
         if ($abno === false) {
-            echo $model->findone(['id=?', $shape . $code])->name;
+            echo $model->findone(['id=?', ($shape . $code) % $maxID])->name;
             return;
         }
         echo $abno->name;
@@ -81,12 +82,13 @@ class Abnos
         $code = $base->get('PARAMS.code') ?? 0;
         $model = new \Models\Abnos();
         $abno = $model->findone(['shape=:sh AND code=:cd', ':sh' => $shape, ':cd' => $code]);
+        $maxID = $model->count();
         $fullCode = "";
         if ($abno === false) {
-            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->origin . "-";
-            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->shape . "-";
-            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->code . "-";
-            $fullCode = $fullCode . $model->findone(['id=?', $shape . $code])->risk;
+            $fullCode = $fullCode . $model->findone(['id=?', ($shape . $code) % $maxID])->origin . "-";
+            $fullCode = $fullCode . $model->findone(['id=?', ($shape . $code) % $maxID])->shape . "-";
+            $fullCode = $fullCode . $model->findone(['id=?', ($shape . $code) % $maxID])->code . "-";
+            $fullCode = $fullCode . $model->findone(['id=?', ($shape . $code) % $maxID])->risk;
             echo $fullCode;
             return;
         }
