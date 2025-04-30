@@ -3,5 +3,5 @@ vendor/
 tmp/
 logs/
 uploads/
-app/Config/db.ini
+app/Configs/db.ini
 app/Configs/emails.ini
