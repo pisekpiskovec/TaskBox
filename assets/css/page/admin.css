@@ -1,0 +1,40 @@
+@import url("/pallete.css");
+
+body {
+  background: linear-gradient(
+    -45deg,
+    var(--blueC),
+    var(--blueD),
+    var(--blueE),
+    var(--darkC),
+    var(--darkC),
+    var(--darkC),
+    var(--blueE),
+    var(--blueD),
+    var(--blueC)
+  );
+  animation: gradient 28s ease infinite;
+  background-size: 400% 400%;
+  overflow: hidden;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.editbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+  }
