@@ -2,4 +2,35 @@
 
 <div class="editbox">
     <h1>{{@pgTitle}}</h1>
+    <panel class="box" id="stats">
+        <h2>Stats</h2>
+        <table>
+            <tr>
+                <td>Abnormalities</td>
+                <td>{{@abnosCount}}</td>
+            </tr>
+            <tr>
+                <td>Lists</td>
+                <td>{{@listsCount}}</td>
+            </tr>
+            <tr>
+                <td>Subtasks</td>
+                <td>{{@subtasksCount}}</td>
+            </tr>
+            <tr>
+                <td>Tasks</td>
+                <td>{{@tasksCount}}</td>
+            </tr>
+            <tr>
+                <td>Users</td>
+                <td>{{@usersCount}}</td>
+            </tr>
+        </table>
+    </panel>
+
+    // 3 naposdledy vytvoreni uzivatele; zobrazeni 3 jmenovek pod sebou; na konci tlacitko "Dalsi uzivatele"
+    <panel class="box" id="last-created-users">
+        <h2>Latest users</h2>
+        <repeat group=""></repeat>
+    </panel>
 </div>
