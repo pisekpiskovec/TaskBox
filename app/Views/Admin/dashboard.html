@@ -2,35 +2,47 @@
 
 <div class="editbox">
     <h1>{{@pgTitle}}</h1>
-    <panel class="box" id="stats">
-        <h2>Stats</h2>
-        <table>
-            <tr>
-                <td>Abnormalities</td>
-                <td>{{@abnosCount}}</td>
-            </tr>
-            <tr>
-                <td>Lists</td>
-                <td>{{@listsCount}}</td>
-            </tr>
-            <tr>
-                <td>Subtasks</td>
-                <td>{{@subtasksCount}}</td>
-            </tr>
-            <tr>
-                <td>Tasks</td>
-                <td>{{@tasksCount}}</td>
-            </tr>
-            <tr>
-                <td>Users</td>
-                <td>{{@usersCount}}</td>
-            </tr>
-        </table>
-    </panel>
+    <div class="boxes">
+        <panel class="box" id="stats">
+            <table>
+                <tr>
+                    <td>Abnormalities</td>
+                    <td>{{@abnosCount}}</td>
+                </tr>
+                <tr>
+                    <td>Lists</td>
+                    <td>{{@listsCount}}</td>
+                </tr>
+                <tr>
+                    <td>Subtasks</td>
+                    <td>{{@subtasksCount}}</td>
+                </tr>
+                <tr>
+                    <td>Tasks</td>
+                    <td>{{@tasksCount}}</td>
+                </tr>
+                <tr>
+                    <td>Users</td>
+                    <td>{{@usersCount}}</td>
+                </tr>
+            </table>
+        </panel>
 
-    // 3 naposdledy vytvoreni uzivatele; zobrazeni 3 jmenovek pod sebou; na konci tlacitko "Dalsi uzivatele"
-    <panel class="box" id="last-created-users">
-        <h2>Latest users</h2>
-        <repeat group=""></repeat>
-    </panel>
+        <panel class="box" id="last-created-users">
+            <repeat group="{{@lastUsers}}" value="{{@user}}">
+                <a class="user-card " href="/admin/user/{{@user.id}}">
+                    <div class="user-card-avtr">
+                        <img class="circle" src="{{@user.avatar}}" alt="{{@user.username}}'s Avatar">
+                    </div>
+                    <div class="user-card-nick">{{@user.username}}</div>
+                    <sub class="user-card-desc">{{@user.account_created}}</sub>
+                </a>
+            </repeat>
+            <a href="/admin/user" class="buttonLight">More users</a>
+        </panel>
+    </div>
+
+    <div class="linkbar">
+        <a href="/" class="link">Go home</a>
+    </div>
 </div>
