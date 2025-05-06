@@ -10,23 +10,18 @@ a.button {
   align-items: center;
 }
 
-a.button:hover, a.buttonLight:hover {
+a.button:hover, a.buttonLight:hover, input[type="submit"].light:hover {
   background-color: light-dark(var(--lightB), var(--darkB));
 }
 
-a.button:active, a.buttonLight:active {
+a.button:active, a.buttonLight:active, input[type="submit"].light:active {
   background-color: var(--brand);
   color: var(--lightA);
 }
 
-a.buttonLight {
+a.light, input[type="submit"].light {
   background-color: light-dark(var(--lightD), var(--darkC));
-  padding: 11px;
-  border-radius: 12px;
   color: light-dark(var(--darkE), var(--lightA));
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
 }
 
 input[type="submit"] {
