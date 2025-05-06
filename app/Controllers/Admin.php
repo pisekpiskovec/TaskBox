@@ -24,13 +24,14 @@ class Admin
         $base->set('tasksCount', $taskModel->count());
         $base->set('usersCount', $userModel->count());
         $base->set('lastUsers', $recentUsers);
-        
+
         $base->set('pgTitle', 'Dashboard');
         $base->set('content', '/Admin/dashboard.html');
         echo \Template::instance()->render('index.html');
     }
 
-    public function getUserList (\Base $base) {
+    public function getUserList(\Base $base)
+    {
         $model = new \Models\User();
         $base->set('users', $model->find());
 
@@ -39,7 +40,8 @@ class Admin
         echo \Template::instance()->render('index.html');
     }
 
-    public function getUserEdit (\Base $base) {
+    public function getUserEdit(\Base $base)
+    {
         if ($base->get('SESSION.uid') != 1)
             $base->reroute('/user');
 
@@ -50,5 +52,33 @@ class Admin
         $base->set('pgTitle', $user->username . '\'s Account');
         $base->set('content', '/Admin/edit_user.html');
         echo \Template::instance()->render('index.html');
+    }
+
+    public function postChangePassword(\Base $base)
+    {
+        $applyTo = $base->get('PARAMS.uid') ?? $base->get('SESSION.uid');
+
+        if ($base->get('POST.new-password') != $base->get('POST.repeat-new-password')) {
+            \Flash::instance()->addMessage("New passwords don't match", 'danger');
+            $base->reroute('/admin/user/' . $applyTo);
+        } else if (empty($base->get('POST.new-password')) || empty($base->get('POST.new-password'))) {
+            \Flash::instance()->addMessage("New password can't be empty", 'danger');
+            $base->reroute('/admin/user/' . $applyTo);
+        }
+
+        $model = new \Models\User();
+        $user = $model->findone(['id=?', $applyTo]);
+        if (password_verify($base->get('POST.new-password'), $user->password)) {
+            \Flash::instance()->addMessage("Old password can't match the new password", 'danger');
+            $base->reroute('/admin/user/' . $applyTo);
+        }
+
+        $user->password = password_hash($base->get('POST.new-password'), PASSWORD_DEFAULT);
+        $user->save();
+        \Flash::instance()->addMessage("Password changed.", 'success');
+        if ($applyTo == $base->get('SESSION.uid'))
+            $base->reroute('/user');
+        else
+            $base->reroute('/admin/user/' . $applyTo);
     }
 }

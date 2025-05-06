@@ -125,8 +125,10 @@ class User
 
 	public function postChangeCredentials(\Base $base)
 	{
+		$applyTo = $base->get('PARAMS.uid') ?? $base->get('SESSION.uid');
+
 		$model = new \Models\User();
-		$user = $model->findone(["id=?", $base->get('SESSION.uid')]);
+		$user = $model->findone(["id=?", $applyTo]);
 
 		$user->username = empty($base->get('POST.username'))
 			? $user->username
@@ -135,10 +137,14 @@ class User
 
 		$user->save();
 
-		$base->set('SESSION.nick', $user->username);
+		if ($applyTo == $base->get('SESSION.uid'))
+			$base->set('SESSION.nick', $user->username);
 
 		\Flash::instance()->addMessage('Credentials changed.', 'success');
-		$base->reroute('/user');
+		if ($applyTo == $base->get('SESSION.uid'))
+			$base->reroute('/user');
+		else
+			$base->reroute('/admin/user/' . $applyTo);
 	}
 
 	public function postChangePassword(\Base $base)
