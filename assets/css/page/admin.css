@@ -104,6 +104,7 @@ td{
   grid-column-start: 4;
   font-weight: bold;
   align-content: end;
+  font-size: x-large;
 }
 
 .user-card-desc {
