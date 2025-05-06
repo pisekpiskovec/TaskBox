@@ -68,6 +68,18 @@ body {
   padding: 10px;
 }
 
+td{
+  padding: 2px 12px;
+}
+
+#tbl-left {
+  text-align: left;
+}
+
+#tbl-right {
+  text-align: right;
+}
+
 .user-card {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
