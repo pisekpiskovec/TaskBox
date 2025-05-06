@@ -3,8 +3,8 @@
 <div class="editbox">
     <h1>{{@pgTitle}}</h1>
     <div class="boxes">
-        <form action="/admin/user/{{@PARAMS.uid}}/change_avatar" method="post" class="login" enctype="multipart/form-data"
-            id="section-avatar">
+        <form action="/admin/user/{{@PARAMS.uid}}/change_avatar" method="post" class="login"
+            enctype="multipart/form-data" id="section-avatar">
             <label for="avatar" class="imgButton">
                 <div class="avatar-container">
                     <img src="{{@user.avatar}}" alt="User's profile picture" height="128" width="128" class="circle"
@@ -17,7 +17,8 @@
             <script src="/assets/js/avatarUpdate.js"></script>
         </form>
 
-        <form action="/admin/user/{{@PARAMS.uid}}/change_credentials" method="post" class="login" id="section-credentials">
+        <form action="/admin/user/{{@PARAMS.uid}}/change_credentials" method="post" class="login"
+            id="section-credentials">
             <label for="username">Username</label>
             <input type="text" name="username" id="username">
             <label for="email">Email</label>
@@ -35,6 +36,7 @@
     </div>
 
     <div class="linkbar">
-        <a href="/admin/user" class="link">Go to user list</a>
+        <a href="/admin/user" class="link">Go to user list</a> • <a href="/admin/user/{{@PARAMS.uid}}/delete"
+            class="link destructive">Delete user</a>
     </div>
 </div>

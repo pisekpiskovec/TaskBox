@@ -41,3 +41,7 @@ a.link{
   margin: 10px;
   text-decoration: none;
 }
+
+a.destructive {
+  color: var(--redC);
+}

@@ -104,4 +104,23 @@ class Admin
         else
             $base->reroute('/admin/user/' . $applyTo);
     }
+
+    public function getDeleteUser(\Base $base)
+    {
+        if ($base->get('PARAMS.uid') == $base->get('SESSION.uid')) {
+            \Flash::instance()->addMessage("You can't delete yourself!", 'danger');
+            $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
+        }
+
+        $model = new \Models\User();
+        $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
+        if ($user === false) {
+            \Flash::instance()->addMessage("User not found", 'danger');
+            $base->reroute('/admin/user');
+        }
+
+        $user->erase();
+        \Flash::instance()->addMessage("User deleted", 'success');
+        $base->reroute('/admin/user');
+    }
 }
