@@ -29,4 +29,17 @@ class Admin
         $base->set('content', '/Admin/dashboard.html');
         echo \Template::instance()->render('index.html');
     }
+
+    public function getUserEdit (\Base $base) {
+        if ($base->get('SESSION.uid') != 1)
+            $base->reroute('/user');
+
+        $model = new \Models\User();
+        $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
+        $base->set('user', $user);
+
+        $base->set('pgTitle', $user->username . '\'s Account');
+        $base->set('content', '/Admin/edit_user.html');
+        echo \Template::instance()->render('index.html');
+    }
 }

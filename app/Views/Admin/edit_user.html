@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="/assets/css/page/user.css">
+<link rel="stylesheet" href="/assets/css/page/admin.css">
+<div class="editbox">
+    <h1>{{@pgTitle}}</h1>
+    <div class="boxes">
+        <form action="/admin/user/{{@PARAMS.uid}}/change_avatar" method="post" class="login" enctype="multipart/form-data"
+            id="section-avatar">
+            <label for="avatar" class="imgButton">
+                <div class="avatar-container">
+                    <img src="{{@user.avatar}}" alt="User's profile picture" height="128" width="128" class="circle"
+                        id="preview">
+                    <div class="hover-overlay circle">Edit</div>
+                </div>
+            </label>
+            <input type="file" name="avatar" id="avatar" class="hidden" accept="image/png, image/gif, image/jpeg">
+            <input type="submit" value="Save avatar" style="margin-top: 20px;" class="light">
+            <script src="/assets/js/avatarUpdate.js"></script>
+        </form>
+
+        <form action="/user/change_credentials" method="post" class="login" id="section-credentials">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+            <input type="submit" value="Save details" class="light">
+        </form>
+
+        <form action="/user/change_password" method="post" class="login" id="section-password">
+            <label for="new-password">New Password</label>
+            <input type="password" name="new-password" id="new-password" required>
+            <label for="repeat-new-password">New Password Verification</label>
+            <input type="password" name="repeat-new-password" id="repeat-new-password" required>
+            <input type="submit" value="Save password" class="light">
+        </form>
+    </div>
+
+    <div class="linkbar">
+        <a href="/admin" class="link">Go to dashboard</a>
+    </div>
+</div>

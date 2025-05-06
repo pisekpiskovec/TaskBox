@@ -97,6 +97,8 @@ class User
 
 	public function postChangeAvatar(\Base $base)
 	{
+		$applyTo = $base->get('PARAMS.uid') ?? $base->get('SESSION.uid');
+
 		$web = \Web::instance();
 		$overwrite = true;
 		$slug = true;
@@ -107,14 +109,18 @@ class User
 
 		foreach (array_keys($files) as $file) {
 			$model = new \Models\User();
-			$user = $model->findone(["id=?", $base->get('SESSION.uid')]);
+			$user = $model->findone(["id=?", $applyTo]);
 			$user->avatar = '/' . $file;
 			$user->save();
-			$base->set('SESSION.avatar', $file);
+			if ($applyTo == $base->get('SESSION.uid'))
+				$base->set('SESSION.avatar', $file);
 		}
 
 		\Flash::instance()->addMessage('Avatar changed.', 'success');
-		$base->reroute('/user');
+		if ($applyTo == $base->get('SESSION.uid'))
+			$base->reroute('/user');
+		else
+			$base->reroute('/admin/user/' . $applyTo);
 	}
 
 	public function postChangeCredentials(\Base $base)
@@ -158,7 +164,7 @@ class User
 			\Flash::instance()->addMessage("Old password can't match the new password", 'danger');
 			$base->reroute('/user');
 		}
-		
+
 		$user->password = password_hash($base->get('POST.new-password'), PASSWORD_DEFAULT);
 		$user->save();
 		\Flash::instance()->addMessage("Password changed.", 'success');
