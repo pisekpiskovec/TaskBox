@@ -37,5 +37,8 @@
 
     <div class="linkbar">
         <a href="/" class="link">Go home</a>
+        <check if="{{@SESSION.uid == 1}}">
+            <true> • <a href="/admin" class="link">Admin dashboard</a></true>
+        </check>
     </div>
 </div>
