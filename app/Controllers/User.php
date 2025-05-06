@@ -108,7 +108,7 @@ class User
 		foreach (array_keys($files) as $file) {
 			$model = new \Models\User();
 			$user = $model->findone(["id=?", $base->get('SESSION.uid')]);
-			$user->avatar = $file;
+			$user->avatar = '/' . $file;
 			$user->save();
 			$base->set('SESSION.avatar', $file);
 		}
