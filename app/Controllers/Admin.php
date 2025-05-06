@@ -30,6 +30,15 @@ class Admin
         echo \Template::instance()->render('index.html');
     }
 
+    public function getUserList (\Base $base) {
+        $model = new \Models\User();
+        $base->set('users', $model->find());
+
+        $base->set('pgTitle', 'Users');
+        $base->set('content', '/Admin/users.html');
+        echo \Template::instance()->render('index.html');
+    }
+
     public function getUserEdit (\Base $base) {
         if ($base->get('SESSION.uid') != 1)
             $base->reroute('/user');
