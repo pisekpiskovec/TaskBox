@@ -25,6 +25,29 @@ class Admin
         $base->set('usersCount', $userModel->count());
         $base->set('lastUsers', $recentUsers);
 
+        // Version prep
+        $vertag = $base->get('TB_VERSION');
+        $base->set('version', $vertag);
+        explode('\.', $vertag);
+        $base->set('PARAMS.shape', $vertag[0]);
+        $base->set('PARAMS.code', $vertag[2]);
+
+        // Abno code
+        ob_start();
+        $controller = new \Controllers\Abnos();
+        $controller->getAbnormalityCode($base);
+        $data = ob_get_clean();
+        ob_end_clean();
+        $base->set('version_tag', $data);
+
+        // Abno name
+        ob_start();
+        $controller = new \Controllers\Abnos();
+        $controller->getAbnormality($base);
+        $data = ob_get_clean();
+        ob_end_clean();
+        $base->set('codename', $data);
+
         $base->set('pgTitle', 'Dashboard');
         $base->set('content', '/Admin/dashboard.html');
         echo \Template::instance()->render('index.html');
