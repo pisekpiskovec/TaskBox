@@ -18,6 +18,7 @@ body {
 
 .circle {
   border-radius: 624.9375rem;
+  object-fit: cover;
 }
 
 .header-bar {
