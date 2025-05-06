@@ -16,7 +16,7 @@ class Admin
         $subtaskModel = new \Models\Subtask();
         $taskModel = new \Models\Task();
         $userModel = new \Models\User();
-        $recentUsers = $userModel->find([], ['order' => 'id DESC', 'limit' => 3]);
+        $recentUsers = $userModel->find([], ['order' => 'account_created DESC', 'limit' => 3]);
 
         $base->set('abnosCount', $abnoModel->count());
         $base->set('listsCount', $listModel->count());
