@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/assets/css/page/admin.css">
+
+<div class="editbox">
+    <h1>{{@pgTitle}}</h1>
+    <div class="boxes">
+        <panel class="box">
+            <repeat group="{{@users}}" value="{{@user}}">
+                <a class="user-card " href="/admin/user/{{@user.id}}">
+                    <div class="user-card-avtr">
+                        <img class="circle" src="{{@user.avatar}}" alt="{{@user.username}}'s Avatar" width="100" height="100">
+                    </div>
+                    <div class="user-card-nick">{{@user.username}}</div>
+                    <sub class="user-card-desc">{{@user.account_created}}</sub>
+                </a>
+            </repeat>
+        </panel>
+    </div>
+
+    <div class="linkbar">
+        <a href="/admin" class="link">Go to Dashboard</a>
+    </div>
+</div>

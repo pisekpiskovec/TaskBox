@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="/assets/css/page/admin.css">
+
+<div class="editbox">
+    <h1>{{@pgTitle}}</h1>
+    <div class="boxes">
+        <panel class="box" id="stats">
+            <table>
+                <tr>
+                    <td id="tbl-left">Abnormalities</td>
+                    <td id="tbl-right">{{@abnosCount}}</td>
+                </tr>
+                <tr>
+                    <td id="tbl-left">Lists</td>
+                    <td id="tbl-right">{{@listsCount}}</td>
+                </tr>
+                <tr>
+                    <td id="tbl-left">Subtasks</td>
+                    <td id="tbl-right">{{@subtasksCount}}</td>
+                </tr>
+                <tr>
+                    <td id="tbl-left">Tasks</td>
+                    <td id="tbl-right">{{@tasksCount}}</td>
+                </tr>
+                <tr>
+                    <td id="tbl-left">Users</td>
+                    <td id="tbl-right">{{@usersCount}}</td>
+                </tr>
+            </table>
+            <a href="/install" class="button light">Reinitialize</a>
+        </panel>
+
+        <panel class="box" id="last-created-users">
+            <repeat group="{{@lastUsers}}" value="{{@user}}">
+                <a class="user-card " href="/admin/user/{{@user.id}}">
+                    <div class="user-card-avtr">
+                        <img class="circle" src="{{@user.avatar}}" alt="{{@user.username}}'s Avatar" width="100" height="100">
+                    </div>
+                    <div class="user-card-nick">{{@user.username}}</div>
+                    <sub class="user-card-desc">{{@user.account_created}}</sub>
+                </a>
+            </repeat>
+            <a href="/admin/user" class="button light">More users</a>
+        </panel>
+
+        <panel class="box" id="version">
+            <h2>{{@version}} - {{@codename}}</h2>
+            <sub>{{@version_tag}}</sub>
+            <a href="https://github.com/pisekpiskovec/TaskBox/releases/latest/" class="button light">Check for updates</a>
+        </panel>
+    </div>
+
+    <div class="linkbar">
+        <a href="/" class="link">Go home</a>
+    </div>
+</div>

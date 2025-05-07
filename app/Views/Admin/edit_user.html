@@ -1,44 +1,42 @@
 <link rel="stylesheet" href="/assets/css/page/user.css">
+<link rel="stylesheet" href="/assets/css/page/admin.css">
 <div class="editbox">
     <h1>{{@pgTitle}}</h1>
     <div class="boxes">
-        <form action="/user/change_avatar" method="post" class="login" enctype="multipart/form-data"
-            id="section-avatar">
+        <form action="/admin/user/{{@PARAMS.uid}}/change_avatar" method="post" class="login"
+            enctype="multipart/form-data" id="section-avatar">
             <label for="avatar" class="imgButton">
                 <div class="avatar-container">
-                    <img src="{{@SESSION.avatar}}" alt="User's profile picture" height="128" width="128" class="circle"
+                    <img src="{{@user.avatar}}" alt="User's profile picture" height="128" width="128" class="circle"
                         id="preview">
                     <div class="hover-overlay circle">Edit</div>
                 </div>
             </label>
             <input type="file" name="avatar" id="avatar" class="hidden" accept="image/png, image/gif, image/jpeg">
-            <input type="submit" value="Save avatar" style="margin-top: 20px;">
+            <input type="submit" value="Save avatar" style="margin-top: 20px;" class="light">
             <script src="/assets/js/avatarUpdate.js"></script>
         </form>
 
-        <form action="/user/change_credentials" method="post" class="login" id="section-credentials">
+        <form action="/admin/user/{{@PARAMS.uid}}/change_credentials" method="post" class="login"
+            id="section-credentials">
             <label for="username">Username</label>
             <input type="text" name="username" id="username">
             <label for="email">Email</label>
             <input type="email" name="email" id="email">
-            <input type="submit" value="Save details">
+            <input type="submit" value="Save details" class="light">
         </form>
 
-        <form action="/user/change_password" method="post" class="login" id="section-password">
-            <label for="old-password">Current Password</label>
-            <input type="password" name="old-password" id="old-password" required>
+        <form action="/admin/user/{{@PARAMS.uid}}/change_password" method="post" class="login" id="section-password">
             <label for="new-password">New Password</label>
             <input type="password" name="new-password" id="new-password" required>
             <label for="repeat-new-password">New Password Verification</label>
             <input type="password" name="repeat-new-password" id="repeat-new-password" required>
-            <input type="submit" value="Save password" class="button">
+            <input type="submit" value="Save password" class="light">
         </form>
     </div>
 
     <div class="linkbar">
-        <a href="/" class="link">Go home</a>
-        <check if="{{@SESSION.uid == 1}}">
-            <true> • <a href="/admin" class="link">Admin dashboard</a></true>
-        </check>
+        <a href="/admin/user" class="link">Go to user list</a> • <a href="/admin/user/{{@PARAMS.uid}}/delete"
+            class="link destructive">Delete user</a>
     </div>
 </div>
