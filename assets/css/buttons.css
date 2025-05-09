@@ -10,11 +10,11 @@ a.button {
   align-items: center;
 }
 
-a.button:hover, a.buttonLight:hover, input[type="submit"].light:hover {
+a.button:hover, a.light:hover, input[type="submit"].light:hover {
   background-color: light-dark(var(--lightB), var(--darkB));
 }
 
-a.button:active, a.buttonLight:active, input[type="submit"].light:active {
+a.button:active, a.light:active, input[type="submit"].light:active {
   background-color: var(--brand);
   color: var(--lightA);
 }
