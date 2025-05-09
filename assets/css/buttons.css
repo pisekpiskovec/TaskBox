@@ -42,6 +42,10 @@ a.link{
   text-decoration: none;
 }
 
+a.worded_link{
+  text-decoration: none;
+}
+
 a.destructive {
   color: var(--redC);
 }
