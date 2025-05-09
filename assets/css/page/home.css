@@ -1,0 +1,56 @@
+.domine {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.domine-medium {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.domine-bold {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.domine-bolder {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+header {
+  margin-top: 5vh;
+  padding: 30px;
+  height: 65vh;
+  min-height: min-content;
+  text-align: center;
+  font-size: 3rem !important;
+  line-height: 0.5 !important;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+section{
+  padding: 30px;
+  margin: 30px;
+}
+
+.section-in-container{
+  display: flex;
+  background-color: var(--darkD);
+  padding: 30px;
+  gap: 30px;
+  border-radius: 12px;
+  align-items: center;
+  font-size: 1.25rem !important;
+}
