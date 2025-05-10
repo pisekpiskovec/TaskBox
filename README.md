@@ -18,6 +18,10 @@
 
 - HTML/CSS/JavaScript
 - Fat Free Framework
+  - bcosca/fatfree-core
+  - ikkez/f3-cortex
+  - ikkez/f-flash
+  - ikkez/f-mailer
 
 ## 🤝 Přispívání
 
