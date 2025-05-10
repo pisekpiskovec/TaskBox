@@ -16,6 +16,7 @@ class Index
         $base->set("content", "home.html");
         echo \Template::instance()->render('index.html');
     }
+
     public function robots_txt(\Base $base, array $args = []): void
     {
         echo "DO YOU LOVE THE CITY YOU LIVE IN?";
@@ -40,5 +41,11 @@ class Index
         Token::setup();
 
         $base->reroute('/abnos/setup');
+    }
+
+    public function getError(\Base $base)
+    {
+        $base->set("content", "error.html");
+        echo \Template::instance()->render('index.html');
     }
 }
