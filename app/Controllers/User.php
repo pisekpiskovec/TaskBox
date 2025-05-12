@@ -30,10 +30,16 @@ class User
 			unset($tmp['repeat-password']);
 			$user->copyfrom($tmp);
 			$user->save();
-			$base->reroute('/login');
+			if ($base->get('POST.admin') == true)
+				$base->reroute('/admin/user');
+			else
+				$base->reroute('/login');
 		} else {
 			\Flash::instance()->addMessage("Passwords don't match", 'danger');
-			$base->reroute('/register');
+			if ($base->get('POST.admin') == true)
+			$base->reroute('/admin/user');
+		else
+			$base->reroute('/admin/user/register');
 		}
 	}
 

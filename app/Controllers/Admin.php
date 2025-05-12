@@ -123,4 +123,14 @@ class Admin
         \Flash::instance()->addMessage("User deleted", 'success');
         $base->reroute('/admin/user');
     }
+
+    public function getUserRegister(\Base $base)
+    {
+        if ($base->get('SESSION.uid') != 1)
+            $base->reroute('/user');
+
+        $base->set('pgTitle', 'Register');
+        $base->set('content', '/Admin/register_user.html');
+        echo \Template::instance()->render('index.html');
+    }
 }
