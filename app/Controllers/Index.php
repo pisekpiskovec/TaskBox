@@ -48,4 +48,18 @@ class Index
         $base->set("content", "error.html");
         echo \Template::instance()->render('index.html');
     }
+
+    public function getSetup(\Base $base)
+    {
+        $page = $base->get('GET.page');
+        switch ($page) {
+            case 1:
+                $base->set("content", "home.html");
+                break;
+            default:
+                $base->set("content", "error.html");
+                break;
+        }
+        echo \Template::instance()->render('index.html');
+    }
 }
