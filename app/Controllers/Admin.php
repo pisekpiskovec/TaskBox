@@ -57,6 +57,7 @@ class Admin
     {
         $model = new \Models\User();
         $base->set('users', $model->find());
+        $base->set('checkstatus', $base->get('TB.enable_user_creation') ? "checked" : "");
 
         $base->set('pgTitle', 'Users');
         $base->set('content', '/Admin/users.html');

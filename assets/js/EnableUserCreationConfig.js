@@ -10,7 +10,7 @@ function sendCheckboxStatus(checkboxID) {
         const url = `/admin/set/enable_user_creation?enable_user_creation=${this.checked ? '1' : '0'}`;
 
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
+        xhr.open('POST', url, true);
 
         xhr.onload = function () {
             if (xhr.status >= 200 && xhr.status < 300)
