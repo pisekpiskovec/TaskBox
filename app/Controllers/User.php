@@ -6,6 +6,11 @@ class User
 {
 	public function register(\Base $base)
 	{
+		if ($base->get('TB.enable_user_creation') == false) {
+			\Flash::instance()->addMessage("User account creation disabled by admin.", 'danger');
+			$base->reroute('/');
+		}
+
 		if ($base->get('SESSION.uid'))
 			$this->clearSession($base);
 		$base->set('pgTitle', 'Register');
@@ -37,9 +42,9 @@ class User
 		} else {
 			\Flash::instance()->addMessage("Passwords don't match", 'danger');
 			if ($base->get('POST.admin') == true)
-			$base->reroute('/admin/user');
-		else
-			$base->reroute('/admin/user/register');
+				$base->reroute('/admin/user');
+			else
+				$base->reroute('/admin/user/register');
 		}
 	}
 

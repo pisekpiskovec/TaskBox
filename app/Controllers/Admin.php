@@ -26,7 +26,7 @@ class Admin
         $base->set('lastUsers', $recentUsers);
 
         // Version prep
-        $vertag = $base->get('TB_VERSION');
+        $vertag = $base->get('TB.VERSION');
         $base->set('version', $vertag);
         explode('\.', $vertag);
         $base->set('PARAMS.shape', $vertag[0]);
@@ -132,5 +132,16 @@ class Admin
         $base->set('pgTitle', 'Register');
         $base->set('content', '/Admin/register_user.html');
         echo \Template::instance()->render('index.html');
+    }
+
+    public function getSetEnableUserCreation(\Base $base)
+    {
+        $value = $base->get('GET.enable_user_creation');
+        $base->set('TB.enable_user_creation', $value);
+
+        $indexCtrl = new \Controllers\Index();
+        $indexCtrl->updateConfigValue($base, 'TB.enable_user_creation', $value);
+        echo json_encode(['success' => true]);
+        exit;
     }
 }
