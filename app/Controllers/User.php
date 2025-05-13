@@ -34,7 +34,12 @@ class User
 			$tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
 			unset($tmp['repeat-password']);
 			$user->copyfrom($tmp);
+
+			if ($user->count() == 0)
+				$user->is_admin = true;
+
 			$user->save();
+
 			if ($base->get('POST.admin') == true)
 				$base->reroute('/admin/user');
 			else
