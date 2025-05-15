@@ -6,10 +6,8 @@ class Admin
 {
     public function getDashboard(\Base $base)
     {
-        if ($base->get('SESSION.uid') != 1) {
-            \Flash::instance()->addMessage("You must be logged in as an admin", 'danger');
-            $base->reroute('/');
-        }
+        (new \Controllers\Index())->evaluateAccess($base);
+
 
         $abnoModel = new \Models\Abnos();
         $listModel = new \Models\Lists();
@@ -26,7 +24,7 @@ class Admin
         $base->set('lastUsers', $recentUsers);
 
         // Version prep
-        $vertag = $base->get('TB_VERSION');
+        $vertag = $base->get('TB.VERSION');
         $base->set('version', $vertag);
         explode('\.', $vertag);
         $base->set('PARAMS.shape', $vertag[0]);
@@ -55,8 +53,11 @@ class Admin
 
     public function getUserList(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         $model = new \Models\User();
         $base->set('users', $model->find());
+        $base->set('checkstatus', $base->get('TB.enable_user_creation') ? "checked" : "");
 
         $base->set('pgTitle', 'Users');
         $base->set('content', '/Admin/users.html');
@@ -65,12 +66,13 @@ class Admin
 
     public function getUserEdit(\Base $base)
     {
-        if ($base->get('SESSION.uid') != 1)
-            $base->reroute('/user');
+        (new \Controllers\Index())->evaluateAccess($base);
 
         $model = new \Models\User();
         $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
         $base->set('user', $user);
+        $base->set('checkstatus', $user->is_admin ? "checked" : "");
+
 
         $base->set('pgTitle', $user->username . '\'s Account');
         $base->set('content', '/Admin/edit_user.html');
@@ -107,6 +109,8 @@ class Admin
 
     public function getDeleteUser(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         if ($base->get('PARAMS.uid') == $base->get('SESSION.uid')) {
             \Flash::instance()->addMessage("You can't delete yourself!", 'danger');
             $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
@@ -122,5 +126,47 @@ class Admin
         $user->erase();
         \Flash::instance()->addMessage("User deleted", 'success');
         $base->reroute('/admin/user');
+    }
+
+    public function getUserRegister(\Base $base)
+    {
+        (new \Controllers\Index())->evaluateAccess($base);
+
+        $base->set('pgTitle', 'Register');
+        $base->set('content', '/Admin/register_user.html');
+        echo \Template::instance()->render('index.html');
+    }
+
+    public function getSetEnableUserCreation(\Base $base)
+    {
+        (new \Controllers\Index())->evaluateAccess($base);
+
+        $value = $base->get('GET.enable_user_creation');
+        $base->set('TB.enable_user_creation', $value);
+
+        $indexCtrl = new \Controllers\Index();
+        $indexCtrl->updateConfigValue($base, 'TB.enable_user_creation', $value);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
+    public function postChangePermissions(\Base $base)
+    {
+        (new \Controllers\Index())->evaluateAccess($base);
+
+        if ($base->get('PARAMS.uid') == 1) {
+            \Flash::instance()->addMessage("First user is always admin!", 'danger');
+            $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
+        }
+
+        $model = new \Models\User();
+        $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
+        $user->is_admin = $base->get('POST.isadmin');
+        $user->save();
+        \Flash::instance()->addMessage("Permissions changed.", 'success');
+        if ($base->get('PARAMS.uid') == $base->get('SESSION.uid'))
+            $base->reroute('/user');
+        else
+            $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
     }
 }

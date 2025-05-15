@@ -6,6 +6,11 @@ class User
 {
 	public function register(\Base $base)
 	{
+		if ($base->get('TB.enable_user_creation') == false) {
+			\Flash::instance()->addMessage("User account creation disabled by admin.", 'danger');
+			$base->reroute('/');
+		}
+
 		if ($base->get('SESSION.uid'))
 			$this->clearSession($base);
 		$base->set('pgTitle', 'Register');
@@ -29,11 +34,22 @@ class User
 			$tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
 			unset($tmp['repeat-password']);
 			$user->copyfrom($tmp);
+
+			if ($user->count() == 0)
+				$user->is_admin = true;
+
 			$user->save();
-			$base->reroute('/login');
+
+			if ($base->get('POST.admin') == true)
+				$base->reroute('/admin/user');
+			else
+				$base->reroute('/login');
 		} else {
 			\Flash::instance()->addMessage("Passwords don't match", 'danger');
-			$base->reroute('/register');
+			if ($base->get('POST.admin') == true)
+				$base->reroute('/admin/user');
+			else
+				$base->reroute('/admin/user/register');
 		}
 	}
 

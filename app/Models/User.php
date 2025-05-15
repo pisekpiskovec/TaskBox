@@ -38,6 +38,11 @@ class User extends \DB\Cortex
         'account_created' => [
             'type' => 'DATETIME',
             'default' => \DB\SQL\Schema::DF_CURRENT_TIMESTAMP
+        ],
+        'is_admin' => [
+            'type' => 'BOOLEAN',
+            'default' => 0,
+            'required' => true
         ]
     ];
 }

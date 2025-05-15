@@ -8,6 +8,7 @@ class Abnos
 {
     public function listAbnormalities(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
         $base->set('pgTitle', 'Abnormalities');
         $model = new \Models\Abnos();
         $base->set('abnos', $model->find());
@@ -17,6 +18,8 @@ class Abnos
 
     public function loadFile(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         \Models\Abnos::setdown();
         \Models\Abnos::setup();
         $filePath = 'assets/AbnoDB.csv';
@@ -48,6 +51,8 @@ class Abnos
 
     public function addAbnormalityPage(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         $base->set('pgTitle', 'Register an Abnormality');
         $base->set('content', '/Abnos/addAbno.html');
         echo \Template::instance()->render('index.html');
