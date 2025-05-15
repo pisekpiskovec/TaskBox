@@ -42,7 +42,7 @@ class Index
 
         $base->reroute('/abnos/setup');
     }
-  
+
     public function getError(\Base $base)
     {
         $base->set("content", "error.html");
@@ -110,4 +110,5 @@ class Index
             \Flash::instance()->addMessage("You must be logged in as an admin", 'danger');
             $base->reroute('/');
         }
+    }
 }
