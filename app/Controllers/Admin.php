@@ -71,6 +71,8 @@ class Admin
         $model = new \Models\User();
         $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
         $base->set('user', $user);
+        $base->set('checkstatus', $user->is_admin ? "checked" : "");
+
 
         $base->set('pgTitle', $user->username . '\'s Account');
         $base->set('content', '/Admin/edit_user.html');
@@ -146,5 +148,25 @@ class Admin
         $indexCtrl->updateConfigValue($base, 'TB.enable_user_creation', $value);
         echo json_encode(['success' => true]);
         exit;
+    }
+
+    public function postChangePermissions(\Base $base)
+    {
+        (new \Controllers\Index())->evaluateAccess($base);
+
+        if ($base->get('PARAMS.uid') == 1) {
+            \Flash::instance()->addMessage("First user is always admin!", 'danger');
+            $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
+        }
+
+        $model = new \Models\User();
+        $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
+        $user->is_admin = $base->get('POST.isadmin');
+        $user->save();
+        \Flash::instance()->addMessage("Permissions changed.", 'success');
+        if ($base->get('PARAMS.uid') == $base->get('SESSION.uid'))
+            $base->reroute('/user');
+        else
+            $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
     }
 }
