@@ -6,10 +6,8 @@ class Admin
 {
     public function getDashboard(\Base $base)
     {
-        if ($base->get('SESSION.uid') != 1) {
-            \Flash::instance()->addMessage("You must be logged in as an admin", 'danger');
-            $base->reroute('/');
-        }
+        (new \Controllers\Index())->evaluateAccess($base);
+
 
         $abnoModel = new \Models\Abnos();
         $listModel = new \Models\Lists();
@@ -55,6 +53,8 @@ class Admin
 
     public function getUserList(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         $model = new \Models\User();
         $base->set('users', $model->find());
         $base->set('checkstatus', $base->get('TB.enable_user_creation') ? "checked" : "");
@@ -66,8 +66,7 @@ class Admin
 
     public function getUserEdit(\Base $base)
     {
-        if ($base->get('SESSION.uid') != 1)
-            $base->reroute('/user');
+        (new \Controllers\Index())->evaluateAccess($base);
 
         $model = new \Models\User();
         $user = $model->findone(['id=?', $base->get('PARAMS.uid')]);
@@ -108,6 +107,8 @@ class Admin
 
     public function getDeleteUser(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         if ($base->get('PARAMS.uid') == $base->get('SESSION.uid')) {
             \Flash::instance()->addMessage("You can't delete yourself!", 'danger');
             $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
@@ -127,8 +128,7 @@ class Admin
 
     public function getUserRegister(\Base $base)
     {
-        if ($base->get('SESSION.uid') != 1)
-            $base->reroute('/user');
+        (new \Controllers\Index())->evaluateAccess($base);
 
         $base->set('pgTitle', 'Register');
         $base->set('content', '/Admin/register_user.html');
@@ -137,6 +137,8 @@ class Admin
 
     public function getSetEnableUserCreation(\Base $base)
     {
+        (new \Controllers\Index())->evaluateAccess($base);
+
         $value = $base->get('GET.enable_user_creation');
         $base->set('TB.enable_user_creation', $value);
 

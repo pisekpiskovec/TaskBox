@@ -89,4 +89,19 @@ class Index
         // Save the content back to the file
         return file_put_contents($iniFile, $content);
     }
+
+    public function evaluateRights(\Base $base)
+    {
+        $model = new User();
+        return $model->findone(['id=? AND is_admin = 0', $base->get('SESSION.uid')]) || !$base->get('SESSION.uid');
+    }
+
+    public function evaluateAccess(\Base $base)
+    {
+        $model = new User();
+        if ($model->findone(['id=? AND is_admin = 0', $base->get('SESSION.uid')]) || !$base->get('SESSION.uid')) {
+            \Flash::instance()->addMessage("You must be logged in as an admin", 'danger');
+            $base->reroute('/');
+        }
+    }
 }
