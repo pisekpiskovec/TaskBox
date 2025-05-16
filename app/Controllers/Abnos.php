@@ -43,7 +43,7 @@ class Abnos
             fclose($open);
         }
 
-        $base->reroute('/');
+        // $base->reroute('/');
     }
 
     public function addAbnormalityPage(\Base $base)

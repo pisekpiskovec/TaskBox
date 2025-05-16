@@ -22,7 +22,7 @@ class Index
         echo "DO YOU LOVE THE CITY YOU LIVE IN?";
     }
 
-    public function install(\Base $base)
+    public function install(\Base $base, $returnTo = "/")
     {
         $base->clear('SESSION');
 
@@ -40,7 +40,9 @@ class Index
         Lists::setup();
         Token::setup();
 
-        $base->reroute('/abnos/setup');
+        //$base->reroute('/abnos/setup');
+        (new \Controllers\Abnos())->loadFile($base);
+        $base->reroute($returnTo);
     }
 
     public function getError(\Base $base)
@@ -54,7 +56,16 @@ class Index
         $page = $base->get('GET.page');
         switch ($page) {
             case 1:
-                $base->set("content", "home.html");
+                $base->set("content", "Setup/start.html");
+                break;
+            case 2:
+                $base->set("content", "Setup/init_db.html");
+                break;
+            case 3:
+                $this->install($base, "/setup?page=4");
+                break;
+            case 4:
+                $base->set("content", "Setup/admin_creation.html");
                 break;
             default:
                 $base->set("content", "error.html");
