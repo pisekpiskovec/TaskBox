@@ -67,10 +67,33 @@ class Index
             case 4:
                 $base->set("content", "Setup/admin_creation.html");
                 break;
+            case 5:
+                $base->set("content", "Setup/finish.html");
+                break;
             default:
                 $base->set("content", "error.html");
                 break;
         }
         echo \Template::instance()->render('index.html');
+    }
+
+    public function postSetup(\Base $base)
+    {
+        if ($base->get('GET.page') != 4) {
+            $base->reroute('/setup?page=1');
+        }
+
+        if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
+            $user = new \Models\User();
+            $tmp = $base->get('POST');
+            $tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
+            unset($tmp['repeat-password']);
+            $user->copyfrom($tmp);
+            $user->save();
+            $base->reroute('/setup?page=5');
+        } else {
+            \Flash::instance()->addMessage("Passwords don't match", 'danger');
+            $base->reroute('/setup?page=4');
+        }
     }
 }
