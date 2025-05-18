@@ -169,4 +169,19 @@ class Admin
         else
             $base->reroute('/admin/user/' . $base->get('PARAMS.uid'));
     }
+
+    public function getChangeSettings(\Base $base)
+    {
+        (new \Controllers\Index())->evaluateAccess($base);
+
+        $returnTo = $base->get('GET.return');
+        $get = $base->get('GET');
+        unset($get['return']);
+
+        foreach (array_keys($get) as $getKey) {
+            (new \Controllers\Index)->updateConfigValue($base, 'TB.' . $getKey, $get[$getKey]);
+        }
+
+        $base->reroute($returnTo);
+    }
 }
