@@ -1,0 +1,23 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/page/setup.css">
+</head>
+
+<div class="loginbox">
+    <header>
+        <h1 class="domine">Administrator account</h1>
+    </header>
+
+    <form method="post" class="login">
+        <input type="hidden" name="admin" value="true">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        <label for="repeat-password">Password Verification</label>
+        <input type="password" name="repeat-password" id="repeat-password" required>
+        <input type="submit" value="Finish" class="light">
+    </form>
+</div>

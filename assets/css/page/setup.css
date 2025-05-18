@@ -1,0 +1,64 @@
+.domine {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.domine-medium {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.domine-bold {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.domine-bolder {
+  font-family: "Domine", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+header {
+  padding-top: 30px;
+  height: 45vh;
+  min-height: min-content;
+  text-align: center;
+  font-size: 3rem !important;
+  line-height: 0.5 !important;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.loginbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 30px;
+}
+
+form.login {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  background-color: var(--darkD);
+  border-radius: 12px;
+  max-width: 30%;
+  padding: 30px;
+  min-width: fit-content;
+  height: fit-content;
+}

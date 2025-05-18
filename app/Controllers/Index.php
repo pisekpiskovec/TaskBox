@@ -22,7 +22,7 @@ class Index
         echo "DO YOU LOVE THE CITY YOU LIVE IN?";
     }
 
-    public function install(\Base $base)
+    public function install(\Base $base, $returnTo = "/")
     {
         $base->clear('SESSION');
 
@@ -40,7 +40,9 @@ class Index
         Lists::setup();
         Token::setup();
 
-        $base->reroute('/abnos/setup');
+        //$base->reroute('/abnos/setup');
+        (new \Controllers\Abnos())->loadFile($base);
+        $base->reroute($returnTo);
     }
 
     public function getError(\Base $base)
@@ -48,6 +50,53 @@ class Index
         $base->set("content", "error.html");
         echo \Template::instance()->render('index.html');
     }
+
+    public function getSetup(\Base $base)
+    {
+        $page = $base->get('GET.page');
+        switch ($page) {
+            case 1:
+                $base->set("content", "Setup/start.html");
+                break;
+            case 2:
+                $base->set("content", "Setup/init_db.html");
+                break;
+            case 3:
+                $this->install($base, "/setup?page=4");
+                break;
+            case 4:
+                $base->set("content", "Setup/admin_creation.html");
+                break;
+            case 5:
+                $base->set("content", "Setup/finish.html");
+                break;
+            default:
+                $base->set("content", "error.html");
+                break;
+        }
+        echo \Template::instance()->render('index.html');
+    }
+
+    public function postSetup(\Base $base)
+    {
+        if ($base->get('GET.page') != 4) {
+            $base->reroute('/setup?page=1');
+        }
+
+        if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
+            $user = new \Models\User();
+            $tmp = $base->get('POST');
+            $tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
+            unset($tmp['repeat-password']);
+            $user->copyfrom($tmp);
+            $user->save();
+            $base->reroute('/setup?page=5');
+        } else {
+            \Flash::instance()->addMessage("Passwords don't match", 'danger');
+            $base->reroute('/setup?page=4');
+        }
+    }
+}
 
     function updateConfigValue($f3, $key, $value, $iniFile = 'app/Configs/config.ini')
     {

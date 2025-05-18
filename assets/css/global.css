@@ -11,7 +11,7 @@ body {
 }
 
 * {
-  color: light-dark(--darkE, --lightA);
+  color: light-dark(var(--darkE), var(--lightA));
   scrollbar-width: thin;
   scrollbar-color: var(--lightA) transparent;
 }
