@@ -96,7 +96,7 @@ class Index
             $base->reroute('/setup?page=4');
         }
     }
-}
+
 
     function updateConfigValue($f3, $key, $value, $iniFile = 'app/Configs/config.ini')
     {
