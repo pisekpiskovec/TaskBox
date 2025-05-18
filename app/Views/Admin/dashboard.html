@@ -26,14 +26,18 @@
                     <td id="tbl-right">{{@usersCount}}</td>
                 </tr>
             </table>
-            <a href="/install" class="button light">Reinitialize</a>
+            <div>
+                <a href="/install" class="button light">Reinitialize</a>
+                <a href="/admin/set?enable_setup=1&return=/" class="button light">Resetup</a>
+            </div>
         </panel>
 
         <panel class="box" id="last-created-users">
             <repeat group="{{@lastUsers}}" value="{{@user}}">
                 <a class="user-card " href="/admin/user/{{@user.id}}">
                     <div class="user-card-avtr">
-                        <img class="circle" src="{{@user.avatar}}" alt="{{@user.username}}'s Avatar" width="100" height="100">
+                        <img class="circle" src="{{@user.avatar}}" alt="{{@user.username}}'s Avatar" width="100"
+                            height="100">
                     </div>
                     <div class="user-card-nick">{{@user.username}}</div>
                     <sub class="user-card-desc">{{@user.account_created}}</sub>
@@ -48,7 +52,8 @@
         <panel class="box" id="version">
             <h2>{{@version}} - {{@codename}}</h2>
             <sub>{{@version_tag}}</sub>
-            <a href="https://github.com/pisekpiskovec/TaskBox/releases/latest/" class="button light">Check for updates</a>
+            <a href="https://github.com/pisekpiskovec/TaskBox/releases/latest/" class="button light">Check for
+                updates</a>
         </panel>
     </div>
 
