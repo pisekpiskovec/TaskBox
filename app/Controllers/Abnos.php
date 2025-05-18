@@ -16,9 +16,10 @@ class Abnos
         echo \Template::instance()->render('index.html');
     }
 
-    public function loadFile(\Base $base)
+    public function loadFile(\Base $base, bool $adminOverride = false)
     {
-        (new \Controllers\Index())->evaluateAccess($base);
+        if (!$adminOverride)
+            (new \Controllers\Index())->evaluateAccess($base);
 
         \Models\Abnos::setdown();
         \Models\Abnos::setup();

@@ -13,6 +13,8 @@ class Index
 {
     public function index(\Base $base)
     {
+        if ($base->get('TB.enable_setup'))
+            $base->reroute('/setup?page=1');
         $base->set("content", "home.html");
         echo \Template::instance()->render('index.html');
     }
@@ -22,8 +24,11 @@ class Index
         echo "DO YOU LOVE THE CITY YOU LIVE IN?";
     }
 
-    public function install(\Base $base, $returnTo = "/")
+    public function install(\Base $base, $returnTo = "/", $adminOverride = false)
     {
+        if (!$adminOverride)
+            $this->evaluateAccess($base);
+
         $base->clear('SESSION');
 
         User::setdown();
@@ -41,7 +46,7 @@ class Index
         Token::setup();
 
         //$base->reroute('/abnos/setup');
-        (new \Controllers\Abnos())->loadFile($base);
+        (new \Controllers\Abnos())->loadFile($base, $adminOverride);
         $base->reroute($returnTo);
     }
 
@@ -53,6 +58,10 @@ class Index
 
     public function getSetup(\Base $base)
     {
+        if ($base->get('TB.enable_setup') == 0) {
+            \Flash::instance()->addMessage("Setup disabled by admin", 'danger');
+            $base->reroute('/');
+        }
         $page = $base->get('GET.page');
         switch ($page) {
             case 1:
@@ -62,13 +71,17 @@ class Index
                 $base->set("content", "Setup/init_db.html");
                 break;
             case 3:
-                $this->install($base, "/setup?page=4");
+                $this->install($base, "/setup?page=4", true);
                 break;
             case 4:
                 $base->set("content", "Setup/admin_creation.html");
                 break;
             case 5:
                 $base->set("content", "Setup/finish.html");
+                break;
+            case 6:
+                $this->updateConfigValue($base, 'TB.enable_setup', 0);
+                $base->reroute('/');
                 break;
             default:
                 $base->set("content", "error.html");
@@ -89,6 +102,7 @@ class Index
             $tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
             unset($tmp['repeat-password']);
             $user->copyfrom($tmp);
+            $user->is_admin = true;
             $user->save();
             $base->reroute('/setup?page=5');
         } else {
@@ -96,7 +110,6 @@ class Index
             $base->reroute('/setup?page=4');
         }
     }
-}
 
     function updateConfigValue($f3, $key, $value, $iniFile = 'app/Configs/config.ini')
     {
