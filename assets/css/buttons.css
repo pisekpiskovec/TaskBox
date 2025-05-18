@@ -10,16 +10,21 @@ a.button {
   align-items: center;
 }
 
-a.button:hover, a.light:hover, input[type="submit"].light:hover {
+a.button:hover,
+a.light:hover,
+input[type="submit"].light:hover {
   background-color: light-dark(var(--lightB), var(--darkB));
 }
 
-a.button:active, a.light:active, input[type="submit"].light:active {
+a.button:active,
+a.light:active,
+input[type="submit"].light:active {
   background-color: var(--brand);
   color: var(--lightA);
 }
 
-a.light, input[type="submit"].light {
+a.light,
+input[type="submit"].light {
   background-color: light-dark(var(--lightD), var(--darkC));
   color: light-dark(var(--darkE), var(--lightA));
 }
@@ -37,13 +42,25 @@ input[type="submit"] {
   display: inline-flex;
 }
 
-a.link{
+a.link {
   margin: 10px;
   text-decoration: none;
+  color: var(--purpleA);
 }
 
-a.worded_link{
+a.worded_link {
   text-decoration: none;
+  color: var(--purpleA);
+}
+
+a.link:hover,
+a.worded_link:hover {
+  color: var(--purpleB);
+}
+
+a.link:active,
+a.worded_link:active {
+  color: light-dark(var(--darkE), var(--lightA));
 }
 
 a.destructive {
