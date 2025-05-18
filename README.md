@@ -30,3 +30,8 @@ Contributions are welcome! Feel free to open an issue or pull request with a sug
 ## 📄 Licence
 
 GNU GPLv3 Licence – see [LICENSE](https://github.com/pisekpiskovec/TaskBox/blob/master/LICENSE.txt)
+
+Release codenames and release tags are based on Project Moon's Abnormalities. More info about [Project Moon](https://projectmoon.studio/)
+
+> [!WARNING]
+> When forking, it is highly discouraged to name releases after Abnormalities.

@@ -33,6 +33,15 @@
             <input type="password" name="repeat-new-password" id="repeat-new-password" required>
             <input type="submit" value="Save password" class="light">
         </form>
+
+        <form action="/admin/user/{{@PARAMS.uid}}/change_permissions" method="post" class="login"
+            id="section-permissions">
+            <div>
+                <input type="checkbox" name="isadmin" id="isadmin" value="1" {{@checkstatus}}>
+                <label for="isadmin">Administrator</label>
+            </div>
+            <input type="submit" value="Save permissions" class="light" style="margin-top: 20px;">
+        </form>
     </div>
 
     <div class="linkbar">
