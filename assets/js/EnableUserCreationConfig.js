@@ -7,10 +7,10 @@ function sendCheckboxStatus(checkboxID) {
     }
 
     checkbox.addEventListener('change', function () {
-        const url = `/admin/set/enable_user_creation?enable_user_creation=${this.checked ? '1' : '0'}`;
+        const url = `/admin/set?enable_user_creation=${this.checked ? '1' : '0'}`;
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
+        xhr.open('GET', url, true);
 
         xhr.onload = function () {
             if (xhr.status >= 200 && xhr.status < 300)

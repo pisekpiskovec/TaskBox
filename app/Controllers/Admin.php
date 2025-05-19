@@ -137,19 +137,6 @@ class Admin
         echo \Template::instance()->render('index.html');
     }
 
-    public function getSetEnableUserCreation(\Base $base)
-    {
-        (new \Controllers\Index())->evaluateAccess($base);
-
-        $value = $base->get('GET.enable_user_creation');
-        $base->set('TB.enable_user_creation', $value);
-
-        $indexCtrl = new \Controllers\Index();
-        $indexCtrl->updateConfigValue($base, 'TB.enable_user_creation', $value);
-        echo json_encode(['success' => true]);
-        exit;
-    }
-
     public function postChangePermissions(\Base $base)
     {
         (new \Controllers\Index())->evaluateAccess($base);
