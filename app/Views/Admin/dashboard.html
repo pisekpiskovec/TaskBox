@@ -6,10 +6,6 @@
         <panel class="box" id="stats">
             <table>
                 <tr>
-                    <td id="tbl-left"><a class="worded_link" href="/abnos">Abnormalities</a></td>
-                    <td id="tbl-right">{{@abnosCount}}</td>
-                </tr>
-                <tr>
                     <td id="tbl-left">Lists</td>
                     <td id="tbl-right">{{@listsCount}}</td>
                 </tr>
@@ -50,8 +46,7 @@
         </panel>
 
         <panel class="box" id="version">
-            <h2>{{@version}} - {{@codename}}</h2>
-            <sub>{{@version_tag}}</sub>
+            <h2>{{@version}} {{@codename}}</h2>
             <a href="https://github.com/pisekpiskovec/TaskBox/releases/latest/" class="button light">Check for
                 updates</a>
         </panel>

@@ -8,15 +8,12 @@ class Admin
     {
         (new \Controllers\Index())->evaluateAccess($base);
 
-
-        $abnoModel = new \Models\Abnos();
         $listModel = new \Models\Lists();
         $subtaskModel = new \Models\Subtask();
         $taskModel = new \Models\Task();
         $userModel = new \Models\User();
         $recentUsers = $userModel->find([], ['order' => 'account_created DESC', 'limit' => 3]);
 
-        $base->set('abnosCount', $abnoModel->count());
         $base->set('listsCount', $listModel->count());
         $base->set('subtasksCount', $subtaskModel->count());
         $base->set('tasksCount', $taskModel->count());
@@ -24,27 +21,8 @@ class Admin
         $base->set('lastUsers', $recentUsers);
 
         // Version prep
-        $vertag = $base->get('TB.VERSION');
-        $base->set('version', $vertag);
-        explode('\.', $vertag);
-        $base->set('PARAMS.shape', $vertag[0]);
-        $base->set('PARAMS.code', $vertag[2]);
-
-        // Abno code
-        ob_start();
-        $controller = new \Controllers\Abnos();
-        $controller->getAbnormalityCode($base);
-        $data = ob_get_clean();
-        ob_end_clean();
-        $base->set('version_tag', $data);
-
-        // Abno name
-        ob_start();
-        $controller = new \Controllers\Abnos();
-        $controller->getAbnormality($base);
-        $data = ob_get_clean();
-        ob_end_clean();
-        $base->set('codename', $data);
+        $base->set('version', $base->get('TB.VERSION'));
+        $base->set('codename', $base->get('TB.CODENAME'));
 
         $base->set('pgTitle', 'Dashboard');
         $base->set('content', '/Admin/dashboard.html');
