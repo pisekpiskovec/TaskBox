@@ -46,7 +46,6 @@ class Index
         Token::setup();
 
         //$base->reroute('/abnos/setup');
-        (new \Controllers\Abnos())->loadFile($base, $adminOverride);
         $base->reroute($returnTo);
     }
 
