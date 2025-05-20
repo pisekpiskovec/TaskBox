@@ -8,7 +8,6 @@ class Admin
     {
         (new \Controllers\Index())->evaluateAccess($base);
 
-
         $listModel = new \Models\Lists();
         $subtaskModel = new \Models\Subtask();
         $taskModel = new \Models\Task();
@@ -22,11 +21,8 @@ class Admin
         $base->set('lastUsers', $recentUsers);
 
         // Version prep
-        $vertag = $base->get('TB.VERSION');
-        $base->set('version', $vertag);
-        explode('\.', $vertag);
-        $base->set('PARAMS.shape', $vertag[0]);
-        $base->set('PARAMS.code', $vertag[2]);
+        $base->set('version', $base->get('TB.VERSION'));
+        $base->set('codename', $base->get('TB.CODENAME'));
 
         $base->set('pgTitle', 'Dashboard');
         $base->set('content', '/Admin/dashboard.html');
