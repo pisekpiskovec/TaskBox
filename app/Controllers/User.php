@@ -12,7 +12,7 @@ class User
 		}
 
 		if ($base->get('SESSION.uid'))
-			$this->clearSession($base);
+			$base->clear('SESSION');
 		$base->set('pgTitle', 'Register');
 		$base->set('content', '/User/register.html');
 		echo \Template::instance()->render('index.html');
@@ -20,7 +20,7 @@ class User
 	public function login(\Base $base)
 	{
 		if ($base->get('SESSION.uid'))
-			$this->clearSession($base);
+			$base->clear('SESSION');
 		$base->set('pgTitle', 'Log In');
 		$base->set('content', '/User/login.html');
 		echo \Template::instance()->render('index.html');
@@ -92,13 +92,8 @@ class User
 
 	public function signOut(\Base $base)
 	{
-		$this->clearSession($base);
-		$base->reroute('/');
-	}
-
-	public function clearSession(\Base $base)
-	{
 		$base->clear('SESSION');
+		$base->reroute('/');
 	}
 
 	public function getEditUser(\Base $base)
