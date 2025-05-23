@@ -71,13 +71,12 @@ class Index
                 $base->set("content", "Setup/connect_db.html");
                 break;
             case 3:
+                if (!$base->get('db.dsn'))
+                    $base->reroute('/setup?step=2');
+
                 $base->set("content", "Setup/create_db.html");
-                //$base->set("content", "Setup/init_db.html");
                 break;
             case 4:
-                $this->install($base, "/setup?page=4", true);
-                break;
-            case 5:
                 $base->set("content", "Setup/admin_creation.html");
                 break;
             case 6:
@@ -96,9 +95,6 @@ class Index
         // Kept only not to break stuff
         $page = $base->get('GET.page');
         switch ($page) {
-            case 3:
-                $this->install($base, "/setup?page=4", true);
-                break;
             case 4:
                 $base->set("content", "Setup/admin_creation.html");
                 break;
@@ -144,27 +140,22 @@ class Index
 
                 $this->install($base, "/setup?step=4", true);
                 break;
+            case 4:
+                if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
+                    $user = new User();
+                    $user->username = $base->get('POST.username');
+                    $user->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);;
+                    $user->is_admin = true;
+                    $user->save();
+                    $base->reroute('/setup?step=5');
+                } else {
+                    \Flash::instance()->addMessage("Passwords don't match", 'danger');
+                    $base->reroute('/setup?step=4');
+                }
+                break;
             default:
                 $base->reroute('/setup?step=1');
                 break;
-        }
-
-        if ($base->get('GET.page') != 4) {
-            $base->reroute('/setup?page=1');
-        }
-
-        if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
-            $user = new \Models\User();
-            $tmp = $base->get('POST');
-            $tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
-            unset($tmp['repeat-password']);
-            $user->copyfrom($tmp);
-            $user->is_admin = true;
-            $user->save();
-            $base->reroute('/setup?page=5');
-        } else {
-            \Flash::instance()->addMessage("Passwords don't match", 'danger');
-            $base->reroute('/setup?page=4');
         }
     }
 
