@@ -83,27 +83,8 @@ class Index
                 $this->updateConfigValue($base, 'TB.enable_setup', 0);
                 $base->set("content", "Setup/finish.html");
                 break;
-            case 7:
-                $base->reroute('/');
-                break;
             default:
                 $base->set("content", "error.html");
-                break;
-        }
-
-        // Legacy system
-        // Kept only not to break stuff
-        $page = $base->get('GET.page');
-        switch ($page) {
-            case 4:
-                $base->set("content", "Setup/admin_creation.html");
-                break;
-            case 5:
-                $base->set("content", "Setup/finish.html");
-                break;
-            case 6:
-                $this->updateConfigValue($base, 'TB.enable_setup', 0);
-                $base->reroute('/');
                 break;
         }
 
@@ -144,7 +125,7 @@ class Index
                 if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
                     $user = new User();
                     $user->username = $base->get('POST.username');
-                    $user->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);;
+                    $user->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);
                     $user->is_admin = true;
                     $user->save();
                     $base->reroute('/setup?step=5');
