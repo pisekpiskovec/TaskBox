@@ -125,8 +125,23 @@ class Index
                 $base->reroute('/setup?step=3');
                 break;
             case 3:
+                $db = new \DB\SQL(
+                    $base->get('db.dsn'),
+                    $base->get('db.username'),
+                    $base->get('db.password'),
+                    [\PDO::ATTR_STRINGIFY_FETCHES => false]
+                );
+                $db->exec("CREATE DATABASE IF NOT EXISTS " . $base->get('POST.name'));
+
                 $dsn = $base->get('db.dsn') . ";dbname={$base->get('POST.name')};charset=utf8";
                 $this->updateConfigValue($base, 'db.dsn', $dsn, 'app/Configs/db.ini');
+                $base->set('DB', new \DB\SQL(
+                    $base->get('db.dsn'),
+                    $base->get('db.username'),
+                    $base->get('db.password'),
+                    [\PDO::ATTR_STRINGIFY_FETCHES => false]
+                ));
+
                 $this->install($base, "/setup?step=4", true);
                 break;
             default:
