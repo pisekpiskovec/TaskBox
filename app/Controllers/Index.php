@@ -79,11 +79,11 @@ class Index
             case 4:
                 $base->set("content", "Setup/admin_creation.html");
                 break;
-            case 6:
+            case 5:
+                $this->updateConfigValue($base, 'TB.enable_setup', 0);
                 $base->set("content", "Setup/finish.html");
                 break;
             case 7:
-                $this->updateConfigValue($base, 'TB.enable_setup', 0);
                 $base->reroute('/');
                 break;
             default:
