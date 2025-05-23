@@ -1,0 +1,35 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/page/setup.css">
+</head>
+
+<div class="setup-grid">
+    <header class="setup-header">
+        <h1 class="domine">Connect to database server</h1>
+    </header>
+
+    <div class="setup-content">
+        <h3>Enter please your database credentials.</h3>
+        <p>Don't worry, we'll keep them safe.</p>
+
+        <div class="loginbox">
+            <form method="post" class="login">
+                <label for="server">Server address</label>
+                <input type="text" name="server" id="server" placeholder="localhost" required>
+
+                <label for="port">Server port</label>
+                <input type="number" name="port" id="port" placeholder="3306" required>
+
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="root" required>
+
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
+
+                <input type="submit" value="Continue" class="light">
+            </form>
+        </div>
+    </div>
+</div>

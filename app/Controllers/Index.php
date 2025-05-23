@@ -61,14 +61,41 @@ class Index
             \Flash::instance()->addMessage("Setup disabled by admin", 'danger');
             $base->reroute('/');
         }
-        $page = $base->get('GET.page');
-        switch ($page) {
+
+        $step = $base->get('GET.step');
+        switch ($step) {
             case 1:
                 $base->set("content", "Setup/start.html");
                 break;
             case 2:
-                $base->set("content", "Setup/init_db.html");
+                $base->set("content", "Setup/connect_db.html");
                 break;
+            case 3:
+                $base->set("content", "Setup/create_db.html");
+                //$base->set("content", "Setup/init_db.html");
+                break;
+            case 4:
+                $this->install($base, "/setup?page=4", true);
+                break;
+            case 5:
+                $base->set("content", "Setup/admin_creation.html");
+                break;
+            case 6:
+                $base->set("content", "Setup/finish.html");
+                break;
+            case 7:
+                $this->updateConfigValue($base, 'TB.enable_setup', 0);
+                $base->reroute('/');
+                break;
+            default:
+                $base->set("content", "error.html");
+                break;
+        }
+
+        // Legacy system
+        // Kept only not to break stuff
+        $page = $base->get('GET.page');
+        switch ($page) {
             case 3:
                 $this->install($base, "/setup?page=4", true);
                 break;
@@ -82,15 +109,31 @@ class Index
                 $this->updateConfigValue($base, 'TB.enable_setup', 0);
                 $base->reroute('/');
                 break;
-            default:
-                $base->set("content", "error.html");
-                break;
         }
+
         echo \Template::instance()->render('index.html');
     }
 
     public function postSetup(\Base $base)
     {
+        switch ($base->get('GET.step')) {
+            case 2:
+                $dsn = "mysql:host={$base->get('POST.server')};port={$base->get('POST.port')}";
+                $this->updateConfigValue($base, 'db.dsn', $dsn, 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.username', $base->get('POST.username'), 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.password', $base->get('POST.password'), 'app/Configs/db.ini');
+                $base->reroute('/setup?step=3');
+                break;
+            case 3:
+                $dsn = $base->get('db.dsn') . ";dbname={$base->get('POST.name')};charset=utf8";
+                $this->updateConfigValue($base, 'db.dsn', $dsn, 'app/Configs/db.ini');
+                $this->install($base, "/setup?step=4", true);
+                break;
+            default:
+                $base->reroute('/setup?step=1');
+                break;
+        }
+
         if ($base->get('GET.page') != 4) {
             $base->reroute('/setup?page=1');
         }
