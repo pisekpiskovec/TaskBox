@@ -113,3 +113,7 @@ td{
   grid-row-start: 4;
   align-content: start;
 }
+
+table {
+  width: 100%;
+}
