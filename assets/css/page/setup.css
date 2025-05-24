@@ -52,7 +52,8 @@ header {
   gap: 30px;
 }
 
-form.login {
+form.login,
+panel {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -97,4 +98,32 @@ form.login {
   grid-column: span 5 / span 5;
   grid-row-start: 6;
   text-align: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  background-color: var(--darkD);
+  border-radius: 12px;
+  max-width: 30%;
+  padding: 30px;
+  margin: 30px;
+  min-width: fit-content;
+  height: fit-content;
+  gap: 12px;
+}
+
+.loginbox > .boxes {
+  display: flex;
+  flex-direction: initial;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  overflow-y: auto;
+  padding: 10px;
 }

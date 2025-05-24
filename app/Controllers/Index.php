@@ -66,6 +66,7 @@ class Index
         $step = $base->get('GET.step');
         switch ($step) {
             case 1:
+                $this->updateConfigValue($base, 'TB.enable_user_creation', value: 1);
                 $base->set("content", "Setup/start.html");
                 break;
             case 2:
@@ -84,6 +85,9 @@ class Index
                 $base->set("content", "Setup/admin_creation.html");
                 break;
             case 5:
+                $base->set("content", "Setup/mailer.html");
+                break;
+            case 6:
                 $this->updateConfigValue($base, 'TB.enable_setup', 0);
                 $base->set("content", "Setup/finish.html");
                 break;
