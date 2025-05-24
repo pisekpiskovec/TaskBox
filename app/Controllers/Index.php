@@ -45,8 +45,9 @@ class Index
         Lists::setup();
         Token::setup();
 
-        //$base->reroute('/abnos/setup');
-        $base->reroute($returnTo);
+        if (is_array($returnTo) && $returnTo[0] == $base->get('PATH'))
+            $returnTo = "/";
+        $base->reroute($base->get('GET.return') ?: (is_array($returnTo) ? $returnTo[0] : $returnTo));
     }
 
     public function getError(\Base $base)
