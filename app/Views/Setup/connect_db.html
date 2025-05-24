@@ -5,26 +5,29 @@
     <link rel="stylesheet" href="/assets/css/page/setup.css">
 </head>
 
-
-
 <div class="setup-grid">
     <header class="setup-header">
-        <h1 class="domine">Create a administrator account</h1>
+        <h1 class="domine">Connect to database server</h1>
     </header>
 
     <div class="setup-content">
-        <h3>Time to crown yourself the ruler of your to-do kingdom.</h3>
-       <p>Choose a username and password wisely - this is the account that will control everything.</p>
+        <h3>Enter please your database credentials.</h3>
+        <p>Don't worry, we'll keep them safe.</p>
 
         <div class="loginbox">
             <form method="post" class="login">
-                <input type="hidden" name="admin" value="true">
+                <label for="server">Server address</label>
+                <input type="text" name="server" id="server" placeholder="localhost" required>
+
+                <label for="port">Server port</label>
+                <input type="number" name="port" id="port" placeholder="3306" required>
+
                 <label for="username">Username</label>
-                <input type="text" name="username" id="username" required>
+                <input type="text" name="username" id="username" placeholder="root" required>
+
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" required>
-                <label for="repeat-password">Password Verification</label>
-                <input type="password" name="repeat-password" id="repeat-password" required>
+
                 <input type="submit" value="Continue" class="light">
             </form>
         </div>

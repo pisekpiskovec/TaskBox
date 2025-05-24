@@ -14,7 +14,7 @@ class Index
     public function index(\Base $base)
     {
         if ($base->get('TB.enable_setup'))
-            $base->reroute('/setup?page=1');
+            $base->reroute('/setup?step=1');
         $base->set("content", "home.html");
         echo \Template::instance()->render('index.html');
     }
@@ -62,52 +62,85 @@ class Index
             \Flash::instance()->addMessage("Setup disabled by admin", 'danger');
             $base->reroute('/');
         }
-        $page = $base->get('GET.page');
-        switch ($page) {
+
+        $step = $base->get('GET.step');
+        switch ($step) {
             case 1:
                 $base->set("content", "Setup/start.html");
                 break;
             case 2:
-                $base->set("content", "Setup/init_db.html");
+                $this->updateConfigValue($base, 'db.dsn', "", 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.username', "", 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.password', "", 'app/Configs/db.ini');
+                $base->set("content", "Setup/connect_db.html");
                 break;
             case 3:
-                $this->install($base, "/setup?page=4", true);
+                if (!$base->get('db.dsn'))
+                    $base->reroute('/setup?step=2');
+
+                $base->set("content", "Setup/create_db.html");
                 break;
             case 4:
                 $base->set("content", "Setup/admin_creation.html");
                 break;
             case 5:
-                $base->set("content", "Setup/finish.html");
-                break;
-            case 6:
                 $this->updateConfigValue($base, 'TB.enable_setup', 0);
-                $base->reroute('/');
+                $base->set("content", "Setup/finish.html");
                 break;
             default:
                 $base->set("content", "error.html");
                 break;
         }
+
         echo \Template::instance()->render('index.html');
     }
 
     public function postSetup(\Base $base)
     {
-        if ($base->get('GET.page') != 4) {
-            $base->reroute('/setup?page=1');
-        }
+        switch ($base->get('GET.step')) {
+            case 2:
+                $dsn = "mysql:host={$base->get('POST.server')};port={$base->get('POST.port')}";
+                $this->updateConfigValue($base, 'db.dsn', $dsn, 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.username', $base->get('POST.username'), 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.password', $base->get('POST.password'), 'app/Configs/db.ini');
+                $base->reroute('/setup?step=3');
+                break;
+            case 3:
+                $db = new \DB\SQL(
+                    $base->get('db.dsn'),
+                    $base->get('db.username'),
+                    $base->get('db.password'),
+                    [\PDO::ATTR_STRINGIFY_FETCHES => false]
+                );
+                $db->exec("CREATE DATABASE IF NOT EXISTS " . $base->get('POST.name'));
 
-        if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
-            $user = new \Models\User();
-            $tmp = $base->get('POST');
-            $tmp['password'] = password_hash($tmp['password'], PASSWORD_DEFAULT);
-            unset($tmp['repeat-password']);
-            $user->copyfrom($tmp);
-            $user->is_admin = true;
-            $user->save();
-            $base->reroute('/setup?page=5');
-        } else {
-            \Flash::instance()->addMessage("Passwords don't match", 'danger');
-            $base->reroute('/setup?page=4');
+                $dsn = $base->get('db.dsn') . ";dbname={$base->get('POST.name')};charset=utf8";
+                $this->updateConfigValue($base, 'db.dsn', $dsn, 'app/Configs/db.ini');
+                $base->set('DB', new \DB\SQL(
+                    $base->get('db.dsn'),
+                    $base->get('db.username'),
+                    $base->get('db.password'),
+                    [\PDO::ATTR_STRINGIFY_FETCHES => false]
+                ));
+
+                $this->install($base, "/setup?step=4", true);
+                break;
+            case 4:
+                if ($base->get('POST')['password'] == $base->get('POST')['repeat-password']) {
+                    $user = new User();
+                    $user->username = $base->get('POST.username');
+                    $user->password = password_hash($base->get('POST.password'), PASSWORD_DEFAULT);
+                    $user->is_admin = true;
+                    $user->save();
+                    $base->reroute('/setup?step=5');
+                } else {
+                    \Flash::instance()->addMessage("Passwords don't match", 'danger');
+                    $base->reroute('/setup?step=4');
+                }
+                break;
+            default:
+                $base->reroute('/setup?step=1');
+                break;
         }
     }
 
