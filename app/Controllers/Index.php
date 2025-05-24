@@ -14,7 +14,7 @@ class Index
     public function index(\Base $base)
     {
         if ($base->get('TB.enable_setup'))
-            $base->reroute('/setup?page=1');
+            $base->reroute('/setup?step=1');
         $base->set("content", "home.html");
         echo \Template::instance()->render('index.html');
     }
