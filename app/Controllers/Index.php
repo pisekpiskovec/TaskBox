@@ -68,6 +68,9 @@ class Index
                 $base->set("content", "Setup/start.html");
                 break;
             case 2:
+                $this->updateConfigValue($base, 'db.dsn', "", 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.username', "", 'app/Configs/db.ini');
+                $this->updateConfigValue($base, 'db.password', "", 'app/Configs/db.ini');
                 $base->set("content", "Setup/connect_db.html");
                 break;
             case 3:
