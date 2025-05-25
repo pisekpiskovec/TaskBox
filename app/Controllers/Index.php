@@ -142,6 +142,19 @@ class Index
                     $base->reroute('/setup?step=4');
                 }
                 break;
+            case 5:
+                $this->updateConfigValue($base, 'mailer.smtp.host', $base->get('POST.host'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.port', $base->get('POST.port'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.user', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.pw', $base->get('POST.pw'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.scheme', $base->get('POST.scheme'), 'app/Configs/emails.ini');
+
+                $this->updateConfigValue($base, 'mailer.from_mail', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.from_name', $base->get('POST.from_name'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.errors_to', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.reply_to', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $base->reroute('/setup?step=6');
+                break;
             default:
                 $base->reroute('/setup?step=1');
                 break;
