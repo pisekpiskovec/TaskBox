@@ -65,7 +65,11 @@ class Index
 
         $step = $base->get('GET.step');
         switch ($step) {
+            case 0:
+                $base->reroute('/setup?step=1');
+                break;
             case 1:
+                $this->updateConfigValue($base, 'TB.enable_user_creation', value: 1);
                 $base->set("content", "Setup/start.html");
                 break;
             case 2:
@@ -84,6 +88,9 @@ class Index
                 $base->set("content", "Setup/admin_creation.html");
                 break;
             case 5:
+                $base->set("content", "Setup/mailer.html");
+                break;
+            case 6:
                 $this->updateConfigValue($base, 'TB.enable_setup', 0);
                 $base->set("content", "Setup/finish.html");
                 break;
@@ -137,6 +144,19 @@ class Index
                     \Flash::instance()->addMessage("Passwords don't match", 'danger');
                     $base->reroute('/setup?step=4');
                 }
+                break;
+            case 5:
+                $this->updateConfigValue($base, 'mailer.smtp.host', $base->get('POST.host'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.port', $base->get('POST.port'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.user', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.pw', $base->get('POST.pw'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.smtp.scheme', $base->get('POST.scheme'), 'app/Configs/emails.ini');
+
+                $this->updateConfigValue($base, 'mailer.from_mail', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.from_name', $base->get('POST.from_name'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.errors_to', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $this->updateConfigValue($base, 'mailer.reply_to', $base->get('POST.user'), 'app/Configs/emails.ini');
+                $base->reroute('/setup?step=6');
                 break;
             default:
                 $base->reroute('/setup?step=1');

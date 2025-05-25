@@ -1,0 +1,47 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/page/setup.css">
+</head>
+
+<div class="setup-grid">
+    <header class="setup-header">
+        <h1 class="domine">Mailer</h1>
+    </header>
+
+    <div class="setup-content">
+        <h3>Let's teach TaskBox how to send emails</h3>
+        <p>so it can help users when they forget their passwords... again.</p>
+
+        <form method="post" class="loginbox">
+            <div class="boxes">
+                <panel class="box">
+                    <label for="host">SMTP host</label>
+                    <input type="text" name="host" id="host" placeholder="smtp.domain.com" required>
+
+                    <label for="port">SMTP port</label>
+                    <input type="number" name="port" id="port" placeholder="587" required>
+
+                    <label for="scheme">SMTP scheme</label>
+                    <select name="scheme" id="scheme">
+                        <option value="TLS">TLS</option>
+                        <option value="SSL">SSL</option>
+                    </select>
+                </panel>
+                <panel class="box">
+                    <label for="user">Email</label>
+                    <input type="email" name="user" id="user" placeholder="info@domain.com" required>
+
+                    <label for="pw">Password</label>
+                    <input type="password" name="pw" id="pw" placeholder="123456789!" required>
+
+                    <label for="from_name">Sender name</label>
+                    <input type="text" name="from_name" id="from_name" placeholder="TaskBox" required>
+
+                </panel>
+            </div>
+            <input type="submit" value="Continue">
+        </form>
+    </div>
+</div>
