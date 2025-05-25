@@ -65,6 +65,9 @@ class Index
 
         $step = $base->get('GET.step');
         switch ($step) {
+            case 0:
+                $base->reroute('/setup?step=1');
+                break;
             case 1:
                 $this->updateConfigValue($base, 'TB.enable_user_creation', value: 1);
                 $base->set("content", "Setup/start.html");
