@@ -1,0 +1,39 @@
+@import url("/pallete.css");
+
+#central_view {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 8px;
+}
+
+#list_panel {
+  grid-row: span 5 / span 5;
+}
+
+#lists_tasks {
+  grid-column: span 5 / span 5;
+  grid-row: span 5 / span 5;
+}
+
+#current_task {
+  grid-column: span 2 / span 2;
+  grid-row: span 5 / span 5;
+  grid-column-start: 7;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  background-color: var(--darkD);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px;
+  max-width: max-content;
+  min-width: fit-content;
+  height: fit-content;
+}
