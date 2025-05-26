@@ -1,0 +1,24 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/page/task.css">
+</head>
+
+<!-- Top bar -->
+<include href="header.html" />
+
+<!-- Page content -->
+<section id="central_view">
+    <section id="list_panel">
+        <repeat group="{{@ListsSet}}" value="{{@list}}">
+            <div class="box">{{@list.name}}</div>
+        </repeat>
+    </section>
+    <section id="lists_tasks">
+
+    </section>
+    <section id="current_task">
+
+    </section>
+</section>
