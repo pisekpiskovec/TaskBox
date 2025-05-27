@@ -26,7 +26,10 @@ class Index
 
     public function install(\Base $base, $returnTo = "/", $adminOverride = false)
     {
-        if (!$adminOverride)
+        if (!is_bool($adminOverride))
+            $adminOverride = false;
+
+        if ($adminOverride != true)
             $this->evaluateAccess($base);
 
         $base->clear('SESSION');
