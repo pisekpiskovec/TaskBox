@@ -3,6 +3,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/page/task.css">
+    <script src="//code.iconify.design/1/1.0.6/iconify.min.js"></script>
 </head>
 
 <!-- Top bar -->
@@ -12,13 +13,17 @@
 <section id="central_view">
     <section id="list_panel">
         <repeat group="{{@ListsSet}}" value="{{@list}}">
-            <div class="box">{{@list.name}}</div>
+            <div class="box list_view">{{@list.name}}</div>
         </repeat>
+        <div class="box">• Add list</div>
     </section>
     <section id="lists_tasks">
-
+        <repeat group="{{@TasksSet}}" value="{{@task}}">
+            <div class="box">{{@task.name}}</div>
+        </repeat>
+        <div class="box"><a class="masked">• Add task</a></div>
     </section>
     <section id="current_task">
-
+        <panel></panel>
     </section>
 </section>

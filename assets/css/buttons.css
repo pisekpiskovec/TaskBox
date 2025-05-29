@@ -54,15 +54,21 @@ a.worded_link {
 }
 
 a.link:hover,
-a.worded_link:hover {
+a.worded_link:hover,
+a.masked:hover {
   color: var(--purpleB);
 }
 
 a.link:active,
-a.worded_link:active {
+a.worded_link:active,
+a.masked:active {
   color: light-dark(var(--darkE), var(--lightA));
 }
 
 a.destructive {
   color: var(--redC);
+}
+
+a.masked {
+  text-decoration: none;
 }

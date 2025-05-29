@@ -33,7 +33,9 @@
   border-radius: 12px;
   padding: 12px;
   margin: 12px;
-  max-width: max-content;
+  max-width: 100%;
   min-width: fit-content;
+  text-wrap-mode: wrap;
+  max-height: fit-content;
   height: fit-content;
 }
