@@ -8,6 +8,8 @@ class Tasks
 {
     public function getTasksList(\Base $base)
     {
+        (new \Controllers\Index())->evaluateLogged($base);
+
         $base->set('ListsSet', (new \Models\Lists())->find(['owner_id = ?', $base->get('SESSION.uid')]));
         $base->set('TasksSet', (new \Models\Task())->find(['owner_id = ?', $base->get('SESSION.uid')]));
 
@@ -16,9 +18,15 @@ class Tasks
     }
 
     public function postListAdd (\Base $base) {
+        if((new \Controllers\Index())->evaluateLogged($base, false) == false){
+            (new \Controllers\Index())->JSON_response(401, 'You must be logged in');
+            return;
+        }
+
         $model = new \Models\Lists();
         $model->name = $base->get('POST.name');
         $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
+
         try{
             $model->save();
             echo json_encode("List added");
