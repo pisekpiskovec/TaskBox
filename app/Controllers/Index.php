@@ -215,12 +215,6 @@ class Index
         return file_put_contents($iniFile, $content);
     }
 
-    public function evaluateRights(\Base $base)
-    {
-        $model = new User();
-        return $model->findone(['id=? AND is_admin = 0', $base->get('SESSION.uid')]) || !$base->get('SESSION.uid');
-    }
-
     public function evaluateAccess(\Base $base)
     {
         $model = new User();
@@ -228,5 +222,24 @@ class Index
             \Flash::instance()->addMessage("You must be logged in as an admin", 'danger');
             $base->reroute('/');
         }
+    }
+
+    public function evaluateLogged(\Base $base, bool $reroute = true): bool
+    {
+        if ($reroute) {
+            if (!$base->get('SESSION.uid')) {
+                \Flash::instance()->addMessage("You must be logged in", 'danger');
+                $base->reroute('/');
+                return false;
+            }
+        } else {
+            return $base->get('SESSION.uid') ?? false;
+        }
+        return false;
+    }
+
+    public function JSON_response (int $code, string $error) {
+        http_response_code($code);
+        echo json_encode($error);
     }
 }
