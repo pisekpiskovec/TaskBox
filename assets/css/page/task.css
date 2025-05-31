@@ -86,3 +86,17 @@ form#add_list_form {
   min-height: 100vh;
   min-width: 100vw;
 }
+
+.modal_content {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  border-radius: 12px;
+  max-width: 30%;
+  min-width: fit-content;
+  height: fit-content;
+}
