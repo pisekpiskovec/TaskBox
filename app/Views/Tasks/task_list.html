@@ -12,22 +12,22 @@
 <!-- Page content -->
 <section id="central_view">
     <section id="list_panel">
-        <repeat group="{{@ListsSet}}" value="{{@list}}">
-            <div class="box list_view">{{@list.name}}</div>
-        </repeat>
+        <div class="box">• Add list</div>
         <check if="{{@ListsSet == true}}">
             <hr>
         </check>
-        <div class="box">• Add list</div>
+        <repeat group="{{@ListsSet}}" value="{{@list}}">
+            <div class="box list_view">{{@list.name}}</div>
+        </repeat>
     </section>
     <section id="lists_tasks">
-        <repeat group="{{@TasksSet}}" value="{{@task}}">
-            <div class="box">{{@task.name}}</div>
-        </repeat>
+        <div class="box"><a class="masked">• Add task</a></div>
         <check if="{{@TasksSet == true}}">
             <hr>
         </check>
-        <div class="box"><a class="masked">• Add task</a></div>
+        <repeat group="{{@TasksSet}}" value="{{@task}}">
+            <div class="box">{{@task.name}}</div>
+        </repeat>
     </section>
     <section id="current_task">
         <panel></panel>
