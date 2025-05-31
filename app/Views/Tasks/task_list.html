@@ -15,12 +15,18 @@
         <repeat group="{{@ListsSet}}" value="{{@list}}">
             <div class="box list_view">{{@list.name}}</div>
         </repeat>
+        <check if="{{@ListsSet == true}}">
+            <hr>
+        </check>
         <div class="box">• Add list</div>
     </section>
     <section id="lists_tasks">
         <repeat group="{{@TasksSet}}" value="{{@task}}">
             <div class="box">{{@task.name}}</div>
         </repeat>
+        <check if="{{@TasksSet == true}}">
+            <hr>
+        </check>
         <div class="box"><a class="masked">• Add task</a></div>
     </section>
     <section id="current_task">

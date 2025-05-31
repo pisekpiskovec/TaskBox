@@ -39,3 +39,16 @@
   max-height: fit-content;
   height: fit-content;
 }
+
+hr {
+  margin: 12px;
+  border-image: linear-gradient(
+      to right,
+      transparent,
+      var(--lightE),
+      var(--lightA),
+      var(--lightC),
+      transparent
+    )
+    1;
+}
