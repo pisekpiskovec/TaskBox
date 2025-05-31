@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use Exception;
+
 class Tasks
 {
     public function getTasksList(\Base $base)
@@ -16,7 +18,12 @@ class Tasks
     public function postListAdd (\Base $base) {
         $model = new \Models\Lists();
         $model->name = $base->get('POST.name');
-        $model->owner_id = $base->get('SESSION.uid');
-        $model->save();
+        $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
+        try{
+            $model->save();
+            echo json_encode("List added");
+        } catch (Exception $e){
+            echo json_encode("Error: {$e->getCode()}, {$e->getMessage()}");
+        }
     }
 }

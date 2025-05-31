@@ -12,7 +12,8 @@ class Lists extends \DB\Cortex
             'required' => true,
             'unique' => false,
             'nullable' => false,
-            'index' => true
+            'index' => true,
+            'default' => "New Task"
         ],
         'owner_id' => [
             'type' => 'INT4',
