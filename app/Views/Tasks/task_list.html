@@ -3,25 +3,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/page/task.css">
-    <script src="//code.iconify.design/1/1.0.6/iconify.min.js"></script>
 </head>
 
 <!-- Top bar -->
 <include href="header.html" />
 
+<!-- Modals -->
+<include href="Tasks/add_list_modal.html" />
+
 <!-- Page content -->
 <section id="central_view">
     <section id="list_panel">
-        <div class="box">• Add list</div>
+        <div class="box cursor_hand" id="open_list_modal">• Add list</div>
         <check if="{{@ListsSet == true}}">
             <hr>
         </check>
         <repeat group="{{@ListsSet}}" value="{{@list}}">
-            <div class="box list_view">{{@list.name}}</div>
+            <div class="box list_view cursor_hand">{{@list.name}}</div>
         </repeat>
     </section>
     <section id="lists_tasks">
-        <div class="box"><a class="masked">• Add task</a></div>
+        <div class="box cursor_hand">• Add task</div>
         <check if="{{@TasksSet == true}}">
             <hr>
         </check>
@@ -33,3 +35,5 @@
         <panel></panel>
     </section>
 </section>
+
+<script src="assets/js/listModalController.js"></script>

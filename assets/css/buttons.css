@@ -55,13 +55,15 @@ a.worded_link {
 
 a.link:hover,
 a.worded_link:hover,
-a.masked:hover {
+a.masked:hover,
+.cursor_hand:hover {
   color: var(--purpleB);
 }
 
 a.link:active,
 a.worded_link:active,
-a.masked:active {
+a.masked:active,
+.cursor_hand:active {
   color: light-dark(var(--darkE), var(--lightA));
 }
 
@@ -71,4 +73,8 @@ a.destructive {
 
 a.masked {
   text-decoration: none;
+}
+
+.cursor_hand {
+  cursor: pointer;
 }
