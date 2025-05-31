@@ -34,4 +34,24 @@ class Tasks
             echo json_encode("Error: {$e->getCode()}, {$e->getMessage()}");
         }
     }
+
+    public function postTaskAdd (\Base $base) {
+        if((new \Controllers\Index())->evaluateLogged($base, false) == false){
+            (new \Controllers\Index())->JSON_response(401, 'You must be logged in');
+            return;
+        }
+
+        $model = new \Models\Task();
+        $model->name = $base->get('POST.name');
+        $model->list = $base->get('GET.list');
+        $model->myday = $base->get('POST.myday');
+        $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
+
+        try{
+            $model->save();
+            echo json_encode("Task added");
+        } catch (Exception $e){
+            echo json_encode("Error: {$e->getCode()}, {$e->getMessage()}");
+        }
+    }
 }
