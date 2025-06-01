@@ -17,8 +17,9 @@ class Tasks
         echo \Template::instance()->render('index.html');
     }
 
-    public function postListAdd (\Base $base) {
-        if((new \Controllers\Index())->evaluateLogged($base, false) == false){
+    public function postListAdd(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
             (new \Controllers\Index())->JSON_response(401, 'You must be logged in');
             return;
         }
@@ -27,16 +28,17 @@ class Tasks
         $model->name = $base->get('POST.name');
         $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
 
-        try{
+        try {
             $model->save();
             echo json_encode("List added");
-        } catch (Exception $e){
+        } catch (Exception $e) {
             echo json_encode("Error: {$e->getCode()}, {$e->getMessage()}");
         }
     }
 
-    public function postTaskAdd (\Base $base) {
-        if((new \Controllers\Index())->evaluateLogged($base, false) == false){
+    public function postTaskAdd(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
             (new \Controllers\Index())->JSON_response(401, 'You must be logged in');
             return;
         }
@@ -47,11 +49,11 @@ class Tasks
         $model->myday = $base->get('POST.myday');
         $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
 
-        try{
+        try {
             $model->save();
-            echo json_encode("Task added");
-        } catch (Exception $e){
-            echo json_encode("Error: {$e->getCode()}, {$e->getMessage()}");
+            (new \Controllers\Index())->JSON_response(200, "Task added");
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getCode(), $e->getMessage());
         }
     }
 }

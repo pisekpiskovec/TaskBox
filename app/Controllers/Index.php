@@ -239,6 +239,7 @@ class Index
     }
 
     public function JSON_response (int $code, string $error) {
+        header("Content-Type: application/json");
         http_response_code($code);
         echo json_encode($error);
     }
