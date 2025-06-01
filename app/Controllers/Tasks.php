@@ -30,9 +30,9 @@ class Tasks
 
         try {
             $model->save();
-            echo json_encode("List added");
+            (new \Controllers\Index())->JSON_response('List added');
         } catch (Exception $e) {
-            echo json_encode("Error: {$e->getCode()}, {$e->getMessage()}");
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
         }
     }
 
@@ -59,8 +59,13 @@ class Tasks
 
     public function deleteListDelete(\Base $base)
     {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
         $model = new \Models\Lists();
-        $entry = $model->findone(["id=?", $base->get('GET.id')]);
+        $entry = $model->findone(["id=? AND owner_id=?", $base->get('GET.id'), $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
         if (!$entry) {
             (new \Controllers\Index())->JSON_response("List not found", 404);
             return;
@@ -75,8 +80,13 @@ class Tasks
 
     public function deleteTaskDelete(\Base $base)
     {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
         $model = new \Models\Task();
-        $entry = $model->findone(["id=?", $base->get('GET.id')]);
+        $entry = $model->findone(["id=? AND owner_id=?", $base->get('GET.id'), $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
         if (!$entry) {
             (new \Controllers\Index())->JSON_response("Task not found", 404);
             return;
