@@ -20,7 +20,7 @@ class Tasks
     public function postListAdd(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
-            (new \Controllers\Index())->JSON_response(401, 'You must be logged in');
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
             return;
         }
 
@@ -39,7 +39,7 @@ class Tasks
     public function postTaskAdd(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
-            (new \Controllers\Index())->JSON_response(401, 'You must be logged in');
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
             return;
         }
 
@@ -51,9 +51,41 @@ class Tasks
 
         try {
             $model->save();
-            (new \Controllers\Index())->JSON_response(200, "Task added");
+            (new \Controllers\Index())->JSON_response("Task added", 200);
         } catch (Exception $e) {
-            (new \Controllers\Index())->JSON_response($e->getCode(), $e->getMessage());
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function deleteListDelete(\Base $base)
+    {
+        $model = new \Models\Lists();
+        $entry = $model->findone(["id=?", $base->get('GET.id')]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("List not found", 404);
+            return;
+        }
+        try {
+            $entry->erase();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+            return;
+        }
+    }
+
+    public function deleteTaskDelete(\Base $base)
+    {
+        $model = new \Models\Task();
+        $entry = $model->findone(["id=?", $base->get('GET.id')]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("Task not found", 404);
+            return;
+        }
+        try {
+            $entry->erase();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+            return;
         }
     }
 }
