@@ -98,4 +98,26 @@ class Tasks
             return;
         }
     }
+
+    public function getListsTasks(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Task();
+        if ($base->get('GET.list') == 'all') {
+            $entries = $model->afind(['owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
+        } else if (!$base->get('GET.list')) {
+            $entries = $model->afind(['myday=1 AND owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
+        } else {
+            $entries = $model->afind(['list=? AND owner_id=?', $base->get('GET.list'), $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
+        }
+        if (!$entries) {
+            (new \Controllers\Index())->JSON_response("Tasks not found", 404);
+            return;
+        }
+        (new \Controllers\Index())->JSON_response($entries);
+    }
 }

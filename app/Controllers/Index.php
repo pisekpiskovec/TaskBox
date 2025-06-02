@@ -238,7 +238,7 @@ class Index
         return false;
     }
 
-    public function JSON_response (string $message, int $code = 200) {
+    public function JSON_response ($message, int $code = 200) {
         header("Content-Type: application/json");
         http_response_code($code);
         echo json_encode($message);
