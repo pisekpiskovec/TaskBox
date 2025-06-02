@@ -110,7 +110,7 @@ class Tasks
         if ($base->get('GET.list') == 'all') {
             $entries = $model->afind(['owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
         } else if (!$base->get('GET.list')) {
-            $entries = $model->afind(['myday=1 AND owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
+            $entries = $model->afind(['myday=1 OR finish_date=? AND owner_id=?', date("Y-m-d"), $base->get('GET.uid') ?? $base->get('SESSION.uid')], ['order' => 'finish_date ASC']);
         } else {
             $entries = $model->afind(['list=? AND owner_id=?', $base->get('GET.list'), $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
         }
