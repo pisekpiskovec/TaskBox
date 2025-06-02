@@ -10,9 +10,11 @@
 
 <!-- Modals -->
 <include href="Tasks/add_list_modal.html" />
+<include href="Tasks/add_task_modal.html" />
 
 <!-- Page content -->
 <section id="central_view">
+    <!-- Lists -->
     <section id="list_panel">
         <div class="box cursor_hand" id="open_list_modal">• Add list</div>
         <check if="{{@ListsSet == true}}">
@@ -22,8 +24,10 @@
             <div class="box list_view cursor_hand">{{@list.name}}</div>
         </repeat>
     </section>
+
+    <!-- Tasks -->
     <section id="lists_tasks">
-        <div class="box cursor_hand">• Add task</div>
+        <div class="box cursor_hand" id="open_task_modal">• Add task</div>
         <check if="{{@TasksSet == true}}">
             <hr>
         </check>
@@ -31,6 +35,8 @@
             <div class="box">{{@task.name}}</div>
         </repeat>
     </section>
+
+    <!-- Current task -->
     <section id="current_task">
         <panel></panel>
     </section>

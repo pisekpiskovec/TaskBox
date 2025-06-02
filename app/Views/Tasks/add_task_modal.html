@@ -1,0 +1,17 @@
+<modal id="add_task_modal" class="containbox">
+    <span class="close_modal cursor_hand">&times;</span>
+    <form method="post" id="add_list_form" class="modal_content">
+        <label for="name">Task name</label>
+        <input type="text" name="name" id="name" required>
+        <div>
+        <input type="checkbox" name="myday" id="myday">
+        <label for="myday">Add to My Day?</label>
+        </div>
+        <label for="reminder">Reminder</label>
+        <input type="datetime-local" name="reminder" id="reminder">
+        <label for="finish_date">Due by</label>
+        <input type="date" name="finish_date" id="finish_date">
+        <input type="submit" value="Add task" id="add_task_post">
+    </form>
+    Click anywhere to close.
+</modal>

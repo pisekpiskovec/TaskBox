@@ -1,22 +1,39 @@
 var ListModal = document.getElementById("add_list_modal");
+var TaskModal = document.getElementById("add_task_modal");
 
-var btn = document.getElementById("open_list_modal");
+var OpenListModalButton = document.getElementById("open_list_modal");
+var OpenTaskModalButton = document.getElementById("open_task_modal");
 
-var span = document.getElementsByClassName("close_modal")[0];
+var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
+var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
 
-btn.onclick = function () {
+OpenListModalButton.onclick = function () {
     document.getElementsByClassName("containbox")[0].style.display = "flex";
     ListModal.style.display = "block";
 }
 
-span.onclick = function () {
+OpenTaskModalButton.onclick = function () {
+    document.getElementsByClassName("containbox")[1].style.display = "flex";
+    TasktModal.style.display = "block";
+}
+
+CloseListModalButton.onclick = function () {
     document.getElementsByClassName("containbox")[0].style.display = "none";
     ListModal.style.display = "none";
+}
+
+CloseTaskModalButton.onclick = function () {
+    document.getElementsByClassName("containbox")[1].style.display = "none";
+    TaskModal.style.display = "none";
 }
 
 window.onclick = function (event) {
     if (event.target == ListModal) {
         ListModal.style.display = "none";
+    }
+
+    if (event.target == TaskModal) {
+        TaskModal.style.display = "none";
     }
 }
 
