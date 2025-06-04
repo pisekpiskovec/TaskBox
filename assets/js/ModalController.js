@@ -60,7 +60,16 @@ function TaskInterface(data) {
 }
 
 function OpenList(ListItem) {
-    alert(ListItem.id);
+    Promise.all(
+        fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' }).then(response => response.json())
+    )
+        .then(data => {
+            refillStack(data);
+        })
+        .catch(error => {
+            console.error('Error getting data:', error);
+            alert('Error getting data. Please try again later.');
+        });
 }
 
 function OpenTask(TaskItem) {
@@ -79,7 +88,7 @@ function fillStack(stack = 2, data) {
     }
 }
 
-function refillStack(stack = 2, data) {
+function refillStack(data, stack = 2) {
     switch (stack) {
         case 'list' ?? 1:
             ListStack.innerHTML = "";
