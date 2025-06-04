@@ -40,23 +40,55 @@ window.onclick = function (event) {
     }
 }
 
+function ListInterface(data) {
+    const listitem = document.createElement('div');
+    listitem['className'] = 'box cursor_hand';
+    listitem['id'] = data["_id"];
+    listitem['innerText'] = data['name'];
+    listitem['onclick'] = function () { OpenList(this); };
+    return listitem;
+}
+
+function TaskInterface(data) {
+    const taskitem = document.createElement('div');
+    taskitem['className'] = 'box cursor_hand';
+    taskitem['id'] = data["_id"];
+    taskitem['innerText'] = data['name'];
+    taskitem['onclick'] = function () { OpenTask(this); };
+    if (data['finished']) taskitem.style.textDecoration = 'line-through';
+    return taskitem;
+}
+
+function OpenList(ListItem) {
+    alert(ListItem.id);
+}
+
+function OpenTask(TaskItem) {
+    alert(TaskItem.id);
+}
+
 function fillStack(stack = 2, data) {
     switch (stack) {
         case 'list' ?? 1:
-            const listitem = document.createElement('div');
-            listitem['className'] = 'box';
-            listitem['id'] = data["_id"];
-            listitem['innerText'] = data['name'];
-            ListStack.appendChild(listitem);
+            ListStack.appendChild(ListInterface(data));
             break;
         case 'task' ?? 2:
         default:
-            const taskitem = document.createElement('div');
-            taskitem['className'] = 'box';
-            taskitem['id'] = data["_id"];
-            taskitem['innerText'] = data['name'];
-            if (data['finished']) taskitem.style.textDecoration = 'overline';
-            TaskStack.appendChild(taskitem);
+            TaskStack.appendChild(TaskInterface(data));
+            break;
+    }
+}
+
+function refillStack(stack = 2, data) {
+    switch (stack) {
+        case 'list' ?? 1:
+            ListStack.innerHTML = "";
+            ListStack.appendChild(ListInterface(data));
+            break;
+        case 'task' ?? 2:
+        default:
+            TaskStack.innerHTML = "";
+            TaskStack.appendChild(TaskInterface(data));
             break;
     }
 }
@@ -64,21 +96,12 @@ function fillStack(stack = 2, data) {
 function refreshStacks(listData, taskData) {
     ListStack.innerHTML = "";
     listData.forEach(data => {
-        const listitem = document.createElement('div');
-        listitem['className'] = 'box';
-        listitem['id'] = data["_id"];
-        listitem['innerText'] = data['name'];
-        ListStack.appendChild(listitem);
+        ListStack.appendChild(ListInterface(data));
     });
 
     TaskStack.innerHTML = "";
     taskData.forEach(data => {
-        const taskitem = document.createElement('div');
-        taskitem['className'] = 'box';
-        taskitem['id'] = data["_id"];
-        taskitem['innerText'] = data['name'];
-        if (data['finished']) taskitem.style.textDecoration = 'line-through';
-        TaskStack.appendChild(taskitem);
+        TaskStack.appendChild(TaskInterface(data));
     });
 }
 
