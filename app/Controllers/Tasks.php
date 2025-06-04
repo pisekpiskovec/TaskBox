@@ -45,7 +45,7 @@ class Tasks
 
         $model = new \Models\Task();
         $model->name = $base->get('POST.name');
-        $model->list = $base->get('GET.list') ?? $base->get('POST.list');
+        $model->list = $base->get('POST.list') ?? $base->get('GET.list');
         $model->myday = $base->get('POST.myday');
         $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
 
