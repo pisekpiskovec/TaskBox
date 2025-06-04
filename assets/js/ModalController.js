@@ -88,18 +88,6 @@ function OpenTask(TaskItem) {
     alert(TaskItem.id);
 }
 
-function fillStack(stack = 2, data) {
-    switch (stack) {
-        case 'list' ?? 1:
-            ListStack.appendChild(ListInterface(data));
-            break;
-        case 'task' ?? 2:
-        default:
-            TaskStack.appendChild(TaskInterface(data));
-            break;
-    }
-}
-
 function refillStack(data, stack = 2) {
     switch (stack) {
         case 'list' ?? 1:
