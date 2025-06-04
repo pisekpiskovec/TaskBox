@@ -168,9 +168,6 @@ window.onload = function () {
         })
         .catch(error => {
             console.error('Error getting data:', error);
-            ListStack.innerHTML = "";
-            ListStack.appendChild(LandErrorInterface());
-            TaskStack.innerHTML = "";
-            TaskStack.appendChild(LandErrorInterface());
+            alert('Error getting data. Please try again later.');
         });
 };
