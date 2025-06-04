@@ -56,3 +56,23 @@ document.getElementById('add_list_form').addEventListener('submit', function (e)
             alert('Error adding list. Please try again.');
         });
 });
+
+document.getElementById('add_task_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/task/task/add', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Task added:', data);
+            TaskModal.style.display = "none";
+            document.getElementById('name').value = '';
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error adding task:', error);
+            alert('Error adding task. Please try again.');
+        });
+});
