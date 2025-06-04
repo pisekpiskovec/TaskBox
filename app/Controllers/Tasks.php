@@ -99,6 +99,22 @@ class Tasks
         }
     }
 
+    public function getLists(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Lists();
+        $entries = $model->afind(['owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
+        if (!$entries) {
+            (new \Controllers\Index())->JSON_response("Lists not found", 404);
+            return;
+        }
+        (new \Controllers\Index())->JSON_response($entries);
+    }
+
     public function getListsTasks(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
