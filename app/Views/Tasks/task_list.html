@@ -20,9 +20,11 @@
         <check if="{{@ListsSet == true}}">
             <hr>
         </check>
-        <repeat group="{{@ListsSet}}" value="{{@list}}">
-            <div class="box list_view cursor_hand">{{@list.name}}</div>
-        </repeat>
+        <stack id="list-stack">
+            <repeat group="{{@ListsSet}}" value="{{@list}}">
+                <div class="box list_view cursor_hand">{{@list.name}}</div>
+            </repeat>
+        </stack>
     </section>
 
     <!-- Tasks -->
@@ -31,9 +33,7 @@
         <check if="{{@TasksSet == true}}">
             <hr>
         </check>
-        <repeat group="{{@TasksSet}}" value="{{@task}}">
-            <div class="box">{{@task.name}}</div>
-        </repeat>
+        <stack id="task-stack"></stack>
     </section>
 
     <!-- Current task -->
@@ -42,4 +42,4 @@
     </section>
 </section>
 
-<script src="assets/js/listModalController.js"></script>
+<script src="assets/js/ModalController.js"></script>

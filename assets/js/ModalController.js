@@ -4,6 +4,9 @@ var TaskModal = document.getElementById("add_task_modal");
 var OpenListModalButton = document.getElementById("open_list_modal");
 var OpenTaskModalButton = document.getElementById("open_task_modal");
 
+var ListStack = document.getElementById("list-stack");
+var TaskStack = document.getElementById("task-stack");
+
 var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
 var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
 
@@ -35,6 +38,48 @@ window.onclick = function (event) {
     if (event.target == TaskModal) {
         TaskModal.style.display = "none";
     }
+}
+
+function fillStack(stack = 2, data) {
+    switch (stack) {
+        case 'list' ?? 1:
+            const listitem = document.createElement('div');
+            listitem['className'] = 'box';
+            listitem['id'] = data["_id"];
+            listitem['innerText'] = data['name'];
+            ListStack.appendChild(listitem);
+            break;
+        case 'task' ?? 2:
+        default:
+            const taskitem = document.createElement('div');
+            taskitem['className'] = 'box';
+            taskitem['id'] = data["_id"];
+            taskitem['innerText'] = data['name'];
+            if (data['finished']) taskitem.style.textDecoration = 'overline';
+            TaskStack.appendChild(taskitem);
+            break;
+    }
+}
+
+function refreshStacks(listData, taskData) {
+    ListStack.children = "";
+    listData.forEach(data => {
+        const listitem = document.createElement('div');
+        listitem['className'] = 'box';
+        listitem['id'] = data["_id"];
+        listitem['innerText'] = data['name'];
+        ListStack.appendChild(listitem);
+    });
+
+    TaskStack.children = "";
+    taskData.forEach(data => {
+        const taskitem = document.createElement('div');
+        taskitem['className'] = 'box';
+        taskitem['id'] = data["_id"];
+        taskitem['innerText'] = data['name'];
+        if (task['finished']) taskitem.style.textDecoration = 'overline';
+        TaskStack.appendChild(taskitem);
+    });
 }
 
 document.getElementById('add_list_form').addEventListener('submit', function (e) {
@@ -76,3 +121,23 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
             alert('Error adding task. Please try again.');
         });
 });
+
+window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const list = urlParams.get('list') != null ? urlParams.get('list') : '';
+    var listData, taskData;
+
+    fetch('/task/task/get' + list, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            taskData = data;
+        })
+        .catch(error => {
+            console.error('Error getting tasks:', error);
+            alert('Error getting tasks. Please try again.');
+        });
+
+    refreshStacks(listData, taskData);
+};
