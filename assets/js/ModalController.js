@@ -62,7 +62,7 @@ function fillStack(stack = 2, data) {
 }
 
 function refreshStacks(listData, taskData) {
-    ListStack.children = "";
+    ListStack.innerHTML = "";
     listData.forEach(data => {
         const listitem = document.createElement('div');
         listitem['className'] = 'box';
@@ -71,13 +71,13 @@ function refreshStacks(listData, taskData) {
         ListStack.appendChild(listitem);
     });
 
-    TaskStack.children = "";
+    TaskStack.innerHTML = "";
     taskData.forEach(data => {
         const taskitem = document.createElement('div');
         taskitem['className'] = 'box';
         taskitem['id'] = data["_id"];
         taskitem['innerText'] = data['name'];
-        if (task['finished']) taskitem.style.textDecoration = 'overline';
+        if (data['finished']) taskitem.style.textDecoration = 'line-through';
         TaskStack.appendChild(taskitem);
     });
 }
@@ -125,19 +125,17 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const list = urlParams.get('list') != null ? urlParams.get('list') : '';
-    var listData, taskData;
 
-    fetch('/task/task/get' + list, {
-        method: 'GET'
-    })
-        .then(response => response.json())
-        .then(data => {
-            taskData = data;
+    // Fetch lists and tasks
+    Promise.all([
+        fetch('/task/list/get', { method: 'GET' }).then(response => response.json()),
+        fetch('/task/task/get' + list, { method: 'GET' }).then(response => response.json()),
+    ])
+        .then(([listData, taskData]) => {
+            refreshStacks(listData, taskData);
         })
         .catch(error => {
-            console.error('Error getting tasks:', error);
-            alert('Error getting tasks. Please try again.');
+            console.error('Error getting data:', error);
+            alert('Error getting data. Please try again later.');
         });
-
-    refreshStacks(listData, taskData);
 };
