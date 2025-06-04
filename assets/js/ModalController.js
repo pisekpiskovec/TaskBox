@@ -129,7 +129,7 @@ window.onload = function () {
     // Fetch lists and tasks
     Promise.all([
         fetch('/task/list/get', { method: 'GET' }).then(response => response.json()),
-        fetch('/task/task/get' + list, { method: 'GET' }).then(response => response.json()),
+        fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json()),
     ])
         .then(([listData, taskData]) => {
             refreshStacks(listData, taskData);
