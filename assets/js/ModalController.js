@@ -40,6 +40,17 @@ window.onclick = function (event) {
     }
 }
 
+function LandErrorInterface() {
+    const error = document.createElement('err');
+    error.innerHTML =
+        `
+        <img src="assets/airplane-landing.svg" alt="Uh oh!" width="470">
+        <h1>Uh oh!</h1>
+        <h3>Something went wrong...</h3>
+        `;
+    return error;
+}
+
 function ListInterface(data) {
     const listitem = document.createElement('div');
     listitem['className'] = 'box cursor_hand';
@@ -68,7 +79,8 @@ function OpenList(ListItem) {
         })
         .catch(error => {
             console.error('Error getting data:', error);
-            alert('Error getting data. Please try again later.');
+            TaskStack.innerHTML = "";
+            TaskStack.appendChild(LandErrorInterface());
         });
 }
 
@@ -168,6 +180,9 @@ window.onload = function () {
         })
         .catch(error => {
             console.error('Error getting data:', error);
-            alert('Error getting data. Please try again later.');
+            ListStack.innerHTML = "";
+            ListStack.appendChild(LandErrorInterface());
+            TaskStack.innerHTML = "";
+            TaskStack.appendChild(LandErrorInterface());
         });
 };
