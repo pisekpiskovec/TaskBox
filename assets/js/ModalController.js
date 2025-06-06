@@ -159,7 +159,7 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
 
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const list = urlParams.get('list') != null ? urlParams.get('list') : '';
+    const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
 
     // Fetch lists and tasks
     Promise.all([
@@ -174,3 +174,10 @@ window.onload = function () {
             alert('Error getting data. Please try again later.');
         });
 };
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
