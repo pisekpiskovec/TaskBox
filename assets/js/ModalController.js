@@ -91,15 +91,15 @@ function OpenTask(TaskItem) {
     alert(TaskItem.id);
 }
 
-function refillStack(inputdata, stack = 2) {
+function refillStack(inputdata, stack = 'task') {
     switch (stack) {
-        case 'list' ?? 1:
+        case 'list':
             ListStack.innerHTML = "";
             inputdata.forEach(data => {
                 ListStack.appendChild(ListInterface(data));
             });
             break;
-        case 'task' ?? 2:
+        case 'task':
         default:
             TaskStack.innerHTML = "";
             inputdata.forEach(data => {
@@ -133,7 +133,7 @@ document.getElementById('add_list_form').addEventListener('submit', function (e)
             console.log('List added:', data);
             ListModal.style.display = "none";
             document.getElementById('name').value = '';
-            location.reload();
+            ReloadListList();
         })
         .catch(error => {
             console.error('Error adding list:', error);
@@ -153,7 +153,7 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
             console.log('Task added:', data);
             TaskModal.style.display = "none";
             document.getElementById('name').value = '';
-            location.reload();
+            ReloadListContent(formData.get('list'));
         })
         .catch(error => {
             console.error('Error adding task:', error);
@@ -175,7 +175,8 @@ window.onload = function () {
         })
         .catch(error => {
             console.error('Error getting data:', error);
-            alert('Error getting data. Please try again later.');
+            TaskStack.innerHTML = "";
+            TaskStack.appendChild(LandErrorInterface());
         });
 };
 
@@ -184,4 +185,29 @@ function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
+}
+
+function ReloadListContent(lID) {
+    fetch('/task/task/get?list=' + lID, { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+            refillStack(data);
+        })
+        .catch(error => {
+            console.error('Error getting data:', error);
+            TaskStack.innerHTML = "";
+            TaskStack.appendChild(LandErrorInterface());
+        });
+}
+
+function ReloadListList() {
+    fetch('/task/list/get', { method: 'GET' }).then(response => response.json())
+        .then(data => {
+            refillStack(data, 'list');
+        })
+        .catch(error => {
+            console.error('Error getting data:', error);
+            ListStack.innerHTML = "";
+            ListStack.appendChild(LandErrorInterface());
+        });
 }
