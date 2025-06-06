@@ -16,6 +16,9 @@ OpenListModalButton.onclick = function () {
 }
 
 OpenTaskModalButton.onclick = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
+    document.getElementsByName('list')[0].value = list;
     document.getElementsByClassName("containbox")[1].style.display = "flex";
     TasktModal.style.display = "block";
 }
