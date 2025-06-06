@@ -23,7 +23,7 @@ class Task extends \DB\Cortex
             'default' => false
         ],
         'list' => [
-            'type' => 'VARCHAR128',
+            'type' => 'INT4',
             'required' => true,
             'unique' => false,
             'nullable' => false,
