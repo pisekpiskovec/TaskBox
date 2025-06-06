@@ -91,16 +91,20 @@ function OpenTask(TaskItem) {
     alert(TaskItem.id);
 }
 
-function refillStack(data, stack = 2) {
+function refillStack(inputdata, stack = 2) {
     switch (stack) {
         case 'list' ?? 1:
             ListStack.innerHTML = "";
-            ListStack.appendChild(ListInterface(data));
+            inputdata.forEach(data => {
+                ListStack.appendChild(ListInterface(data));
+            });
             break;
         case 'task' ?? 2:
         default:
             TaskStack.innerHTML = "";
-            TaskStack.appendChild(TaskInterface(data));
+            inputdata.forEach(data => {
+                TaskStack.appendChild(TaskInterface(data));
+            });
             break;
     }
 }
