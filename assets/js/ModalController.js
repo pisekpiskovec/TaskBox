@@ -84,7 +84,9 @@ function OpenList(ListItem) {
             TaskStack.innerHTML = "";
             TaskStack.appendChild(LandErrorInterface());
         });
+    document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
     document.cookie = 'lID=' + ListItem.id;
+    ListItem.classList.add('selected_box');
 }
 
 function OpenTask(TaskItem) {
@@ -172,6 +174,7 @@ window.onload = function () {
     ])
         .then(([listData, taskData]) => {
             refreshStacks(listData, taskData);
+            Array.from(document.getElementById('list_panel').querySelectorAll('.box')).find(box=>box.id === getCookie('lID')).classList.add('selected_box');
         })
         .catch(error => {
             console.error('Error getting data:', error);

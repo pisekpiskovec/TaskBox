@@ -100,3 +100,18 @@ form#add_list_form {
   min-width: fit-content;
   height: fit-content;
 }
+
+.selected_box{
+  background: linear-gradient(
+    90deg,
+    var(--purpleC),
+    var(--purpleD),
+    var(--purpleE),
+    var(--darkD),
+    var(--darkD),
+    var(--darkD),
+    var(--darkD),
+    var(--darkD),
+    var(--darkD)
+  );
+}
