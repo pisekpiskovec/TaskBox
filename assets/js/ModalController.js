@@ -74,9 +74,8 @@ function TaskInterface(data) {
 }
 
 function OpenList(ListItem) {
-    Promise.all(
-        fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' }).then(response => response.json())
-    )
+    fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' })
+        .then(response => response.json())
         .then(data => {
             refillStack(data);
         })
@@ -85,6 +84,7 @@ function OpenList(ListItem) {
             TaskStack.innerHTML = "";
             TaskStack.appendChild(LandErrorInterface());
         });
+    document.cookie = 'lID=' + ListItem.id;
 }
 
 function OpenTask(TaskItem) {
