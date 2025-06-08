@@ -72,21 +72,36 @@ function TaskInterface(data) {
 }
 
 function OpenList(ListItem) {
-    fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-            refillStack(data);
-        })
-        .catch(error => {
-            console.error('Error getting data:', error);
-            TaskStack.innerHTML = "";
-            TaskStack.appendChild(LandErrorInterface());
-        });
-    try {
+    if (!ListItem.classList.contains('selected_box')) {
+        fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                refillStack(data);
+            })
+            .catch(error => {
+                console.error('Error getting data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
+        try {
+            document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
+        } catch { console.error('Could\'t deselect current list'); }
+        document.cookie = 'lID=' + ListItem.id;
+        ListItem.classList.add('selected_box');
+    } else {
+        fetch('/task/task/get?list=0', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                refillStack(data);
+            })
+            .catch(error => {
+                console.error('Error getting data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
         document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
-    } catch { console.error('Could\'t deselect current list'); }
-    document.cookie = 'lID=' + ListItem.id;
-    ListItem.classList.add('selected_box');
+        document.cookie = 'lID=0';
+    }
 }
 
 function OpenTask(TaskItem, id, name, finished, notes) {
