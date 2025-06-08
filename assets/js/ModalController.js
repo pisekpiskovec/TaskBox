@@ -113,18 +113,6 @@ function refillStack(inputdata, stack = 'task') {
     }
 }
 
-function refreshStacks(listData, taskData) {
-    ListStack.innerHTML = "";
-    listData.forEach(data => {
-        ListStack.appendChild(ListInterface(data));
-    });
-
-    TaskStack.innerHTML = "";
-    taskData.forEach(data => {
-        TaskStack.appendChild(TaskInterface(data));
-    });
-}
-
 document.getElementById('add_list_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
@@ -178,8 +166,9 @@ window.onload = function () {
         fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json()),
     ])
         .then(([listData, taskData]) => {
-            refreshStacks(listData, taskData);
-            Array.from(document.getElementById('list_panel').querySelectorAll('.box')).find(box=>box.id === getCookie('lID')).classList.add('selected_box');
+            refillStack(listData, 'list');
+            refillStack(taskData);
+            Array.from(document.getElementById('list_panel').querySelectorAll('.box')).find(box => box.id === getCookie('lID')).classList.add('selected_box');
         })
         .catch(error => {
             console.error('Error getting data:', error);
