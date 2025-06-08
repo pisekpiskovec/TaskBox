@@ -22,6 +22,22 @@ select {
   box-sizing: content-box;
 }
 
+textarea {
+  background-color: light-dark(var(--lightD), var(--darkD));
+  padding: 11px;
+  border-radius: 12px;
+  color: light-dark(var(--darkE), var(--lightA));
+  text-decoration: none;
+  margin: 2ch;
+  border: none;
+  max-width: max-content;
+  min-width: fit-content;
+  -ms-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
 label {
   background-color: transparent;
 }

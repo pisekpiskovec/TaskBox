@@ -66,7 +66,7 @@ function TaskInterface(data) {
     taskitem['className'] = 'box cursor_hand';
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
-    taskitem['onclick'] = function () { OpenTask(this); };
+    taskitem['onclick'] = function () { OpenTask(data['_id'], data['name'], data['finished'], data['notes']); };
     if (data['finished']) taskitem.style.textDecoration = 'line-through';
     return taskitem;
 }
@@ -89,8 +89,8 @@ function OpenList(ListItem) {
     ListItem.classList.add('selected_box');
 }
 
-function OpenTask(TaskItem) {
-    alert(TaskItem.id);
+function OpenTask(id, name, finished, notes) {
+    new TaskViewInterface(id, name, finished, notes)
 }
 
 function refillStack(inputdata, stack = 'task') {
@@ -205,4 +205,50 @@ function ReloadListList() {
             ListStack.innerHTML = "";
             ListStack.appendChild(LandErrorInterface());
         });
+}
+
+class TaskViewInterface {
+    TaskView = document.getElementById('current_task');
+    constructor(id, name, finished, notes) {
+        this.TaskView.innerHTML = "";
+        this.TaskView.appendChild(this.TaskViewPart_IDholder(id));
+        this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
+        this.TaskView.appendChild(this.TaskViewPart_Note(notes));
+    }
+
+    TaskViewPart_IDholder(id) {
+        const item = document.createElement('input');
+        item['type'] = 'hidden';
+        item['value'] = id;
+        return item;
+    }
+
+    TaskViewPart_Nameplate(name, finished) {
+        const item = document.createElement('div');
+        const connector = document.createElement('div');
+        const checkbox = document.createElement('input');
+        const label = document.createElement('label');
+
+        checkbox['type'] = 'checkbox';
+        checkbox['name'] = 'task-finished';
+        checkbox['id'] = 'task-finished';
+        checkbox['checked'] = finished;
+        connector.appendChild(checkbox);
+
+        label['for'] = 'task-finished';
+        label.innerText = name;
+        connector.appendChild(label);
+
+        item['className'] = 'box cursor_hand';
+        item.appendChild(connector);
+        // item['onclick'] = function () { OpenTask(this); };
+        if (finished) item.style.textDecoration = 'line-through';
+        return item;
+    }
+
+    TaskViewPart_Note(note) {
+        const item = document.createElement('textarea');
+        item['value'] = note;
+        return item;
+    }
 }
