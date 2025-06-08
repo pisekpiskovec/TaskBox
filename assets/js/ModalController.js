@@ -84,7 +84,9 @@ function OpenList(ListItem) {
             TaskStack.innerHTML = "";
             TaskStack.appendChild(LandErrorInterface());
         });
-    document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
+    try {
+        document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
+    } catch { console.error('Could\'t deselect current list'); }
     document.cookie = 'lID=' + ListItem.id;
     ListItem.classList.add('selected_box');
 }
@@ -166,6 +168,9 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
+    if (list == '0') {
+        document.cookie = 'lID=0';
+    }
 
     // Fetch lists and tasks
     Promise.all([
