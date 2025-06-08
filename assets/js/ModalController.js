@@ -11,16 +11,14 @@ var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
 var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
 
 OpenListModalButton.onclick = function () {
-    document.getElementsByClassName("containbox")[0].style.display = "flex";
-    ListModal.style.display = "block";
+    ListModal.style.display = "flex";
 }
 
 OpenTaskModalButton.onclick = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
     document.getElementsByName('list')[0].value = list;
-    document.getElementsByClassName("containbox")[1].style.display = "flex";
-    TasktModal.style.display = "block";
+    TaskModal.style.display = "flex";
 }
 
 CloseListModalButton.onclick = function () {

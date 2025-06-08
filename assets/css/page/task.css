@@ -66,12 +66,6 @@ modal {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-form#add_list_form {
-  margin: 15% auto;
-  padding: 20px;
-  width: 80%;
-}
-
 .close_modal {
   font-size: 28px;
   font-weight: bold;
@@ -101,7 +95,7 @@ form#add_list_form {
   height: fit-content;
 }
 
-.selected_box{
+.selected_box {
   background: linear-gradient(
     90deg,
     var(--purpleC),
