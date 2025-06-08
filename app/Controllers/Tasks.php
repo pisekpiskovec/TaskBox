@@ -108,10 +108,8 @@ class Tasks
 
         $model = new \Models\Lists();
         $entries = $model->afind(['owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
-        if (!$entries) {
-            (new \Controllers\Index())->JSON_response("Lists not found", 404);
-            return;
-        }
+        if (!$entries)
+            $entries = array();
         (new \Controllers\Index())->JSON_response($entries);
     }
 
