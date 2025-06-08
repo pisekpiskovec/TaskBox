@@ -66,7 +66,7 @@ function TaskInterface(data) {
     taskitem['className'] = 'box cursor_hand';
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
-    taskitem['onclick'] = function () { OpenTask(data['_id'], data['name'], data['finished'], data['notes']); };
+    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['notes']); };
     if (data['finished']) taskitem.style.textDecoration = 'line-through';
     return taskitem;
 }
@@ -89,8 +89,19 @@ function OpenList(ListItem) {
     ListItem.classList.add('selected_box');
 }
 
-function OpenTask(id, name, finished, notes) {
-    new TaskViewInterface(id, name, finished, notes)
+function OpenTask(TaskItem, id, name, finished, notes) {
+    if (!TaskItem.classList.contains(('selected_box'))) {
+        new TaskViewInterface(id, name, finished, notes)
+        try {
+            document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
+        } catch { console.error('Could\'t deselect current task'); }
+        document.cookie = 'tID=' + TaskItem.id;
+        TaskItem.classList.add('selected_box');
+    } else {
+        document.getElementById('current_task').innerHTML = '';
+        document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
+        document.cookie = 'tID=0';
+    }
 }
 
 function refillStack(inputdata, stack = 'task') {
@@ -209,11 +220,17 @@ function ReloadListList() {
 
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
+    tID = 0; tName = ''; tFinished = false; tNote = '';
     constructor(id, name, finished, notes) {
         this.TaskView.innerHTML = "";
         this.TaskView.appendChild(this.TaskViewPart_IDholder(id));
         this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
+
+        this.tID = id;
+        this.tName = name;
+        this.tFinished = finished;
+        this.tNote = notes;
     }
 
     TaskViewPart_IDholder(id) {
@@ -235,7 +252,7 @@ class TaskViewInterface {
         checkbox['checked'] = finished;
         connector.appendChild(checkbox);
 
-        label['for'] = 'task-finished';
+        label['htmlFor'] = 'task-finished';
         label.innerText = name;
         connector.appendChild(label);
 
