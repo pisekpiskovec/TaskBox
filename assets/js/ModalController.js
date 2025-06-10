@@ -88,7 +88,7 @@ function OpenList(ListItem) {
         } catch { console.error('Could\'t deselect current list'); }
         document.cookie = 'lID=' + ListItem.id;
         ListItem.classList.add('selected_box');
-    } else {
+    } else if (getCookie('lID') != 0) {
         fetch('/task/task/get?list=0', { method: 'GET' })
             .then(response => response.json())
             .then(data => {
@@ -101,11 +101,12 @@ function OpenList(ListItem) {
             });
         document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
         document.cookie = 'lID=0';
+        document.getElementsByName('AllTasks')[0].classList.add('selected_box');
     }
 }
 
 function OpenTask(TaskItem, id, name, finished, notes) {
-    if (!TaskItem.classList.contains(('selected_box'))) {
+    if (!TaskItem.classList.contains('selected_box')) {
         new TaskViewInterface(id, name, finished, notes)
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
