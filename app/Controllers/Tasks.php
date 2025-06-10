@@ -134,4 +134,36 @@ class Tasks
         }
         (new \Controllers\Index())->JSON_response($entries);
     }
+
+    public function putTask(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+        $input = [];
+        parse_str($base->get('BODY'), $input);
+        $model = new \Models\Task();
+        $entry = $model->findone(["id=? AND owner_id=?", $input['id'], $input['uid'] ?? $base->get('SESSION.uid')]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("Task not found", 404);
+            return;
+        }
+
+        $entry->name = $input['name'];
+        $entry->finished = $input['finished'];
+        // $entry->list = $input['list'];
+        // $entry->myday = $input['myday'];
+        // $entry->reminder = $input['reminder'];
+        // $entry->finish_date = $input['finish_date'];
+        $entry->notes = $input['notes'];
+
+        try {
+            $entry->save();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+            return;
+        }
+        (new \Controllers\Index())->JSON_response('Task edited.');
+    }
 }
