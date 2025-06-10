@@ -150,13 +150,13 @@ class Tasks
             return;
         }
 
-        $entry->name = $input['name'];
-        $entry->finished = $input['finished'];
-        // $entry->list = $input['list'];
-        // $entry->myday = $input['myday'];
-        // $entry->reminder = $input['reminder'];
-        // $entry->finish_date = $input['finish_date'];
-        $entry->notes = $input['notes'];
+        $entry->name = $input['name'] ?? $entry->name;
+        $entry->finished = $input['finished'] ?? $entry->finished;
+        $entry->list = $input['list'] ?? $entry->list;
+        $entry->myday = $input['myday'] ?? $entry->myday;
+        $entry->reminder = $input['reminder'] ?? $entry->reminder;
+        $entry->finish_date = $input['finish_date'] ?? $entry->finish_date;
+        $entry->notes = $input['notes'] ?? $entry->notes;
 
         try {
             $entry->save();
