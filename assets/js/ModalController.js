@@ -66,7 +66,7 @@ function TaskInterface(data) {
     taskitem['className'] = 'box cursor_hand';
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
-    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['notes']); };
+    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
     if (data['finished']) taskitem.style.textDecoration = 'line-through';
     return taskitem;
 }
@@ -109,9 +109,9 @@ function OpenList(ListItem) {
     }
 }
 
-function OpenTask(TaskItem, id, name, finished, notes) {
+function OpenTask(TaskItem, id, name, finished, list, notes) {
     if (!TaskItem.classList.contains('selected_box')) {
-        new TaskViewInterface(id, name, finished, notes)
+        new TaskViewInterface(id, name, finished, list, notes)
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
         } catch { console.error('Could\'t deselect current task'); }
@@ -242,21 +242,23 @@ function ReloadListList() {
 
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
-    tID = 0; tName = ''; tFinished = false; tNote = '';
+    tID = 0; tName = ''; tFinished = false; tList = 0; tNote = '';
 
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
 
-    constructor(id, name, finished, notes) {
+    constructor(id, name, finished, list, notes) {
+        this.tID = id;
+        this.tName = name;
+        this.tFinished = finished;
+        this.tList = list;
+        this.tNote = notes;
+
         this.TaskView.innerHTML = "";
         this.TaskView.appendChild(this.TaskViewPart_IDholder(id));
         this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
-
-        this.tID = id;
-        this.tName = name;
-        this.tFinished = finished;
-        this.tNote = notes;
+        this.TaskView.appendChild(this.TaskViewPart_ListChanger());
     }
 
     TaskViewPart_IDholder(id) {
@@ -299,9 +301,45 @@ class TaskViewInterface {
             this.TaskControl_ChangeNote(item['value'], item);
         });
         item.addEventListener('animationend', () => {
-            this.TaskControl_NoteAnimationEnd(item);
+            this.TaskStylesControl_NoteAnimationEnd(item);
         });
         item['placeholder'] = 'Add note';
+        return item;
+    }
+
+    TaskViewPart_ListChanger() {
+        const item = document.createElement('div');
+        const selector = document.createElement('select');
+        const default_option = document.createElement('option');
+
+        default_option['value'] = 0;
+        default_option['innerText'] = 'No list selected';
+        if (0 == this.tList)
+            default_option['selected'] = true;
+        selector.appendChild(default_option);
+
+        fetch('/task/list/get', { method: 'GET' }).then(response => response.json())
+            .then(datas => {
+                datas.forEach(data => {
+                    const option = document.createElement('option');
+                    option['value'] = data['_id'];
+                    option['innerText'] = data['name'];
+                    if (data['_id'] == this.tList)
+                        option['selected'] = true;
+                    selector.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error getting data:', error);
+                this.TaskView.innerHTML = 'Error getting data: ' + error;
+            });
+
+        selector.addEventListener('change', () => {
+            this.TaskControl_MoveTask(selector['value']);
+        });
+
+        item['className'] = 'box cursor_hand';
+        item.appendChild(selector);
         return item;
     }
 
@@ -329,7 +367,7 @@ class TaskViewInterface {
     }
 
     TaskControl_ChangeNote(NewNote, Object) {
-        this.TaskControl_NoteAnimationEnd(Object);
+        this.TaskStylesControl_NoteAnimationEnd(Object);
         const params = new URLSearchParams({
             'notes': NewNote,
             'id': this.tID
@@ -353,32 +391,53 @@ class TaskViewInterface {
             });
     }
 
-    TaskControl_NoteAnimationEnd(Object) {
+    TaskControl_MoveTask(NewListID) {
+        const params = new URLSearchParams({
+            'list': NewListID,
+            'id': this.tID
+        });
+
+        fetch('/task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
+                this.tList = NewListID;
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
+    TaskStylesControl_NoteAnimationEnd(Object) {
         if (Object.classList.contains('textarea_fail'))
             Object.classList.remove('textarea_fail');
         if (Object.classList.contains('textarea_success'))
             Object.classList.remove('textarea_success');
     }
 
-    TaskControl_refillStack(inputdata, stack = 'task') {
+    TaskPage_RefillStack(inputdata, stack = 'task') {
         switch (stack) {
             case 'list':
                 this.ListStack.innerHTML = "";
                 inputdata.forEach(data => {
-                    this.ListStack.appendChild(this.TaskControl_ListInterface(data));
+                    this.ListStack.appendChild(this.TaskInterface_List(data));
                 });
                 break;
             case 'task':
             default:
                 this.TaskStack.innerHTML = "";
                 inputdata.forEach(data => {
-                    this.TaskStack.appendChild(this.TaskControl_TaskInterface(data));
+                    this.TaskStack.appendChild(this.TaskInterface_Task(data));
                 });
                 break;
         }
     }
 
-    TaskControl_ListInterface(data) {
+    TaskInterface_List(data) {
         const listitem = document.createElement('div');
         listitem['className'] = 'box cursor_hand';
         listitem['id'] = data["_id"];
@@ -387,12 +446,12 @@ class TaskViewInterface {
         return listitem;
     }
 
-    TaskControl_TaskInterface(data) {
+    TaskInterface_Task(data) {
         const taskitem = document.createElement('div');
         taskitem['className'] = 'box cursor_hand';
         taskitem['id'] = data["_id"];
         taskitem['innerText'] = data['name'];
-        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['notes']); };
+        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
     }
@@ -402,7 +461,7 @@ class TaskViewInterface {
         const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
         fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json())
             .then(data => {
-                this.TaskControl_refillStack(data);
+                this.TaskPage_RefillStack(data);
                 if (getCookie('tID') != 0)
                     Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
             })
