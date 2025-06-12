@@ -290,7 +290,9 @@ class TaskViewInterface {
 
         item['className'] = 'box cursor_hand';
         item.appendChild(connector);
-        // item['onclick'] = function () { OpenTask(this); };
+        item.addEventListener('click', () => {
+            this.TaskControl_ToggleFinish(this.tFinished)
+        });
         if (finished) item.style.textDecoration = 'line-through';
         return item;
     }
@@ -380,7 +382,7 @@ class TaskViewInterface {
             }
         })
             .then(response => response.json())
-            .then(data => {
+            .then(() => {
                 this.reconstructor();
                 this.tFinished = currentState ? false : true;
             })
@@ -453,8 +455,9 @@ class TaskViewInterface {
             });
     }
 
-    TaskControl_RenameTask(){
+    TaskControl_RenameTask() {
         const NewName = prompt('Enter new name');
+        if (NewName == null) return;
         const params = new URLSearchParams({
             'name': NewName,
             'id': this.tID
