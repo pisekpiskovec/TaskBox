@@ -341,10 +341,11 @@ class TaskViewInterface {
             }
         })
             .then(response => response.json())
-            .then(() => {
-                this.reconstructor();
+            .then(async () => {
                 this.tNote = NewNote;
                 Object.classList.add('textarea_success');
+                await this.sleep(3000);
+                this.reconstructor();
             })
             .catch(error => {
                 console.error('Error updating data:', error);
@@ -411,4 +412,6 @@ class TaskViewInterface {
                 TaskStack.appendChild(LandErrorInterface());
             });
     }
+
+    sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 }
