@@ -282,6 +282,42 @@ class TaskViewInterface {
     TaskViewPart_Note(note) {
         const item = document.createElement('textarea');
         item['value'] = note;
+        item.addEventListener('change', () => {
+            this.TaskControl_ChangeNote(item['value'], item);
+        });
+        item.addEventListener('animationend', () => {
+            this.TaskControl_NoteAnimationEnd(item);
+        });
+        item['placeholder'] = 'Add note';
         return item;
+    }
+    TaskControl_ChangeNote(NewNote, Object) {
+        const params = new URLSearchParams({
+            'notes': NewNote,
+            'id': this.tID
+        });
+
+        fetch('/task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                this.tNote = NewNote;
+                Object.classList.add('textarea_success');
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+                Object.classList.add('textarea_fail');
+            });
+    }
+
+    TaskControl_NoteAnimationEnd(Object) {
+        if (Object.classList.contains('textarea_fail'))
+            Object.classList.remove('textarea_fail');
+        if (Object.classList.contains('textarea_success'))
+            Object.classList.remove('textarea_success');
     }
 }

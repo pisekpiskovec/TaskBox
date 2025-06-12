@@ -109,3 +109,21 @@ modal {
     var(--darkD)
   );
 }
+textarea {
+  border: 1px solid transparent;
+}
+.textarea_success {
+  border: 1px solid greenyellow;
+  animation: fade 3s alternate;
+}
+
+.textarea_fail {
+  border: 1px solid orangered;
+  animation: fade 3s alternate;
+}
+
+@keyframes fade {
+  to {
+    border: 1px solid transparent;
+  }
+}
