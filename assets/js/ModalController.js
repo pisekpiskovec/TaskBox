@@ -243,6 +243,10 @@ function ReloadListList() {
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
     tID = 0; tName = ''; tFinished = false; tNote = '';
+
+    ListStack = document.getElementById("list-stack");
+    TaskStack = document.getElementById("task-stack");
+
     constructor(id, name, finished, notes) {
         this.TaskView.innerHTML = "";
         this.TaskView.appendChild(this.TaskViewPart_IDholder(id));
@@ -272,6 +276,9 @@ class TaskViewInterface {
         checkbox['name'] = 'task-finished';
         checkbox['id'] = 'task-finished';
         checkbox['checked'] = finished;
+        checkbox.addEventListener('click', () => {
+            this.TaskControl_ToggleFinish(this.tFinished)
+        });
         connector.appendChild(checkbox);
 
         label['htmlFor'] = 'task-finished';
@@ -297,7 +304,32 @@ class TaskViewInterface {
         item['placeholder'] = 'Add note';
         return item;
     }
+
+    TaskControl_ToggleFinish(currentState) {
+        const params = new URLSearchParams({
+            'finished': currentState ? '0' : '1',
+            'id': this.tID
+        });
+
+        fetch('/task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.reconstructor();
+                this.tFinished = currentState ? false : true;
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
+    }
+
     TaskControl_ChangeNote(NewNote, Object) {
+        this.TaskControl_NoteAnimationEnd(Object);
         const params = new URLSearchParams({
             'notes': NewNote,
             'id': this.tID
@@ -309,8 +341,8 @@ class TaskViewInterface {
             }
         })
             .then(response => response.json())
-            .then(data => {
-                console.log(data);
+            .then(() => {
+                this.reconstructor();
                 this.tNote = NewNote;
                 Object.classList.add('textarea_success');
             })
@@ -325,5 +357,58 @@ class TaskViewInterface {
             Object.classList.remove('textarea_fail');
         if (Object.classList.contains('textarea_success'))
             Object.classList.remove('textarea_success');
+    }
+
+    TaskControl_refillStack(inputdata, stack = 'task') {
+        switch (stack) {
+            case 'list':
+                this.ListStack.innerHTML = "";
+                inputdata.forEach(data => {
+                    this.ListStack.appendChild(this.TaskControl_ListInterface(data));
+                });
+                break;
+            case 'task':
+            default:
+                this.TaskStack.innerHTML = "";
+                inputdata.forEach(data => {
+                    this.TaskStack.appendChild(this.TaskControl_TaskInterface(data));
+                });
+                break;
+        }
+    }
+
+    TaskControl_ListInterface(data) {
+        const listitem = document.createElement('div');
+        listitem['className'] = 'box cursor_hand';
+        listitem['id'] = data["_id"];
+        listitem['innerText'] = data['name'];
+        listitem['onclick'] = function () { OpenList(this); };
+        return listitem;
+    }
+
+    TaskControl_TaskInterface(data) {
+        const taskitem = document.createElement('div');
+        taskitem['className'] = 'box cursor_hand';
+        taskitem['id'] = data["_id"];
+        taskitem['innerText'] = data['name'];
+        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['notes']); };
+        if (data['finished']) taskitem.style.textDecoration = 'line-through';
+        return taskitem;
+    }
+
+    reconstructor() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
+        fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json())
+            .then(data => {
+                this.TaskControl_refillStack(data);
+                if (getCookie('tID') != 0)
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+            })
+            .catch(error => {
+                console.error('Error getting data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
     }
 }
