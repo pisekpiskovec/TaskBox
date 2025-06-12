@@ -194,6 +194,8 @@ window.onload = function () {
             refillStack(listData, 'list');
             refillStack(taskData);
             Array.from(document.getElementById('list_panel').querySelectorAll('.box')).find(box => box.id === getCookie('lID')).classList.add('selected_box');
+            if (getCookie('tID') != 0)
+                Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
         })
         .catch(error => {
             console.error('Error getting data:', error);
