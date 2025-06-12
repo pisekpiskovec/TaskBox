@@ -259,6 +259,7 @@ class TaskViewInterface {
         this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
         this.TaskView.appendChild(this.TaskViewPart_ListChanger());
+        this.TaskView.appendChild(this.TaskViewPart_Controls());
     }
 
     TaskViewPart_IDholder(id) {
@@ -338,8 +339,32 @@ class TaskViewInterface {
             this.TaskControl_MoveTask(selector['value']);
         });
 
-        item['className'] = 'box cursor_hand';
+        item['className'] = 'box';
         item.appendChild(selector);
+        return item;
+    }
+
+    TaskViewPart_Controls() {
+        const item = document.createElement('div');
+        const bin = document.createElement('a');
+        const rename = document.createElement('a');
+
+        bin['className'] = 'box destructive light cursor_hand';
+        bin['innerText'] = 'Delete task';
+        bin.addEventListener('click', () => {
+            this.TaskControl_DeleteTask();
+        })
+        item.appendChild(bin);
+
+        rename['className'] = 'box light cursor_hand';
+        rename['innerText'] = 'Rename task';
+        rename.addEventListener('click', () => {
+            this.TaskControl_RenameTask();
+        })
+        item.appendChild(rename);
+
+        item['className'] = 'box';
+        item['style'] = 'display: block ruby;';
         return item;
     }
 
@@ -405,6 +430,44 @@ class TaskViewInterface {
             .then(response => response.json())
             .then(async () => {
                 this.tList = NewListID;
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
+    TaskControl_DeleteTask() {
+        if (!confirm('Are you sure you want to delete this task?')) return;
+
+        fetch('/task/task/delete?id=' + this.tID, { method: 'DELETE' })
+            .then(() => {
+                document.cookie = 'tID=0';
+                this.TaskView.innerHTML = "";
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
+    }
+
+    TaskControl_RenameTask(){
+        const NewName = prompt('Enter new name');
+        const params = new URLSearchParams({
+            'name': NewName,
+            'id': this.tID
+        });
+
+        fetch('/task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
+                this.tList = NewName;
                 this.reconstructor();
             })
             .catch(error => {
