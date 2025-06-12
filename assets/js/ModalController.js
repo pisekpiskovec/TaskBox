@@ -77,6 +77,8 @@ function OpenList(ListItem) {
             .then(response => response.json())
             .then(data => {
                 refillStack(data);
+                if (getCookie('tID') != 0)
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
             })
             .catch(error => {
                 console.error('Error getting data:', error);
@@ -93,6 +95,8 @@ function OpenList(ListItem) {
             .then(response => response.json())
             .then(data => {
                 refillStack(data);
+                if (getCookie('tID') != 0)
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
             })
             .catch(error => {
                 console.error('Error getting data:', error);
