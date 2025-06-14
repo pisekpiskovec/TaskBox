@@ -1,5 +1,6 @@
 var ListModal = document.getElementById("add_list_modal");
 var TaskModal = document.getElementById("add_task_modal");
+var ListEModal = document.getElementById("edit_list_modal");
 
 var OpenListModalButton = document.getElementById("open_list_modal");
 var OpenTaskModalButton = document.getElementById("open_task_modal");
@@ -9,6 +10,7 @@ var TaskStack = document.getElementById("task-stack");
 
 var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
 var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
+var CloseListEModalButton = document.getElementsByClassName("close_modal")[2];
 
 OpenListModalButton.onclick = function () {
     ListModal.style.display = "flex";
@@ -31,6 +33,11 @@ CloseTaskModalButton.onclick = function () {
     TaskModal.style.display = "none";
 }
 
+CloseListEModalButton.onclick = function () {
+    document.getElementsByClassName("containbox")[2].style.display = "none";
+    ListEModal.style.display = "none";
+}
+
 window.onclick = function (event) {
     if (event.target == ListModal) {
         ListModal.style.display = "none";
@@ -38,6 +45,10 @@ window.onclick = function (event) {
 
     if (event.target == TaskModal) {
         TaskModal.style.display = "none";
+    }
+
+    if (event.target == ListEModal) {
+        ListEModal.style.display = "none";
     }
 }
 
@@ -58,6 +69,11 @@ function ListInterface(data) {
     listitem['id'] = data["_id"];
     listitem['innerText'] = data['name'];
     listitem['onclick'] = function () { OpenList(this); };
+    listitem.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        document.getElementsByName('id')[0].value = data['_id'];
+        ListEModal.style.display = "flex";
+    });
     return listitem;
 }
 
@@ -153,7 +169,7 @@ document.getElementById('add_list_form').addEventListener('submit', function (e)
         .then(data => {
             console.log('List added:', data);
             ListModal.style.display = "none";
-            document.getElementById('name').value = '';
+            document.getElementsByName('name')[0].value = '';
             ReloadListList();
         })
         .catch(error => {
@@ -173,12 +189,56 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
         .then(data => {
             console.log('Task added:', data);
             TaskModal.style.display = "none";
-            document.getElementById('name').value = '';
+            document.getElementsByName('name')[1].value = '';
             ReloadListContent(formData.get('list'));
         })
         .catch(error => {
             console.error('Error adding task:', error);
             alert('Error adding task. Please try again.');
+        });
+});
+
+document.getElementById('edit_list_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const formObject = Object.fromEntries(formData.entries());
+    const params = new URLSearchParams({
+        'name': formObject['name'],
+        'id': formObject['id']
+    });
+
+    fetch('/task/list/edit', {
+        method: 'PUT', body: params.toString(), headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('List added:', data);
+            document.getElementsByName('name')[2].value = '';
+            ListEModal.style.display = "none";
+            ReloadListList();
+        })
+        .catch(error => {
+            console.error('Error editing list:', error);
+            alert('Error editing list. Please try again.');
+        });
+});
+
+document.getElementById('delete_list').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    fetch('/task/list/delete?id=' + document.getElementById('id').value, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+            console.log('List deleted:', data);
+            document.getElementsByName('name')[2].value = '';
+            ListEModal.style.display = "none";
+            ReloadListList();
+        })
+        .catch(error => {
+            console.error('Error deleting list:', error);
+            alert('Error deleting list. Please try again.');
         });
 });
 

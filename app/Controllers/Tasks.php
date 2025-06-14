@@ -76,6 +76,7 @@ class Tasks
             (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
             return;
         }
+        (new \Controllers\Index())->JSON_response(true);
     }
 
     public function deleteTaskDelete(\Base $base)
