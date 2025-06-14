@@ -135,6 +135,32 @@ class Tasks
         (new \Controllers\Index())->JSON_response($entries);
     }
 
+    public function putList(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+        $input = [];
+        parse_str($base->get('BODY'), $input);
+        $model = new \Models\Lists();
+        $entry = $model->findone(["id=? AND owner_id=?", $input['id'], $input['uid'] ?? $base->get('SESSION.uid')]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("List not found", 404);
+            return;
+        }
+
+        $entry->name = $input['name'] ?? $entry->name;
+        
+        try {
+            $entry->save();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+            return;
+        }
+        (new \Controllers\Index())->JSON_response('List edited.');
+    }
+
     public function putTask(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
