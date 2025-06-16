@@ -1,0 +1,43 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/page/task.css">
+</head>
+
+<!-- Top bar -->
+<include href="header.html" />
+
+<!-- Modals -->
+<include href="Tasks/add_list_modal.html" />
+<include href="Tasks/add_task_modal.html" />
+<include href="Tasks/edit_list_modal.html" />
+<include href="Tasks/edit_task_modal.html" />
+
+<!-- Page content -->
+<section id="central_view">
+    <!-- Lists -->
+    <section id="list_panel">
+        <div class="box cursor_hand" id="open_list_modal">• Add list</div>
+        <div class="box cursor_hand" id="0" name="AllTasks" onclick="OpenList(this)">All Tasks</div>
+        <check if="{{@ListsSet == true}}">
+            <hr>
+        </check>
+        <stack id="list-stack"></stack>
+    </section>
+
+    <!-- Tasks -->
+    <section id="lists_tasks">
+        <div class="box cursor_hand" id="open_task_modal">• Add task</div>
+        <check if="{{@TasksSet == true}}">
+            <hr>
+        </check>
+        <stack id="task-stack"></stack>
+    </section>
+
+    <!-- Current task -->
+    <section id="current_task">
+    </section>
+</section>
+
+<script src="assets/js/ModalController.js"></script>

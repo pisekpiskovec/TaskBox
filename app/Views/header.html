@@ -3,6 +3,9 @@
     <div>
         <check if="isset({{@SESSION.uid}})">
             <true>
+                <check if="{{@PATH != '/tasks'}}">
+                    <a href="/tasks" class="button">Tasks</a>
+                </check>
                 <a href="/user" class="imgButton">
                     <img src="{{@SESSION.avatar}}" alt="User's profile picture" height="43" width="43" class="circle">
                 </a>

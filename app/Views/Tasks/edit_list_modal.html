@@ -1,0 +1,13 @@
+<modal id="edit_list_modal" class="containbox">
+    <span class="close_modal cursor_hand">&times;</span>
+    <form method="post" id="edit_list_form" class="modal_content">
+        <input type="hidden" name="id" id="id">
+        <label for="name">New list name</label>
+        <input type="text" name="name" id="name" required>
+        <div style="margin: 2ch;">
+            <button class="button cursor_hand light destructive" id="delete_list">Delete List</button>
+            <input type="submit" value="Edit list" id="edit_list_post" class="light">
+        </div>
+    </form>
+    Click anywhere to close.
+</modal>
