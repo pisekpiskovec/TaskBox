@@ -1,6 +1,7 @@
 var ListModal = document.getElementById("add_list_modal");
 var TaskModal = document.getElementById("add_task_modal");
 var ListEModal = document.getElementById("edit_list_modal");
+var TaskEModal = document.getElementById("edit_task_modal");
 
 var OpenListModalButton = document.getElementById("open_list_modal");
 var OpenTaskModalButton = document.getElementById("open_task_modal");
@@ -11,6 +12,7 @@ var TaskStack = document.getElementById("task-stack");
 var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
 var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
 var CloseListEModalButton = document.getElementsByClassName("close_modal")[2];
+var CloseTaskEModalButton = document.getElementsByClassName("close_modal")[2];
 
 OpenListModalButton.onclick = function () {
     ListModal.style.display = "flex";
@@ -38,6 +40,11 @@ CloseListEModalButton.onclick = function () {
     ListEModal.style.display = "none";
 }
 
+CloseTaskEModalButton.onclick = function () {
+    document.getElementsByClassName("containbox")[3].style.display = "none";
+    TaskEModal.style.display = "none";
+}
+
 window.onclick = function (event) {
     if (event.target == ListModal) {
         ListModal.style.display = "none";
@@ -49,6 +56,10 @@ window.onclick = function (event) {
 
     if (event.target == ListEModal) {
         ListEModal.style.display = "none";
+    }
+
+    if (event.target == TaskEModal) {
+        TaskEModal.style.display = "none";
     }
 }
 
@@ -83,6 +94,11 @@ function TaskInterface(data) {
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
     taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
+    taskitem.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        document.getElementsByName('id')[1].value = data['_id'];
+        TaskEModal.style.display = "flex";
+    })
     if (data['finished']) taskitem.style.textDecoration = 'line-through';
     return taskitem;
 }
@@ -239,6 +255,40 @@ document.getElementById('delete_list').addEventListener('click', function (e) {
         .catch(error => {
             console.error('Error deleting list:', error);
             alert('Error deleting list. Please try again.');
+        });
+});
+
+document.getElementById('edit_task_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const formObject = Object.fromEntries(formData.entries());
+    const params = new URLSearchParams({
+        'name': formObject['name'],
+        'id': formObject['id']
+    });
+
+    fetch('/task/task/edit', {
+        method: 'PUT', body: params.toString(), headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            TaskEModal.style.display = "none";
+            console.log('List added:', data);
+            document.getElementsByName('name')[3].value = '';
+            ReloadListContent(getCookie('lID'));
+            if (getCookie('tID') != 0) {
+                try {
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                } catch (error) {
+                    alert(error);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error editing task:', error);
+            alert('Error editing task. Please try again.');
         });
 });
 
@@ -408,8 +458,8 @@ class TaskViewInterface {
 
     TaskViewPart_Controls() {
         const item = document.createElement('div');
-        const bin = document.createElement('a');
-        const rename = document.createElement('a');
+        const bin = document.createElement('button');
+        const rename = document.createElement('button');
 
         bin['className'] = 'box destructive light cursor_hand';
         bin['innerText'] = 'Delete task';
