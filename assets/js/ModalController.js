@@ -12,7 +12,7 @@ var TaskStack = document.getElementById("task-stack");
 var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
 var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
 var CloseListEModalButton = document.getElementsByClassName("close_modal")[2];
-var CloseTaskEModalButton = document.getElementsByClassName("close_modal")[2];
+var CloseTaskEModalButton = document.getElementsByClassName("close_modal")[3];
 
 OpenListModalButton.onclick = function () {
     ListModal.style.display = "flex";
