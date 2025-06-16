@@ -277,14 +277,15 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
             TaskEModal.style.display = "none";
             console.log('List added:', data);
             document.getElementsByName('name')[3].value = '';
-            ReloadListContent(getCookie('lID'));
-            if (getCookie('tID') != 0) {
-                try {
-                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
-                } catch (error) {
-                    alert(error);
+            ReloadListContent(getCookie('lID')).then(() => {
+                if (getCookie('tID') != 0) {
+                    try {
+                        Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                    } catch (error) {
+                        alert(error);
+                    }
                 }
-            }
+            })
         })
         .catch(error => {
             console.error('Error editing task:', error);
@@ -326,15 +327,17 @@ function getCookie(name) {
 }
 
 function ReloadListContent(lID) {
-    fetch('/task/task/get?list=' + lID, { method: 'GET' })
+    return fetch('/task/task/get?list=' + lID, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             refillStack(data);
+            return data;
         })
         .catch(error => {
             console.error('Error getting data:', error);
             TaskStack.innerHTML = "";
             TaskStack.appendChild(LandErrorInterface());
+            throw error;
         });
 }
 
