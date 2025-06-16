@@ -8,6 +8,7 @@ var OpenTaskModalButton = document.getElementById("open_task_modal");
 
 var ListStack = document.getElementById("list-stack");
 var TaskStack = document.getElementById("task-stack");
+var TaskView = document.getElementById('current_task');
 
 var CloseListModalButton = document.getElementsByClassName("close_modal")[0];
 var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
@@ -290,6 +291,39 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
         .catch(error => {
             console.error('Error editing task:', error);
             alert('Error editing task. Please try again.');
+        });
+});
+
+document.getElementById('delete_task').addEventListener('click', function (e) {
+    e.preventDefault();
+    const tID = document.getElementsByName('id')[1].value;
+    if (!confirm('Are you sure you want to delete this task?')) return;
+
+    fetch('/task/task/delete?id=' + tID, { method: 'DELETE' })
+        .then(data => {
+            console.log('Task deleted:', data);
+            document.getElementsByName('name')[3].value = '';
+            TaskEModal.style.display = "none";
+
+            if (getCookie('tID') === String(tID)) {
+                document.cookie = 'tID=0';
+                TaskView.innerHTML = '';
+            }
+            
+            ReloadListContent(getCookie('lID')).then(() => {
+                if (getCookie('tID') != 0) {
+                    try {
+                        Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                    } catch (error) {
+                        alert(error);
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error updating data:', error);
+            TaskStack.innerHTML = "";
+            TaskStack.appendChild(LandErrorInterface());
         });
 });
 
