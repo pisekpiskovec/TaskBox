@@ -276,7 +276,7 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
         .then(response => response.json())
         .then(data => {
             TaskEModal.style.display = "none";
-            console.log('List added:', data);
+            console.log('Task edited:', data);
             document.getElementsByName('name')[3].value = '';
             ReloadListContent(getCookie('lID')).then(() => {
                 if (getCookie('tID') != 0) {
@@ -286,7 +286,7 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
                         alert(error);
                     }
                 }
-            })
+            });
         })
         .catch(error => {
             console.error('Error editing task:', error);
