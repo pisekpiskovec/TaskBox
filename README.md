@@ -12,7 +12,7 @@
 
 ## 🚀 Screenshot
 
-![Screenshot](screenshot.png)
+![Screenshot](assets/readme-screenshot.png)
 
 ## 🔧 Technology
 
