@@ -309,7 +309,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
                 document.cookie = 'tID=0';
                 TaskView.innerHTML = '';
             }
-            
+
             ReloadListContent(getCookie('lID')).then(() => {
                 if (getCookie('tID') != 0) {
                     try {
@@ -404,6 +404,7 @@ class TaskViewInterface {
         this.TaskView.innerHTML = "";
         this.TaskView.appendChild(this.TaskViewPart_IDholder(id));
         this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
+        this.TaskView.appendChild(this.TaskViewPart_Subtasks());
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
         this.TaskView.appendChild(this.TaskViewPart_ListChanger());
         this.TaskView.appendChild(this.TaskViewPart_Controls());
@@ -441,6 +442,25 @@ class TaskViewInterface {
             this.TaskControl_ToggleFinish(this.tFinished)
         });
         if (finished) item.style.textDecoration = 'line-through';
+        return item;
+    }
+
+    TaskViewPart_Subtasks() {
+        const item = document.createElement('div');
+        item.style.paddingLeft = '24px';
+        item.style.paddingRight = '24px';
+
+        fetch('/task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
+            .then(datas => {
+                datas.forEach(data => {
+                    item.appendChild(this.TaskInterface_Subtask(data));
+                });
+            })
+            .catch(error => {
+                console.error('Error getting data:', error);
+                this.TaskView.innerHTML = 'Error getting data: ' + error;
+            });
+
         return item;
     }
 
@@ -625,6 +645,27 @@ class TaskViewInterface {
             });
     }
 
+    TaskControl_ToggleSubtask(stID, finished) {
+        const params = new URLSearchParams({
+            'finished': finished ? '0' : '1',
+            'tID': this.tID,
+            'id': stID
+        });
+
+        fetch('/task/subtask/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
     TaskStylesControl_NoteAnimationEnd(Object) {
         if (Object.classList.contains('textarea_fail'))
             Object.classList.remove('textarea_fail');
@@ -667,6 +708,34 @@ class TaskViewInterface {
         taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
+    }
+
+    TaskInterface_Subtask(data) {
+        const subtaskitem = document.createElement('div');
+        const connector = document.createElement('div');
+        const checkbox = document.createElement('input');
+        const label = document.createElement('label');
+
+        checkbox['type'] = 'checkbox';
+        checkbox['name'] = 'subtask-finished';
+        checkbox['id'] = 'subtask-finished-' + data['_id'];
+        checkbox['checked'] = data['finished'] ? 1 : 0;
+        checkbox.addEventListener('click', () => {
+            this.TaskControl_ToggleSubtask(data['_id'], data['finished']);
+        });
+        connector.appendChild(checkbox);
+
+        label['htmlFor'] = 'subtask-finished-' + data['_id'];
+        label['innerText'] = data['name'];
+        connector.appendChild(label);
+
+        subtaskitem['className'] = 'box cursor_hand';
+        subtaskitem.appendChild(connector);
+        subtaskitem.addEventListener('click', () => {
+            this.TaskControl_ToggleSubtask(data['_id'], data['finished']);
+        });
+        if (data['finished']) subtaskitem.style.textDecoration = 'line-through';
+        return subtaskitem;
     }
 
     reconstructor() {
