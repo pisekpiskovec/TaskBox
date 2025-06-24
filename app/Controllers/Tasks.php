@@ -250,4 +250,32 @@ class Tasks
         }
         (new \Controllers\Index())->JSON_response('Task edited.');
     }
+
+    public function putSubtask(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $input = [];
+        parse_str($base->get('BODY'), $input);
+        $model = new \Models\Subtask();
+        $entry = $model->findone(["id=? AND owner_id=? AND parent_task=?", $input['id'], $input['uid'] ?? $base->get('SESSION.uid'), $input['tID']]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("Subtask not found", 404);
+            return;
+        }
+
+        $entry->name = $input['name'] ?? $entry->name;
+        $entry->finished = $input['finished'] ?? $entry->finished;
+
+        try {
+            $entry->save();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+            return;
+        }
+        (new \Controllers\Index())->JSON_response('Subtask edited.');
+    }
 }
