@@ -121,6 +121,26 @@ class Tasks
         }
     }
 
+    public function deleteSubtaskDelete(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Subtask();
+        $entry = $model->findone(["id=? AND owner_id=? AND parent_task", $base->get('GET.id'), $base->get('GET.uid') ?? $base->get('SESSION.uid'), $base->get('GET.tID')]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("Subtask not found", 404);
+            return;
+        }
+        try {
+            $entry->erase();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function getLists(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
