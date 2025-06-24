@@ -177,6 +177,22 @@ class Tasks
         (new \Controllers\Index())->JSON_response($entries);
     }
 
+    public function getSubtasks(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Subtask();
+        $entries = $model->afind(['parent_task=?', $base->get('GET.tID')]);
+        if (!$entries) {
+            (new \Controllers\Index())->JSON_response("Subtasks not found", 404);
+            return;
+        }
+        (new \Controllers\Index())->JSON_response($entries);
+    }
+
     public function putList(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
