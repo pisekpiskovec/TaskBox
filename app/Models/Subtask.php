@@ -28,6 +28,13 @@ class Subtask extends \DB\Cortex
             'unique' => false,
             'nullable' => false,
             'index' => true
+        ],
+        'owner_id' => [
+            'type' => 'INT4',
+            'required' => true,
+            'unique' => false,
+            'nullable' => false,
+            'index' => true
         ]
     ];
 }

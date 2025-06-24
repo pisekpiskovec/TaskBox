@@ -57,6 +57,27 @@ class Tasks
         }
     }
 
+    public function postSubtaskAdd(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Subtask();
+        $model->name = $base->get('POST.name');
+        $model->finished = false;
+        $model->parent_task = $base->get('POST.tID');
+        $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
+
+        try {
+            $model->save();
+            (new \Controllers\Index())->JSON_response("Subtask added", 200);
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function deleteListDelete(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
