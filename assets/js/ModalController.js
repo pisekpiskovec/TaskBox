@@ -637,7 +637,7 @@ class TaskViewInterface {
         })
             .then(response => response.json())
             .then(async () => {
-                this.tList = NewName;
+                this.tName = NewName;
                 this.reconstructor();
             })
             .catch(error => {
