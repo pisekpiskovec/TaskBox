@@ -332,6 +332,27 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
         });
 });
 
+document.getElementById('add_subtask_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/task/subtask/add', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Subtask added:', data);
+            SubtaskModal.style.display = "none";
+            document.getElementsByName('name')[4].value = '';
+            var NewInterface = new TaskViewInterface();
+            NewInterface.reconstructor();
+        })
+        .catch(error => {
+            console.error('Error adding list:', error);
+            alert('Error adding list. Please try again.');
+        });
+});
+
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
