@@ -186,10 +186,8 @@ class Tasks
 
         $model = new \Models\Subtask();
         $entries = $model->afind(['parent_task=?', $base->get('GET.tID')]);
-        if (!$entries) {
-            (new \Controllers\Index())->JSON_response("Subtasks not found", 404);
-            return;
-        }
+        if (!$entries)
+            $entries = array();
         (new \Controllers\Index())->JSON_response($entries);
     }
 
@@ -209,7 +207,7 @@ class Tasks
         }
 
         $entry->name = $input['name'] ?? $entry->name;
-        
+
         try {
             $entry->save();
         } catch (Exception $e) {
