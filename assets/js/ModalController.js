@@ -465,7 +465,7 @@ class TaskViewInterface {
         AddSubtask['id'] = 'open_subtask_modal';
         AddSubtask['innerText'] = '• Add subtask';
         AddSubtask.onclick = (() => {
-            document.getElementsByName('task')[0].value = this.tID;
+            document.getElementsByName('tID')[0].value = this.tID;
             this.SubtaskModal.style.display = "flex";
         });
         item.appendChild(AddSubtask);
