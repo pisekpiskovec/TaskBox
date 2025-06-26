@@ -759,7 +759,8 @@ class TaskViewInterface {
         checkbox['name'] = 'subtask-finished';
         checkbox['id'] = 'subtask-finished-' + data['_id'];
         checkbox['checked'] = data['finished'] ? 1 : 0;
-        checkbox.addEventListener('click', () => {
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.TaskControl_ToggleSubtask(data['_id'], data['finished']);
         });
         if (data['finished']) connector_left.style.textDecoration = 'line-through';
@@ -776,14 +777,16 @@ class TaskViewInterface {
 
         bin['className'] = 'destructive light cursor_hand';
         bin['innerText'] = 'D';
-        bin.addEventListener('click', () => {
+        bin.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.TaskControl_DeleteSubtask(data['_id']);
         });
         connector_right.appendChild(bin);
 
         rename['className'] = 'light cursor_hand';
         rename['innerText'] = 'R';
-        rename.addEventListener('click', () => {
+        rename.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.TaskControl_RenameSubtask(data['_id']);
         });
         connector_right.appendChild(rename);
