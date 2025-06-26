@@ -2,6 +2,7 @@ var ListModal = document.getElementById("add_list_modal");
 var TaskModal = document.getElementById("add_task_modal");
 var ListEModal = document.getElementById("edit_list_modal");
 var TaskEModal = document.getElementById("edit_task_modal");
+var SubtaskModal = document.getElementById("add_subtask_modal");
 
 var OpenListModalButton = document.getElementById("open_list_modal");
 var OpenTaskModalButton = document.getElementById("open_task_modal");
@@ -61,6 +62,10 @@ window.onclick = function (event) {
 
     if (event.target == TaskEModal) {
         TaskEModal.style.display = "none";
+    }
+
+    if (event.target == SubtaskModal) {
+        SubtaskModal.style.display = "none";
     }
 }
 
@@ -309,7 +314,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
                 document.cookie = 'tID=0';
                 TaskView.innerHTML = '';
             }
-            
+
             ReloadListContent(getCookie('lID')).then(() => {
                 if (getCookie('tID') != 0) {
                     try {
@@ -324,6 +329,27 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
             console.error('Error updating data:', error);
             TaskStack.innerHTML = "";
             TaskStack.appendChild(LandErrorInterface());
+        });
+});
+
+document.getElementById('add_subtask_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/task/subtask/add', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Subtask added:', data);
+            SubtaskModal.style.display = "none";
+            document.getElementsByName('name')[4].value = '';
+            var NewInterface = new TaskViewInterface();
+            NewInterface.reconstructor();
+        })
+        .catch(error => {
+            console.error('Error adding list:', error);
+            alert('Error adding list. Please try again.');
         });
 });
 
@@ -394,6 +420,9 @@ class TaskViewInterface {
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
 
+    SubtaskModal = document.getElementById("add_subtask_modal");
+    CloseSubtaskModalButton = document.getElementsByClassName("close_modal")[4];
+
     constructor(id, name, finished, list, notes) {
         this.tID = id;
         this.tName = name;
@@ -404,9 +433,15 @@ class TaskViewInterface {
         this.TaskView.innerHTML = "";
         this.TaskView.appendChild(this.TaskViewPart_IDholder(id));
         this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
+        this.TaskView.appendChild(this.TaskViewPart_Subtasks());
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
         this.TaskView.appendChild(this.TaskViewPart_ListChanger());
         this.TaskView.appendChild(this.TaskViewPart_Controls());
+
+        this.CloseSubtaskModalButton.onclick = (() => {
+            document.getElementsByClassName("containbox")[4].style.display = "none";
+            this.SubtaskModal.style.display = "none";
+        });
     }
 
     TaskViewPart_IDholder(id) {
@@ -441,6 +476,34 @@ class TaskViewInterface {
             this.TaskControl_ToggleFinish(this.tFinished)
         });
         if (finished) item.style.textDecoration = 'line-through';
+        return item;
+    }
+
+    TaskViewPart_Subtasks() {
+        const item = document.createElement('div');
+        const AddSubtask = document.createElement('div');
+        AddSubtask['className'] = 'box cursor_hand';
+        AddSubtask['id'] = 'open_subtask_modal';
+        AddSubtask['innerText'] = '• Add subtask';
+        AddSubtask.onclick = (() => {
+            document.getElementsByName('tID')[0].value = this.tID;
+            this.SubtaskModal.style.display = "flex";
+        });
+        item.appendChild(AddSubtask);
+
+        fetch('/task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
+            .then(datas => {
+                datas.forEach(data => {
+                    item.appendChild(this.TaskInterface_Subtask(data));
+                });
+            })
+            .catch(error => {
+                console.error('Error getting data:', error);
+                this.TaskView.innerHTML = 'Error getting data: ' + error;
+            });
+
+        item.style.paddingLeft = '24px';
+        item.style.paddingRight = '24px';
         return item;
     }
 
@@ -617,7 +680,65 @@ class TaskViewInterface {
         })
             .then(response => response.json())
             .then(async () => {
-                this.tList = NewName;
+                this.tName = NewName;
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
+    TaskControl_ToggleSubtask(stID, finished) {
+        const params = new URLSearchParams({
+            'finished': finished ? '0' : '1',
+            'tID': this.tID,
+            'id': stID
+        });
+
+        fetch('/task/subtask/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
+    TaskControl_DeleteSubtask(stID) {
+        if (!confirm('Are you sure you want to delete this subtask?')) return;
+
+        fetch('/task/subtask/delete?id=' + stID, { method: 'DELETE' })
+            .then(() => {
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
+    }
+
+    TaskControl_RenameSubtask(stID) {
+        const NewName = prompt('Enter new name');
+        if (NewName == null) return;
+        const params = new URLSearchParams({
+            'name': NewName,
+            'tID': this.tID,
+            'id': stID
+        });
+
+        fetch('/task/subtask/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
                 this.reconstructor();
             })
             .catch(error => {
@@ -669,6 +790,66 @@ class TaskViewInterface {
         return taskitem;
     }
 
+    TaskInterface_Subtask(data) {
+        const subtaskitem = document.createElement('div');
+
+        // left side of item
+        const connector_left = document.createElement('div');
+        const checkbox = document.createElement('input');
+        const label = document.createElement('label');
+
+        checkbox['type'] = 'checkbox';
+        checkbox['name'] = 'subtask-finished';
+        checkbox['id'] = 'subtask-finished-' + data['_id'];
+        checkbox['checked'] = data['finished'] ? 1 : 0;
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.TaskControl_ToggleSubtask(data['_id'], data['finished']);
+        });
+        if (data['finished']) connector_left.style.textDecoration = 'line-through';
+        connector_left.appendChild(checkbox);
+
+        label['htmlFor'] = 'subtask-finished-' + data['_id'];
+        label['innerText'] = data['name'];
+        connector_left.appendChild(label);
+
+        // right side of item
+        const connector_right = document.createElement('div');
+        const bin = document.createElement('button');
+        const rename = document.createElement('button');
+
+        bin['className'] = 'destructive light cursor_hand';
+        bin['innerText'] = 'D';
+        bin.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.TaskControl_DeleteSubtask(data['_id']);
+        });
+        connector_right.appendChild(bin);
+
+        rename['className'] = 'light cursor_hand';
+        rename['innerText'] = 'R';
+        rename.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.TaskControl_RenameSubtask(data['_id']);
+        });
+        connector_right.appendChild(rename);
+
+        connector_right.style.display = 'flex';
+        connector_right.style.alignItems = 'center';
+        connector_right.style.gap = '10px';
+
+        subtaskitem['className'] = 'box cursor_hand';
+        subtaskitem.style.flexDirection = 'row';
+        subtaskitem.style.justifyContent = 'space-between';
+        subtaskitem.style.alignItems = 'center';
+        subtaskitem.appendChild(connector_left);
+        subtaskitem.appendChild(connector_right);
+        subtaskitem.addEventListener('click', () => {
+            this.TaskControl_ToggleSubtask(data['_id'], data['finished']);
+        });
+        return subtaskitem;
+    }
+
     reconstructor() {
         const urlParams = new URLSearchParams(window.location.search);
         const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
@@ -685,5 +866,5 @@ class TaskViewInterface {
             });
     }
 
-    sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 }

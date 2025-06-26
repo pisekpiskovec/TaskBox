@@ -57,6 +57,27 @@ class Tasks
         }
     }
 
+    public function postSubtaskAdd(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Subtask();
+        $model->name = $base->get('POST.name');
+        $model->finished = false;
+        $model->parent_task = $base->get('POST.tID');
+        $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
+
+        try {
+            $model->save();
+            (new \Controllers\Index())->JSON_response("Subtask added", 200);
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function deleteListDelete(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
@@ -100,6 +121,26 @@ class Tasks
         }
     }
 
+    public function deleteSubtaskDelete(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Subtask();
+        $entry = $model->findone(["id=? AND owner_id=? AND parent_task", $base->get('GET.id'), $base->get('GET.uid') ?? $base->get('SESSION.uid'), $base->get('GET.tID')]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("Subtask not found", 404);
+            return;
+        }
+        try {
+            $entry->erase();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function getLists(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
@@ -136,6 +177,20 @@ class Tasks
         (new \Controllers\Index())->JSON_response($entries);
     }
 
+    public function getSubtasks(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $model = new \Models\Subtask();
+        $entries = $model->afind(['parent_task=?', $base->get('GET.tID')]);
+        if (!$entries)
+            $entries = array();
+        (new \Controllers\Index())->JSON_response($entries);
+    }
+
     public function putList(\Base $base)
     {
         if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
@@ -152,7 +207,7 @@ class Tasks
         }
 
         $entry->name = $input['name'] ?? $entry->name;
-        
+
         try {
             $entry->save();
         } catch (Exception $e) {
@@ -192,5 +247,33 @@ class Tasks
             return;
         }
         (new \Controllers\Index())->JSON_response('Task edited.');
+    }
+
+    public function putSubtask(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $input = [];
+        parse_str($base->get('BODY'), $input);
+        $model = new \Models\Subtask();
+        $entry = $model->findone(["id=? AND owner_id=? AND parent_task=?", $input['id'], $input['uid'] ?? $base->get('SESSION.uid'), $input['tID']]);
+        if (!$entry) {
+            (new \Controllers\Index())->JSON_response("Subtask not found", 404);
+            return;
+        }
+
+        $entry->name = $input['name'] ?? $entry->name;
+        $entry->finished = $input['finished'] ?? $entry->finished;
+
+        try {
+            $entry->save();
+        } catch (Exception $e) {
+            (new \Controllers\Index())->JSON_response($e->getMessage(), $e->getCode());
+            return;
+        }
+        (new \Controllers\Index())->JSON_response('Subtask edited.');
     }
 }
