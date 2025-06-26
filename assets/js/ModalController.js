@@ -2,6 +2,7 @@ var ListModal = document.getElementById("add_list_modal");
 var TaskModal = document.getElementById("add_task_modal");
 var ListEModal = document.getElementById("edit_list_modal");
 var TaskEModal = document.getElementById("edit_task_modal");
+var SubtaskModal = document.getElementById("add_subtask_modal");
 
 var OpenListModalButton = document.getElementById("open_list_modal");
 var OpenTaskModalButton = document.getElementById("open_task_modal");
@@ -61,6 +62,10 @@ window.onclick = function (event) {
 
     if (event.target == TaskEModal) {
         TaskEModal.style.display = "none";
+    }
+
+    if (event.target == SubtaskModal) {
+        SubtaskModal.style.display = "none";
     }
 }
 
@@ -394,6 +399,9 @@ class TaskViewInterface {
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
 
+    SubtaskModal = document.getElementById("add_subtask_modal");
+    CloseSubtaskModalButton = document.getElementsByClassName("close_modal")[4];
+
     constructor(id, name, finished, list, notes) {
         this.tID = id;
         this.tName = name;
@@ -408,6 +416,11 @@ class TaskViewInterface {
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
         this.TaskView.appendChild(this.TaskViewPart_ListChanger());
         this.TaskView.appendChild(this.TaskViewPart_Controls());
+
+        this.CloseSubtaskModalButton.onclick = (() => {
+            document.getElementsByClassName("containbox")[4].style.display = "none";
+            this.SubtaskModal.style.display = "none";
+        });
     }
 
     TaskViewPart_IDholder(id) {
@@ -447,8 +460,15 @@ class TaskViewInterface {
 
     TaskViewPart_Subtasks() {
         const item = document.createElement('div');
-        item.style.paddingLeft = '24px';
-        item.style.paddingRight = '24px';
+        const AddSubtask = document.createElement('div');
+        AddSubtask['className'] = 'box cursor_hand';
+        AddSubtask['id'] = 'open_subtask_modal';
+        AddSubtask['innerText'] = '• Add subtask';
+        AddSubtask.onclick = (() => {
+            document.getElementsByName('task')[0].value = this.tID;
+            this.SubtaskModal.style.display = "flex";
+        });
+        item.appendChild(AddSubtask);
 
         fetch('/task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
             .then(datas => {
@@ -461,6 +481,8 @@ class TaskViewInterface {
                 this.TaskView.innerHTML = 'Error getting data: ' + error;
             });
 
+        item.style.paddingLeft = '24px';
+        item.style.paddingRight = '24px';
         return item;
     }
 
@@ -823,5 +845,5 @@ class TaskViewInterface {
             });
     }
 
-    sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 }
