@@ -47,6 +47,7 @@ class Tasks
         $model->name = $base->get('POST.name');
         $model->list = $base->get('POST.list') ?? $base->get('GET.list');
         $model->myday = $base->get('POST.myday');
+        $model->finish_date = $base->get('POST.finish_date');
         $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
 
         try {
