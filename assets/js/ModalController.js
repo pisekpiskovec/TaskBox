@@ -212,6 +212,7 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
             console.log('Task added:', data);
             TaskModal.style.display = "none";
             document.getElementsByName('name')[1].value = '';
+            document.getElementsByName('finish_date')[0].value = '';
             ReloadListContent(formData.get('list'));
         })
         .catch(error => {
