@@ -100,9 +100,9 @@ function TaskInterface(data) {
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
     if (data['finish_date']) {
-        taskitem['innerText'] += ' • Due to: ' + new Date(data['finish_date']).toLocaleDateString();
+        taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
     }
-    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
+    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['finish_date'], data['notes']); };
     taskitem.addEventListener('contextmenu', e => {
         e.preventDefault();
         document.getElementsByName('id')[1].value = data['_id'];
@@ -150,9 +150,9 @@ function OpenList(ListItem) {
     }
 }
 
-function OpenTask(TaskItem, id, name, finished, list, notes) {
+function OpenTask(TaskItem, id, name, finished, list, due, notes) {
     if (!TaskItem.classList.contains('selected_box')) {
-        new TaskViewInterface(id, name, finished, list, notes)
+        new TaskViewInterface(id, name, finished, list, due, notes)
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
         } catch { console.error('Could\'t deselect current task'); }
@@ -426,7 +426,7 @@ function ReloadListList() {
 
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
-    tID = 0; tName = ''; tFinished = false; tList = 0; tNote = '';
+    tID = 0; tName = ''; tFinished = false; tList = 0; tDue = null; tNote = '';
 
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
@@ -434,11 +434,12 @@ class TaskViewInterface {
     SubtaskModal = document.getElementById("add_subtask_modal");
     CloseSubtaskModalButton = document.getElementsByClassName("close_modal")[4];
 
-    constructor(id, name, finished, list, notes) {
+    constructor(id, name, finished, list, due, notes) {
         this.tID = id;
         this.tName = name;
         this.tFinished = finished;
         this.tList = list;
+        this.tDue = due;
         this.tNote = notes;
 
         this.TaskView.innerHTML = "";
@@ -533,14 +534,34 @@ class TaskViewInterface {
 
     TaskViewPart_ListChanger() {
         const item = document.createElement('div');
-        const selector = document.createElement('select');
+        const due_date_item = document.createElement('div');
+        const due_date_label = document.createElement('label');
+        const due_date_selector = document.createElement('input');
+        const list_selector = document.createElement('select');
         const default_option = document.createElement('option');
+
+        due_date_item.style.display = 'ruby';
+        due_date_item.style.maxWidth= 'fit-content';
+
+        due_date_label.innerText = 'Due date:';
+        due_date_label.htmlFor = 'due_date_selector';
+        due_date_item.appendChild(due_date_label);
+
+        due_date_selector['value'] = this.tDue;
+        due_date_selector['type'] = 'date';
+        due_date_selector['id'] = 'due_date_selector';
+        due_date_selector.style.maxWidth = 'inherit';
+        due_date_selector.addEventListener('change', (e) => {
+            this.TaskControl_RescheduleFinish(due_date_selector.value);
+        });
+        due_date_item.appendChild(due_date_selector);
+        item.appendChild(due_date_item);
 
         default_option['value'] = 0;
         default_option['innerText'] = 'No list selected';
         if (0 == this.tList)
             default_option['selected'] = true;
-        selector.appendChild(default_option);
+        list_selector.appendChild(default_option);
 
         fetch('task/list/get', { method: 'GET' }).then(response => response.json())
             .then(datas => {
@@ -550,7 +571,7 @@ class TaskViewInterface {
                     option['innerText'] = data['name'];
                     if (data['_id'] == this.tList)
                         option['selected'] = true;
-                    selector.appendChild(option);
+                    list_selector.appendChild(option);
                 });
             })
             .catch(error => {
@@ -558,12 +579,12 @@ class TaskViewInterface {
                 this.TaskView.innerHTML = 'Error getting data: ' + error;
             });
 
-        selector.addEventListener('change', () => {
-            this.TaskControl_MoveTask(selector['value']);
+        list_selector.addEventListener('change', () => {
+            this.TaskControl_MoveTask(list_selector['value']);
         });
 
         item['className'] = 'box';
-        item.appendChild(selector);
+        item.appendChild(list_selector);
         return item;
     }
 
@@ -757,6 +778,27 @@ class TaskViewInterface {
             });
     }
 
+    TaskControl_RescheduleFinish(NewDate) {
+        const params = new URLSearchParams({
+            'finish_date': NewDate,
+            'id': this.tID
+        });
+
+        fetch('task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
+                this.tDue = NewDate;
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
     TaskStylesControl_NoteAnimationEnd(Object) {
         if (Object.classList.contains('textarea_fail'))
             Object.classList.remove('textarea_fail');
@@ -797,7 +839,7 @@ class TaskViewInterface {
         taskitem['id'] = data["_id"];
         taskitem['innerText'] = data['name'];
         if (data['finish_date']) {
-            taskitem['innerText'] += ' • Due to: ' + new Date(data['finish_date']).toLocaleDateString();
+            taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
         }
         taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
