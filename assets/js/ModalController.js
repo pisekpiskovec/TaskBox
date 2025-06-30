@@ -99,6 +99,9 @@ function TaskInterface(data) {
     taskitem['className'] = 'box cursor_hand';
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
+    if (data['finish_date']) {
+        taskitem['innerText'] += ' • Due to: ' + new Date(data['finish_date']).toLocaleDateString();
+    }
     taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
     taskitem.addEventListener('contextmenu', e => {
         e.preventDefault();
@@ -793,6 +796,9 @@ class TaskViewInterface {
         taskitem['className'] = 'box cursor_hand';
         taskitem['id'] = data["_id"];
         taskitem['innerText'] = data['name'];
+        if (data['finish_date']) {
+            taskitem['innerText'] += ' • Due to: ' + new Date(data['finish_date']).toLocaleDateString();
+        }
         taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
