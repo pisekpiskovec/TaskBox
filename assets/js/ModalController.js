@@ -361,6 +361,13 @@ window.onload = function () {
         document.cookie = 'lID=0';
     }
 
+    if (getCookie('lID') === null || undefined) {
+        document.cookie = 'lID=0';
+    }
+    if (getCookie('tID') === null || undefined) {
+        document.cookie = 'tID=0';
+    }
+
     // Fetch lists and tasks
     Promise.all([
         fetch('task/list/get', { method: 'GET' }).then(response => response.json()),
