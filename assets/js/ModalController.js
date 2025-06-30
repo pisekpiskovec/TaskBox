@@ -111,7 +111,7 @@ function TaskInterface(data) {
 
 function OpenList(ListItem) {
     if (!ListItem.classList.contains('selected_box')) {
-        fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' })
+        fetch('task/task/get?list=' + ListItem.id, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 refillStack(data);
@@ -129,7 +129,7 @@ function OpenList(ListItem) {
         document.cookie = 'lID=' + ListItem.id;
         ListItem.classList.add('selected_box');
     } else if (getCookie('lID') != 0) {
-        fetch('/task/task/get?list=0', { method: 'GET' })
+        fetch('task/task/get?list=0', { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 refillStack(data);
@@ -183,7 +183,7 @@ function refillStack(inputdata, stack = 'task') {
 document.getElementById('add_list_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    fetch('/task/list/add', {
+    fetch('task/list/add', {
         method: 'POST',
         body: formData
     })
@@ -203,7 +203,7 @@ document.getElementById('add_list_form').addEventListener('submit', function (e)
 document.getElementById('add_task_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    fetch('/task/task/add', {
+    fetch('task/task/add', {
         method: 'POST',
         body: formData
     })
@@ -230,7 +230,7 @@ document.getElementById('edit_list_form').addEventListener('submit', function (e
         'id': formObject['id']
     });
 
-    fetch('/task/list/edit', {
+    fetch('task/list/edit', {
         method: 'PUT', body: params.toString(), headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -251,7 +251,7 @@ document.getElementById('edit_list_form').addEventListener('submit', function (e
 document.getElementById('delete_list').addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch('/task/list/delete?id=' + document.getElementById('id').value, { method: 'DELETE' })
+    fetch('task/list/delete?id=' + document.getElementById('id').value, { method: 'DELETE' })
         .then(response => response.json())
         .then(data => {
             console.log('List deleted:', data);
@@ -274,7 +274,7 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
         'id': formObject['id']
     });
 
-    fetch('/task/task/edit', {
+    fetch('task/task/edit', {
         method: 'PUT', body: params.toString(), headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -305,7 +305,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
     const tID = document.getElementsByName('id')[1].value;
     if (!confirm('Are you sure you want to delete this task?')) return;
 
-    fetch('/task/task/delete?id=' + tID, { method: 'DELETE' })
+    fetch('task/task/delete?id=' + tID, { method: 'DELETE' })
         .then(data => {
             console.log('Task deleted:', data);
             document.getElementsByName('name')[3].value = '';
@@ -336,7 +336,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
 document.getElementById('add_subtask_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    fetch('/task/subtask/add', {
+    fetch('task/subtask/add', {
         method: 'POST',
         body: formData
     })
@@ -363,8 +363,8 @@ window.onload = function () {
 
     // Fetch lists and tasks
     Promise.all([
-        fetch('/task/list/get', { method: 'GET' }).then(response => response.json()),
-        fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json()),
+        fetch('task/list/get', { method: 'GET' }).then(response => response.json()),
+        fetch('task/task/get?list=' + list, { method: 'GET' }).then(response => response.json()),
     ])
         .then(([listData, taskData]) => {
             refillStack(listData, 'list');
@@ -388,7 +388,7 @@ function getCookie(name) {
 }
 
 function ReloadListContent(lID) {
-    return fetch('/task/task/get?list=' + lID, { method: 'GET' })
+    return fetch('task/task/get?list=' + lID, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             refillStack(data);
@@ -403,7 +403,7 @@ function ReloadListContent(lID) {
 }
 
 function ReloadListList() {
-    fetch('/task/list/get', { method: 'GET' }).then(response => response.json())
+    fetch('task/list/get', { method: 'GET' }).then(response => response.json())
         .then(data => {
             refillStack(data, 'list');
         })
@@ -492,7 +492,7 @@ class TaskViewInterface {
         });
         item.appendChild(AddSubtask);
 
-        fetch('/task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
+        fetch('task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
             .then(datas => {
                 datas.forEach(data => {
                     item.appendChild(this.TaskInterface_Subtask(data));
@@ -532,7 +532,7 @@ class TaskViewInterface {
             default_option['selected'] = true;
         selector.appendChild(default_option);
 
-        fetch('/task/list/get', { method: 'GET' }).then(response => response.json())
+        fetch('task/list/get', { method: 'GET' }).then(response => response.json())
             .then(datas => {
                 datas.forEach(data => {
                     const option = document.createElement('option');
@@ -587,7 +587,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -611,7 +611,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -635,7 +635,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -653,7 +653,7 @@ class TaskViewInterface {
     TaskControl_DeleteTask() {
         if (!confirm('Are you sure you want to delete this task?')) return;
 
-        fetch('/task/task/delete?id=' + this.tID, { method: 'DELETE' })
+        fetch('task/task/delete?id=' + this.tID, { method: 'DELETE' })
             .then(() => {
                 document.cookie = 'tID=0';
                 this.TaskView.innerHTML = "";
@@ -674,7 +674,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -696,7 +696,7 @@ class TaskViewInterface {
             'id': stID
         });
 
-        fetch('/task/subtask/edit', {
+        fetch('task/subtask/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -713,7 +713,7 @@ class TaskViewInterface {
     TaskControl_DeleteSubtask(stID) {
         if (!confirm('Are you sure you want to delete this subtask?')) return;
 
-        fetch('/task/subtask/delete?id=' + stID, { method: 'DELETE' })
+        fetch('task/subtask/delete?id=' + stID, { method: 'DELETE' })
             .then(() => {
                 this.reconstructor();
             })
@@ -733,7 +733,7 @@ class TaskViewInterface {
             'id': stID
         });
 
-        fetch('/task/subtask/edit', {
+        fetch('task/subtask/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -854,7 +854,7 @@ class TaskViewInterface {
     reconstructor() {
         const urlParams = new URLSearchParams(window.location.search);
         const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
-        fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json())
+        fetch('task/task/get?list=' + list, { method: 'GET' }).then(response => response.json())
             .then(data => {
                 this.TaskPage_RefillStack(data);
                 if (getCookie('tID') != 0)
