@@ -571,15 +571,16 @@ class TaskViewInterface {
         input.style.maxWidth = 'fit-content';
 
         if (reminder && reminder !== '000-00-00 00:00:00') {
-            const date = new Date(reminder);
-            if (!isNaN(date.getTime())) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0'); // TODO: Fix?
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            }
+            //const date = new Date(reminder);
+            //if (!isNaN(date.getTime())) {
+            //    const year = date.getFullYear();
+            //    const month = String(date.getMonth() + 1).padStart(2, '0');
+            //    const day = String(date.getDate()).padStart(2, '0'); // TODO: Fix?
+            //    const hours = String(date.getHours()).padStart(2, '0');
+            //    const minutes = String(date.getMinutes()).padStart(2, '0');
+            //    input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            //}
+            input.value = reminder;
         }
 
         input.addEventListener('change', () => {
@@ -881,7 +882,8 @@ class TaskViewInterface {
         }
 
         const params = new URLSearchParams({
-            'reminder': formattedReminder,
+            // 'reminder': formattedReminder,
+            'reminder': newReminder,
             'id': this.tID
         });
 
