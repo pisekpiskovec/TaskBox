@@ -841,7 +841,7 @@ class TaskViewInterface {
         if (data['finish_date']) {
             taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
         }
-        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
+        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['finish_date'],data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
     }
