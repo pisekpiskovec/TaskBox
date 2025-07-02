@@ -310,15 +310,3 @@ class NotificationManager {
         this.activeReminders.clear();
     }
 }
-
-let notificationManager;
-
-document.addEventListener('DOMContentLoaded', () => {
-    notificationManager = new NotificationManager();
-});
-
-window.addEventListener('beforeunload', () => {
-    if (notificationManager) {
-        notificationManager.destroy();
-    }
-});

@@ -16,6 +16,18 @@ var CloseTaskModalButton = document.getElementsByClassName("close_modal")[1];
 var CloseListEModalButton = document.getElementsByClassName("close_modal")[2];
 var CloseTaskEModalButton = document.getElementsByClassName("close_modal")[3];
 
+let notificationManager;
+
+document.addEventListener('DOMContentLoaded', () => {
+    notificationManager = new NotificationManager();
+});
+
+window.addEventListener('beforeunload', () => {
+    if (notificationManager) {
+        notificationManager.destroy();
+    }
+});
+
 OpenListModalButton.onclick = function () {
     ListModal.style.display = "flex";
 }
@@ -99,15 +111,24 @@ function TaskInterface(data) {
     taskitem['className'] = 'box cursor_hand';
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
+    taskitem['title'] = data['name'];
     if (data['finish_date']) {
         taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
+        taskitem['title'] += ', Due date: ' + new Date(data['finish_date']).toLocaleDateString();
     }
-    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['finish_date'], data['notes']); };
+
+    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['reminder'], data['finish_date'], data['notes']); };
     taskitem.addEventListener('contextmenu', e => {
         e.preventDefault();
         document.getElementsByName('id')[1].value = data['_id'];
         TaskEModal.style.display = "flex";
-    })
+    });
+
+    if(data['reminder'] && data['reminder'] !== '0000-00-00 00:00:00'){
+        taskitem['innerText'] += ' • 🔔';
+        taskitem.title += `, Reminder: ${new Date(data['reminder']).toLocaleString()}`;
+    }
+
     if (data['finished']) taskitem.style.textDecoration = 'line-through';
     return taskitem;
 }
@@ -150,9 +171,9 @@ function OpenList(ListItem) {
     }
 }
 
-function OpenTask(TaskItem, id, name, finished, list, due, notes) {
+function OpenTask(TaskItem, id, name, finished, list, reminder, due, notes) {
     if (!TaskItem.classList.contains('selected_box')) {
-        new TaskViewInterface(id, name, finished, list, due, notes)
+        new TaskViewInterface(id, name, finished, list, reminder, due, notes)
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
         } catch { console.error('Could\'t deselect current task'); }
@@ -426,7 +447,7 @@ function ReloadListList() {
 
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
-    tID = 0; tName = ''; tFinished = false; tList = 0; tDue = null; tNote = '';
+    tID = 0; tName = ''; tFinished = false; tList = 0; tReminder = null; tDue = null; tNote = '';
 
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
@@ -434,11 +455,12 @@ class TaskViewInterface {
     SubtaskModal = document.getElementById("add_subtask_modal");
     CloseSubtaskModalButton = document.getElementsByClassName("close_modal")[4];
 
-    constructor(id, name, finished, list, due, notes) {
+    constructor(id, name, finished, list, reminder, due, notes) {
         this.tID = id;
         this.tName = name;
         this.tFinished = finished;
         this.tList = list;
+        this.tReminder = reminder;
         this.tDue = due;
         this.tNote = notes;
 
@@ -447,6 +469,7 @@ class TaskViewInterface {
         this.TaskView.appendChild(this.TaskViewPart_Nameplate(name, finished));
         this.TaskView.appendChild(this.TaskViewPart_Subtasks());
         this.TaskView.appendChild(this.TaskViewPart_Note(notes));
+        this.TaskView.appendChild(this.TaskViewPart_Reminder(reminder));
         this.TaskView.appendChild(this.TaskViewPart_ListChanger());
         this.TaskView.appendChild(this.TaskViewPart_Controls());
 
@@ -532,6 +555,55 @@ class TaskViewInterface {
         return item;
     }
 
+    TaskViewPart_Reminder(reminder) {
+        const item = document.createElement('div');
+        const group = document.createElement('div');
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        const clearButton = document.createElement('button');
+
+        label.innerText = 'Reminder:';
+        label.htmlFor = 'reminder';
+
+        input.type = 'datetime-local';
+        input.id = 'reminder';
+        input.name = 'reminder';
+        input.style.maxWidth = 'fit-content';
+
+        if (reminder && reminder !== '000-00-00 00:00:00') {
+            const date = new Date(reminder);
+            if (!isNaN(date.getTime())) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0'); // TODO: Fix?
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+        }
+
+        input.addEventListener('change', () => {
+            this.TaskControl_RescheduleReminder(input.value);
+        });
+
+        clearButton.innerText = 'Clear';
+        clearButton.className = 'light cursor_hand';
+        clearButton.addEventListener('click', () => {
+            input.value = '';
+            this.TaskControl_RescheduleReminder('');
+        });
+
+        group.style.display = 'ruby';
+        group.appendChild(label);
+        group.appendChild(input);
+        group.appendChild(clearButton);
+
+        item.className = 'box';
+        item.appendChild(group);
+
+        return item;
+    }
+
     TaskViewPart_ListChanger() {
         const item = document.createElement('div');
         const due_date_item = document.createElement('div');
@@ -541,7 +613,7 @@ class TaskViewInterface {
         const default_option = document.createElement('option');
 
         due_date_item.style.display = 'ruby';
-        due_date_item.style.maxWidth= 'fit-content';
+        due_date_item.style.maxWidth = 'fit-content';
 
         due_date_label.innerText = 'Due date:';
         due_date_label.htmlFor = 'due_date_selector';
@@ -799,6 +871,42 @@ class TaskViewInterface {
             });
     }
 
+    TaskControl_RescheduleReminder(newReminder) {
+        let formattedReminder = '';
+        if (newReminder) {
+            const date = new Date(newReminder);
+            if (!isNaN(date.getTime())) {
+                formattedReminder = date.toISOString().slice(0, 19).replace('T', ' ');
+            }
+        }
+
+        const params = new URLSearchParams({
+            'reminder': formattedReminder,
+            'id': this.tID
+        });
+
+        fetch('task/task/edit', {
+            method: 'PUT',
+            body: params.toString(),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(() => {
+                console.log('Reminder updated successfully');
+                if (window.notificationManager) {
+                    window.notificationManager.clearReminder(this.tID);
+                }
+                this.showRemiderFeedback('Reminder updated!', 'success');
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating rminder:', error);
+                this.showRemiderFeedback('Error updating reminder', 'error');
+            });
+    }
+
     TaskStylesControl_NoteAnimationEnd(Object) {
         if (Object.classList.contains('textarea_fail'))
             Object.classList.remove('textarea_fail');
@@ -811,14 +919,15 @@ class TaskViewInterface {
             case 'list':
                 this.ListStack.innerHTML = "";
                 inputdata.forEach(data => {
-                    this.ListStack.appendChild(this.TaskInterface_List(data));
+                    //this.ListStack.appendChild(this.TaskInterface_List(data));
+                    this.ListStack.appendChild(window.ListInterface(data));
                 });
                 break;
             case 'task':
             default:
                 this.TaskStack.innerHTML = "";
                 inputdata.forEach(data => {
-                    this.TaskStack.appendChild(this.TaskInterface_Task(data));
+                    this.TaskStack.appendChild(window.TaskInterface(data));
                 });
                 break;
         }
@@ -841,7 +950,7 @@ class TaskViewInterface {
         if (data['finish_date']) {
             taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
         }
-        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['finish_date'],data['notes']); };
+        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['reminder'], data['finish_date'], data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
     }
@@ -923,4 +1032,25 @@ class TaskViewInterface {
     }
 
     sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    showRemiderFeedback(message, type) {
+        const feedback = document.createElement('div');
+        feedback.innerText = message;
+        feedback.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: white;
+        z-index: 1000;
+        background-color: ${type === 'success' ? '#4CAF50' : '#f44336'};
+        `;
+
+        document.body.appendChild(feedback);
+
+        setTimeout(() => {
+            document.body.removeChild(feedback);
+        }, 3000);
+    }
 }
