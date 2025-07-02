@@ -47,6 +47,7 @@ class Tasks
         $model->name = $base->get('POST.name');
         $model->list = $base->get('POST.list') ?? $base->get('GET.list');
         $model->myday = $base->get('POST.myday');
+        $model->reminder = $base->get('POST.reminder');
         $model->finish_date = $base->get('POST.finish_date');
         $model->owner_id = $base->get('POST.uid') ?? $base->get('SESSION.uid');
 
@@ -276,5 +277,35 @@ class Tasks
             return;
         }
         (new \Controllers\Index())->JSON_response('Subtask edited.');
+    }
+
+    public function getReminders(\Base $base)
+    {
+        if ((new \Controllers\Index())->evaluateLogged($base, false) == false) {
+            (new \Controllers\Index())->JSON_response('You must be logged in', 401);
+            return;
+        }
+
+        $taskModel = new \Models\Task();
+        $listModel = new \Models\Lists();
+
+        $tasks = $taskModel->find(['owner_id=? AND reminder <> "" AND reminder != "" AND finished = 0', $base->get('SESSION.uid')]);
+        $result = [];
+
+        if ($tasks)
+            foreach ($tasks as $task) {
+                $taskData = $task->cast();
+
+                if ($taskData['list'] && $taskData['list'] != '0') {
+                    $list = $listModel->findone(['id=?', $taskData['list']]);
+                    $taskData['list_name'] = $list ? $list->name : 'Unknown List';
+                } else {
+                    $taskData['list_name'] = 'No List';
+                }
+
+                $result[] = $taskData;
+            }
+
+        (new \Controllers\Index())->JSON_response($result);
     }
 }
