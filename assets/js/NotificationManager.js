@@ -310,3 +310,13 @@ class NotificationManager {
         this.activeReminders.clear();
     }
 }
+
+window.addEventListener('load', function () {
+    if ('Notification' in this.window && Notification.permission === 'default') {
+        Notification.requestPermission().then(function (permission) {
+            if (permission === 'granted') {
+                console.log('Notification permission granted');
+            }
+        });
+    }
+});
