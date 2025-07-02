@@ -289,7 +289,7 @@ class Tasks
         $taskModel = new \Models\Task();
         $listModel = new \Models\Lists();
 
-        $tasks = $taskModel->afind(['owner_id=? AND reminder <> "" AND reminder != "" AND finished = 0', $base->get('SESSION.uid')]);
+        $tasks = $taskModel->find(['owner_id=? AND reminder <> "" AND reminder != "" AND finished = 0', $base->get('SESSION.uid')]);
         $result = [];
 
         if ($tasks)
