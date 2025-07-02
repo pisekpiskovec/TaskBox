@@ -99,7 +99,10 @@ function TaskInterface(data) {
     taskitem['className'] = 'box cursor_hand';
     taskitem['id'] = data["_id"];
     taskitem['innerText'] = data['name'];
-    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
+    if (data['finish_date']) {
+        taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
+    }
+    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['finish_date'], data['notes']); };
     taskitem.addEventListener('contextmenu', e => {
         e.preventDefault();
         document.getElementsByName('id')[1].value = data['_id'];
@@ -111,7 +114,7 @@ function TaskInterface(data) {
 
 function OpenList(ListItem) {
     if (!ListItem.classList.contains('selected_box')) {
-        fetch('/task/task/get?list=' + ListItem.id, { method: 'GET' })
+        fetch('task/task/get?list=' + ListItem.id, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 refillStack(data);
@@ -129,7 +132,7 @@ function OpenList(ListItem) {
         document.cookie = 'lID=' + ListItem.id;
         ListItem.classList.add('selected_box');
     } else if (getCookie('lID') != 0) {
-        fetch('/task/task/get?list=0', { method: 'GET' })
+        fetch('task/task/get?list=0', { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 refillStack(data);
@@ -147,9 +150,9 @@ function OpenList(ListItem) {
     }
 }
 
-function OpenTask(TaskItem, id, name, finished, list, notes) {
+function OpenTask(TaskItem, id, name, finished, list, due, notes) {
     if (!TaskItem.classList.contains('selected_box')) {
-        new TaskViewInterface(id, name, finished, list, notes)
+        new TaskViewInterface(id, name, finished, list, due, notes)
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
         } catch { console.error('Could\'t deselect current task'); }
@@ -183,7 +186,7 @@ function refillStack(inputdata, stack = 'task') {
 document.getElementById('add_list_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    fetch('/task/list/add', {
+    fetch('task/list/add', {
         method: 'POST',
         body: formData
     })
@@ -203,7 +206,7 @@ document.getElementById('add_list_form').addEventListener('submit', function (e)
 document.getElementById('add_task_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    fetch('/task/task/add', {
+    fetch('task/task/add', {
         method: 'POST',
         body: formData
     })
@@ -212,6 +215,7 @@ document.getElementById('add_task_form').addEventListener('submit', function (e)
             console.log('Task added:', data);
             TaskModal.style.display = "none";
             document.getElementsByName('name')[1].value = '';
+            document.getElementsByName('finish_date')[0].value = '';
             ReloadListContent(formData.get('list'));
         })
         .catch(error => {
@@ -229,7 +233,7 @@ document.getElementById('edit_list_form').addEventListener('submit', function (e
         'id': formObject['id']
     });
 
-    fetch('/task/list/edit', {
+    fetch('task/list/edit', {
         method: 'PUT', body: params.toString(), headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -250,7 +254,7 @@ document.getElementById('edit_list_form').addEventListener('submit', function (e
 document.getElementById('delete_list').addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch('/task/list/delete?id=' + document.getElementById('id').value, { method: 'DELETE' })
+    fetch('task/list/delete?id=' + document.getElementById('id').value, { method: 'DELETE' })
         .then(response => response.json())
         .then(data => {
             console.log('List deleted:', data);
@@ -273,7 +277,7 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
         'id': formObject['id']
     });
 
-    fetch('/task/task/edit', {
+    fetch('task/task/edit', {
         method: 'PUT', body: params.toString(), headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -304,7 +308,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
     const tID = document.getElementsByName('id')[1].value;
     if (!confirm('Are you sure you want to delete this task?')) return;
 
-    fetch('/task/task/delete?id=' + tID, { method: 'DELETE' })
+    fetch('task/task/delete?id=' + tID, { method: 'DELETE' })
         .then(data => {
             console.log('Task deleted:', data);
             document.getElementsByName('name')[3].value = '';
@@ -335,7 +339,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
 document.getElementById('add_subtask_form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    fetch('/task/subtask/add', {
+    fetch('task/subtask/add', {
         method: 'POST',
         body: formData
     })
@@ -360,10 +364,17 @@ window.onload = function () {
         document.cookie = 'lID=0';
     }
 
+    if (getCookie('lID') === null || undefined) {
+        document.cookie = 'lID=0';
+    }
+    if (getCookie('tID') === null || undefined) {
+        document.cookie = 'tID=0';
+    }
+
     // Fetch lists and tasks
     Promise.all([
-        fetch('/task/list/get', { method: 'GET' }).then(response => response.json()),
-        fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json()),
+        fetch('task/list/get', { method: 'GET' }).then(response => response.json()),
+        fetch('task/task/get?list=' + list, { method: 'GET' }).then(response => response.json()),
     ])
         .then(([listData, taskData]) => {
             refillStack(listData, 'list');
@@ -387,7 +398,7 @@ function getCookie(name) {
 }
 
 function ReloadListContent(lID) {
-    return fetch('/task/task/get?list=' + lID, { method: 'GET' })
+    return fetch('task/task/get?list=' + lID, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             refillStack(data);
@@ -402,7 +413,7 @@ function ReloadListContent(lID) {
 }
 
 function ReloadListList() {
-    fetch('/task/list/get', { method: 'GET' }).then(response => response.json())
+    fetch('task/list/get', { method: 'GET' }).then(response => response.json())
         .then(data => {
             refillStack(data, 'list');
         })
@@ -415,7 +426,7 @@ function ReloadListList() {
 
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
-    tID = 0; tName = ''; tFinished = false; tList = 0; tNote = '';
+    tID = 0; tName = ''; tFinished = false; tList = 0; tDue = null; tNote = '';
 
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
@@ -423,11 +434,12 @@ class TaskViewInterface {
     SubtaskModal = document.getElementById("add_subtask_modal");
     CloseSubtaskModalButton = document.getElementsByClassName("close_modal")[4];
 
-    constructor(id, name, finished, list, notes) {
+    constructor(id, name, finished, list, due, notes) {
         this.tID = id;
         this.tName = name;
         this.tFinished = finished;
         this.tList = list;
+        this.tDue = due;
         this.tNote = notes;
 
         this.TaskView.innerHTML = "";
@@ -491,7 +503,7 @@ class TaskViewInterface {
         });
         item.appendChild(AddSubtask);
 
-        fetch('/task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
+        fetch('task/subtask/get?tID=' + this.tID, { method: 'GET' }).then(response => response.json())
             .then(datas => {
                 datas.forEach(data => {
                     item.appendChild(this.TaskInterface_Subtask(data));
@@ -522,16 +534,36 @@ class TaskViewInterface {
 
     TaskViewPart_ListChanger() {
         const item = document.createElement('div');
-        const selector = document.createElement('select');
+        const due_date_item = document.createElement('div');
+        const due_date_label = document.createElement('label');
+        const due_date_selector = document.createElement('input');
+        const list_selector = document.createElement('select');
         const default_option = document.createElement('option');
+
+        due_date_item.style.display = 'ruby';
+        due_date_item.style.maxWidth= 'fit-content';
+
+        due_date_label.innerText = 'Due date:';
+        due_date_label.htmlFor = 'due_date_selector';
+        due_date_item.appendChild(due_date_label);
+
+        due_date_selector['value'] = this.tDue;
+        due_date_selector['type'] = 'date';
+        due_date_selector['id'] = 'due_date_selector';
+        due_date_selector.style.maxWidth = 'inherit';
+        due_date_selector.addEventListener('change', (e) => {
+            this.TaskControl_RescheduleFinish(due_date_selector.value);
+        });
+        due_date_item.appendChild(due_date_selector);
+        item.appendChild(due_date_item);
 
         default_option['value'] = 0;
         default_option['innerText'] = 'No list selected';
         if (0 == this.tList)
             default_option['selected'] = true;
-        selector.appendChild(default_option);
+        list_selector.appendChild(default_option);
 
-        fetch('/task/list/get', { method: 'GET' }).then(response => response.json())
+        fetch('task/list/get', { method: 'GET' }).then(response => response.json())
             .then(datas => {
                 datas.forEach(data => {
                     const option = document.createElement('option');
@@ -539,7 +571,7 @@ class TaskViewInterface {
                     option['innerText'] = data['name'];
                     if (data['_id'] == this.tList)
                         option['selected'] = true;
-                    selector.appendChild(option);
+                    list_selector.appendChild(option);
                 });
             })
             .catch(error => {
@@ -547,12 +579,12 @@ class TaskViewInterface {
                 this.TaskView.innerHTML = 'Error getting data: ' + error;
             });
 
-        selector.addEventListener('change', () => {
-            this.TaskControl_MoveTask(selector['value']);
+        list_selector.addEventListener('change', () => {
+            this.TaskControl_MoveTask(list_selector['value']);
         });
 
         item['className'] = 'box';
-        item.appendChild(selector);
+        item.appendChild(list_selector);
         return item;
     }
 
@@ -586,7 +618,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -610,7 +642,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -634,7 +666,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -652,7 +684,7 @@ class TaskViewInterface {
     TaskControl_DeleteTask() {
         if (!confirm('Are you sure you want to delete this task?')) return;
 
-        fetch('/task/task/delete?id=' + this.tID, { method: 'DELETE' })
+        fetch('task/task/delete?id=' + this.tID, { method: 'DELETE' })
             .then(() => {
                 document.cookie = 'tID=0';
                 this.TaskView.innerHTML = "";
@@ -673,7 +705,7 @@ class TaskViewInterface {
             'id': this.tID
         });
 
-        fetch('/task/task/edit', {
+        fetch('task/task/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -695,7 +727,7 @@ class TaskViewInterface {
             'id': stID
         });
 
-        fetch('/task/subtask/edit', {
+        fetch('task/subtask/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -712,7 +744,7 @@ class TaskViewInterface {
     TaskControl_DeleteSubtask(stID) {
         if (!confirm('Are you sure you want to delete this subtask?')) return;
 
-        fetch('/task/subtask/delete?id=' + stID, { method: 'DELETE' })
+        fetch('task/subtask/delete?id=' + stID, { method: 'DELETE' })
             .then(() => {
                 this.reconstructor();
             })
@@ -732,13 +764,34 @@ class TaskViewInterface {
             'id': stID
         });
 
-        fetch('/task/subtask/edit', {
+        fetch('task/subtask/edit', {
             method: 'PUT', body: params.toString(), headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         })
             .then(response => response.json())
             .then(async () => {
+                this.reconstructor();
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
+    }
+
+    TaskControl_RescheduleFinish(NewDate) {
+        const params = new URLSearchParams({
+            'finish_date': NewDate,
+            'id': this.tID
+        });
+
+        fetch('task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(async () => {
+                this.tDue = NewDate;
                 this.reconstructor();
             })
             .catch(error => {
@@ -785,7 +838,10 @@ class TaskViewInterface {
         taskitem['className'] = 'box cursor_hand';
         taskitem['id'] = data["_id"];
         taskitem['innerText'] = data['name'];
-        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['notes']); };
+        if (data['finish_date']) {
+            taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
+        }
+        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['finish_date'],data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
     }
@@ -853,7 +909,7 @@ class TaskViewInterface {
     reconstructor() {
         const urlParams = new URLSearchParams(window.location.search);
         const list = urlParams.get('list') != null ? urlParams.get('list') : getCookie('lID') ?? '0';
-        fetch('/task/task/get?list=' + list, { method: 'GET' }).then(response => response.json())
+        fetch('task/task/get?list=' + list, { method: 'GET' }).then(response => response.json())
             .then(data => {
                 this.TaskPage_RefillStack(data);
                 if (getCookie('tID') != 0)
