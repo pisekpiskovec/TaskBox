@@ -124,7 +124,7 @@ function TaskInterface(data) {
         TaskEModal.style.display = "flex";
     });
 
-    if(data['reminder'] && data['reminder'] !== '0000-00-00 00:00:00'){
+    if (data['reminder'] && data['reminder'] !== '0000-00-00 00:00:00') {
         taskitem['innerText'] += ' • 🔔';
         taskitem.title += `, Reminder: ${new Date(data['reminder']).toLocaleString()}`;
     }
@@ -385,10 +385,10 @@ window.onload = function () {
         document.cookie = 'lID=0';
     }
 
-    if (getCookie('lID') === null || undefined) {
+    if (getCookie('lID') === (null || undefined)) {
         document.cookie = 'lID=0';
     }
-    if (getCookie('tID') === null || undefined) {
+    if (getCookie('tID') === (null || undefined)) {
         document.cookie = 'tID=0';
     }
 
