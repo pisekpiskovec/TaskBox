@@ -399,8 +399,12 @@ window.onload = function () {
     ])
         .then(([listData, taskData]) => {
             refillStack(listData, 'list');
-            refillStack(taskData);
             Array.from(document.getElementById('list_panel').querySelectorAll('.box')).find(box => box.id === getCookie('lID')).classList.add('selected_box');
+
+            if (taskData = "Tasks not found")
+                document.cookie = 'tID=0';
+            else
+                refillStack(taskData);
             if (getCookie('tID') != 0)
                 Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
         })
