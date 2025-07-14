@@ -140,7 +140,7 @@ function OpenList(ListItem) {
             .then(data => {
                 refillStack(data);
                 if (getCookie('tID') != 0)
-                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID'))?.click();
             })
             .catch(error => {
                 console.error('Error getting data:', error);
@@ -158,7 +158,7 @@ function OpenList(ListItem) {
             .then(data => {
                 refillStack(data);
                 if (getCookie('tID') != 0)
-                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID'))?.click();
             })
             .catch(error => {
                 console.error('Error getting data:', error);
@@ -167,7 +167,7 @@ function OpenList(ListItem) {
             });
         document.getElementById('list_panel').querySelector('.selected_box').classList.remove('selected_box');
         document.cookie = 'lID=0';
-        document.getElementsByName('AllTasks')[0].classList.add('selected_box');
+        document.getElementsByName('TodaysView')[0].classList.add('selected_box');
     }
 }
 
@@ -311,7 +311,7 @@ document.getElementById('edit_task_form').addEventListener('submit', function (e
             ReloadListContent(getCookie('lID')).then(() => {
                 if (getCookie('tID') != 0) {
                     try {
-                        Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                        Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID'))?.click();
                     } catch (error) {
                         alert(error);
                     }
@@ -343,7 +343,7 @@ document.getElementById('delete_task').addEventListener('click', function (e) {
             ReloadListContent(getCookie('lID')).then(() => {
                 if (getCookie('tID') != 0) {
                     try {
-                        Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                        Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID'))?.click();
                     } catch (error) {
                         alert(error);
                     }
@@ -406,7 +406,7 @@ window.onload = function () {
             else
                 refillStack(taskData);
             if (getCookie('tID') != 0)
-                Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID'))?.click();
         })
         .catch(error => {
             console.error('Error getting data:', error);
@@ -1028,7 +1028,7 @@ class TaskViewInterface {
             .then(data => {
                 this.TaskPage_RefillStack(data);
                 if (getCookie('tID') != 0)
-                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID')).click();
+                    Array.from(document.getElementById('lists_tasks').querySelectorAll('.box')).find(box => box.id === getCookie('tID'))?.click();
             })
             .catch(error => {
                 console.error('Error getting data:', error);
