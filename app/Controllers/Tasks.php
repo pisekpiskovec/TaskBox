@@ -165,10 +165,27 @@ class Tasks
         }
 
         $model = new \Models\Task();
-        if ($base->get('GET.list') == 'all' || !$base->get('GET.list')) {
+        if ($base->get('GET.list') == 'all') {
             $entries = $model->afind(['owner_id=?', $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
-        // } else if (!$base->get('GET.list')) {
-        //     $entries = $model->afind(['myday=1 OR finish_date=? AND owner_id=?', date("Y-m-d"), $base->get('GET.uid') ?? $base->get('SESSION.uid')], ['order' => 'finish_date ASC']);
+        } else if (!$base->get('GET.list')) {
+            $db = $base->get('DB');
+            $today = date('Y-m-d');
+            $userID = $base->get('GET.uid') ?? $base->get('SESSION.uid');
+            $sql = "
+            SELECT * FROM tasks
+            WHERE myday = 1 AND owner_id = ? AND finished = 0
+            ORDER BY
+                CASE
+                    WHEN finish_date = ? THEN 1
+                    WHEN finish_date < ? AND finish_date IS NOT NULL THEN 2
+                    WHEN myday = 1 THEN 3
+                    ELSE 4
+                END,
+                finish_date ASC,
+                id ASC
+            ";
+
+            $entries = $db->exec($sql, [$userID, $today, $today]);
         } else {
             $entries = $model->afind(['list=? AND owner_id=?', $base->get('GET.list'), $base->get('GET.uid') ?? $base->get('SESSION.uid')]);
         }
