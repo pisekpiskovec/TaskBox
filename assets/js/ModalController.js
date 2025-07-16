@@ -152,7 +152,7 @@ function OpenList(ListItem) {
         } catch { console.error('Could\'t deselect current list'); }
         document.cookie = 'lID=' + ListItem.id;
         ListItem.classList.add('selected_box');
-    } else if (getCookie('lID') != 0) {
+    } else {
         fetch('task/task/get?list=0', { method: 'GET' })
             .then(response => response.json())
             .then(data => {
@@ -173,7 +173,7 @@ function OpenList(ListItem) {
 
 function OpenTask(TaskItem, id, name, finished, list, reminder, due, notes) {
     if (!TaskItem.classList.contains('selected_box')) {
-        new TaskViewInterface(id, name, finished, list, reminder, due, notes)
+        new TaskViewInterface(id, name, finished, list, reminder, due, notes);
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
         } catch { console.error('Could\'t deselect current task'); }
