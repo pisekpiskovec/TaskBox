@@ -109,7 +109,7 @@ function ListInterface(data) {
 function TaskInterface(data) {
     const taskitem = document.createElement('div');
     taskitem['className'] = 'box cursor_hand';
-    taskitem['id'] = data["_id"];
+    taskitem['id'] = data["_id"] ?? data["id"];
     taskitem['innerText'] = data['name'];
     taskitem['title'] = data['name'];
     if (data['finish_date']) {
