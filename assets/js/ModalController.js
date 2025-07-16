@@ -117,10 +117,10 @@ function TaskInterface(data) {
         taskitem['title'] += ', Due date: ' + new Date(data['finish_date']).toLocaleDateString();
     }
 
-    taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['reminder'], data['finish_date'], data['notes']); };
+    taskitem['onclick'] = function () { OpenTask(this, data['_id'] ?? data["id"], data['name'], data['finished'], data['list'], data['myday'], data['reminder'], data['finish_date'], data['notes']); };
     taskitem.addEventListener('contextmenu', e => {
         e.preventDefault();
-        document.getElementsByName('id')[1].value = data['_id'];
+        document.getElementsByName('id')[1].value = data['_id'] ?? data["id"];
         TaskEModal.style.display = "flex";
     });
 
@@ -171,9 +171,9 @@ function OpenList(ListItem) {
     }
 }
 
-function OpenTask(TaskItem, id, name, finished, list, reminder, due, notes) {
+function OpenTask(TaskItem, id, name, finished, list, myday, reminder, due, notes) {
     if (!TaskItem.classList.contains('selected_box')) {
-        new TaskViewInterface(id, name, finished, list, reminder, due, notes);
+        new TaskViewInterface(id, name, finished, list, myday, reminder, due, notes);
         try {
             document.getElementById('lists_tasks').querySelector('.selected_box').classList.remove('selected_box');
         } catch { console.error('Could\'t deselect current task'); }
@@ -451,7 +451,7 @@ function ReloadListList() {
 
 class TaskViewInterface {
     TaskView = document.getElementById('current_task');
-    tID = 0; tName = ''; tFinished = false; tList = 0; tReminder = null; tDue = null; tNote = '';
+    tID = 0; tName = ''; tFinished = false; tList = 0; tMyDay = false; tReminder = null; tDue = null; tNote = '';
 
     ListStack = document.getElementById("list-stack");
     TaskStack = document.getElementById("task-stack");
@@ -459,11 +459,12 @@ class TaskViewInterface {
     SubtaskModal = document.getElementById("add_subtask_modal");
     CloseSubtaskModalButton = document.getElementsByClassName("close_modal")[4];
 
-    constructor(id, name, finished, list, reminder, due, notes) {
+    constructor(id, name, finished, list, myday, reminder, due, notes) {
         this.tID = id;
         this.tName = name;
         this.tFinished = finished;
         this.tList = list;
+        this.tMyDay = myday;
         this.tReminder = reminder;
         this.tDue = due;
         this.tNote = notes;
@@ -616,6 +617,9 @@ class TaskViewInterface {
         const due_date_selector = document.createElement('input');
         const list_selector = document.createElement('select');
         const default_option = document.createElement('option');
+        const my_day_connector = document.createElement('div');
+        const my_day_label = document.createElement('label');
+        const my_day_check = document.createElement('input');
 
         due_date_item.style.display = 'ruby';
         due_date_item.style.maxWidth = 'fit-content';
@@ -633,6 +637,21 @@ class TaskViewInterface {
         });
         due_date_item.appendChild(due_date_selector);
         item.appendChild(due_date_item);
+
+        my_day_check['type'] = 'checkbox';
+        my_day_check['name'] = 'myDayToggle';
+        my_day_check['id'] = 'myDayToggle';
+        my_day_check['checked'] = this.tMyDay;
+        my_day_check.addEventListener('click', () => {
+            this.TaskControl_ToggleMyDay(this.tMyDay);
+        });
+        my_day_connector.appendChild(my_day_check);
+
+        my_day_label.innerText = 'Add to Today\'s View';
+        my_day_label.htmlFor = 'myDayToggle';
+        my_day_connector.appendChild(my_day_label);
+
+        item.appendChild(my_day_connector);
 
         default_option['value'] = 0;
         default_option['innerText'] = 'No list selected';
@@ -913,6 +932,29 @@ class TaskViewInterface {
             });
     }
 
+    TaskControl_ToggleMyDay(currentState){
+        const params = new URLSearchParams({
+            'myday': currentState ? '0' : '1',
+            'id': this.tID
+        });
+
+        fetch('task/task/edit', {
+            method: 'PUT', body: params.toString(), headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json())
+            .then(() => {
+                this.reconstructor();
+                this.tMyDay = currentState ? false : true;
+            })
+            .catch(error => {
+                console.error('Error updating data:', error);
+                TaskStack.innerHTML = "";
+                TaskStack.appendChild(LandErrorInterface());
+            });
+    }
+
     TaskStylesControl_NoteAnimationEnd(Object) {
         if (Object.classList.contains('textarea_fail'))
             Object.classList.remove('textarea_fail');
@@ -956,7 +998,7 @@ class TaskViewInterface {
         if (data['finish_date']) {
             taskitem['innerText'] += ' • Due date: ' + new Date(data['finish_date']).toLocaleDateString();
         }
-        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['reminder'], data['finish_date'], data['notes']); };
+        taskitem['onclick'] = function () { OpenTask(this, data['_id'], data['name'], data['finished'], data['list'], data['myday'], data['reminder'], data['finish_date'], data['notes']); };
         if (data['finished']) taskitem.style.textDecoration = 'line-through';
         return taskitem;
     }
