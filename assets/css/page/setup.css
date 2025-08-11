@@ -59,7 +59,7 @@ form.login {
   justify-content: center;
   align-items: baseline;
   align-content: center;
-  background-color: var(--darkD);
+  background-color: light-dark(var(--lightB), var(--darkD));
   border-radius: 12px;
   max-width: 30%;
   padding: 30px;
@@ -106,7 +106,7 @@ form.login {
   justify-content: center;
   align-items: baseline;
   align-content: center;
-  background-color: var(--darkD);
+  background-color: light-dark(var(--lightB), var(--darkD));
   border-radius: 12px;
   max-width: 30%;
   padding: 30px;

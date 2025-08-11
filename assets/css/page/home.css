@@ -39,14 +39,14 @@ header {
   justify-content: center;
 }
 
-section{
+section {
   padding: 30px;
   margin: 30px;
 }
 
-.section-in-container{
+.section-in-container {
   display: flex;
-  background-color: var(--darkD);
+  background-color: light-dark(var(--lightB), var(--darkD));
   padding: 30px;
   gap: 30px;
   border-radius: 12px;
