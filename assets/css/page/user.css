@@ -103,6 +103,7 @@ form.login {
 }
 
 .editbox > h1,
-.loginbox > h1 {
+.loginbox > h1,
+.linkbar {
   color: var(--lightA);
 }

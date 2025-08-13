@@ -2,7 +2,7 @@
 
 a.button,
 button {
-  background-color: light-dark(var(--lightD), var(--darkD));
+  background-color: light-dark(var(--lightB), var(--darkD));
   padding: 11px;
   border-radius: 12px;
   color: light-dark(var(--darkE), var(--lightA));
@@ -17,7 +17,7 @@ a.light:hover,
 input[type="submit"].light:hover,
 button:hover,
 button.light:hover {
-  background-color: light-dark(var(--lightB), var(--darkB));
+  background-color: light-dark(var(--lightD), var(--darkB));
 }
 
 a.button:active,
@@ -32,7 +32,7 @@ button.light:active {
 a.light,
 input[type="submit"].light,
 button.light {
-  background-color: light-dark(var(--lightD), var(--darkC));
+  background-color: light-dark(var(--lightC), var(--darkC));
   color: light-dark(var(--darkE), var(--lightA));
 }
 

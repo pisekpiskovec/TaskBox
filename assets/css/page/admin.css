@@ -35,9 +35,12 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
+  color: var(--lightA);
 }
 
-.editbox > h1 {
+.editbox > h1,
+.linkbar,
+.editbox > p {
   color: var(--lightA);
 }
 
