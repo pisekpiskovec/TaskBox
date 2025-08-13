@@ -1,5 +1,3 @@
-@import url("/pallete.css");
-
 body {
   background: linear-gradient(
     -45deg,
@@ -37,6 +35,13 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
+  color: var(--lightA);
+}
+
+.editbox > h1,
+.linkbar,
+.editbox > p {
+  color: var(--lightA);
 }
 
 .box {
@@ -46,7 +51,7 @@ body {
   justify-content: center;
   align-items: baseline;
   align-content: center;
-  background-color: var(--darkD);
+  background-color: light-dark(var(--lightB), var(--darkD));
   border-radius: 12px;
   max-width: 30%;
   padding: 30px;
@@ -68,7 +73,7 @@ body {
   padding: 10px;
 }
 
-td{
+td {
   padding: 2px 12px;
 }
 
@@ -92,7 +97,7 @@ td{
   color: light-dark(var(--darkE), var(--lightA));
   text-decoration: none;
 }
-  
+
 .user-card-avtr {
   grid-column: span 3 / span 3;
   grid-row: span 4 / span 4;
