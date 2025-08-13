@@ -62,11 +62,13 @@ modal {
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.6);
+  color: var(--lightA);
 }
 
 .close_modal {
   font-size: 28px;
   font-weight: bold;
+  color: var(--lightA);
 }
 
 .containbox {
@@ -91,32 +93,35 @@ modal {
   max-width: 30%;
   min-width: fit-content;
   height: fit-content;
+  color: var(--lightA);
+}
+
+modal *,
+.modal_content * {
+  color: var(--lightA);
 }
 
 .selected_box {
   background: linear-gradient(
     90deg,
-    var(--purpleC),
-    var(--purpleD),
+    light-dark(var(--lightB), var(--darkD)),
+    light-dark(var(--lightB), var(--darkD)),
+    light-dark(var(--lightB), var(--darkD)),
     var(--purpleE),
-    var(--darkD),
-    var(--darkD),
-    var(--darkD),
-    var(--darkD),
-    var(--darkD),
-    var(--darkD)
+    var(--purpleD),
+    var(--purpleC)
   );
 }
 textarea {
   border: 1px solid transparent;
 }
 .textarea_success {
-  border: 1px solid greenyellow;
+  border: 1px solid var(--greenE);
   animation: fade 3s alternate;
 }
 
 .textarea_fail {
-  border: 1px solid orangered;
+  border: 1px solid var(--orangeE);
   animation: fade 3s alternate;
 }
 
