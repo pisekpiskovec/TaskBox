@@ -31,7 +31,6 @@ body {
 }
 
 header {
-  padding-top: 30px;
   height: 45vh;
   min-height: min-content;
   text-align: center;
@@ -41,6 +40,10 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+footer {
+  height: 10vh;
 }
 
 .loginbox {
@@ -70,8 +73,7 @@ form.login {
 .setup-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 8px;
+  grid-template-rows: repeat(5, 1fr);
   max-height: 100vh;
   max-width: 100vw;
   min-height: min-content;
@@ -87,7 +89,7 @@ form.login {
 
 .setup-content {
   grid-column: span 5 / span 5;
-  grid-row: span 3 / span 3;
+  grid-row: span 2 / span 2;
   grid-row-start: 3;
   text-align: center;
   overflow: scroll;
