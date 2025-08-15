@@ -6,8 +6,8 @@
 
 - 🗂️ Sorting tasks into custom lists
 - ✏️ Support for notes, subtasks, reminders and completion date
-- 🗓️ **Today** section for a quick overview of current priorities
-- 🌐 Web interface available on all devices
+- 🗓️ **Today's View** section for a quick overview of current priorities
+- 🌐 Web interface available on PC
 - 💾 Self-hosted application with full control over data
 
 ## 🚀 Screenshot
@@ -20,10 +20,10 @@
 - Fat Free Framework
   - bcosca/fatfree-core
   - ikkez/f3-cortex
-  - ikkez/f-flash
-  - ikkez/f-mailer
+  - ikkez/f3-flash
+  - ikkez/f3-mailer
 
-## 🤝 Přispívání
+## 🤝 Contributions
 
 Contributions are welcome! Feel free to open an issue or pull request with a suggestion for improvements.
 
